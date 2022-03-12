@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "TJ Droid",
+    "slug": "tjdroid",
+    "scheme": "tjdroid",
+    "version": "1.0.11",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0277bd"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "dev.pedropaulo.tjdroid",
+      "useNextNotificationsApi": true,
+      "versionCode": 12,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0277bd"
+      },
+      "permissions": []
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  },
+  "name": "TJ Droid"
+}
