@@ -506,8 +506,7 @@ export default function Configuracoes({ navigation }) {
                 </ItemListTextTitle>
                 <ItemListTextDescription
                    onPress={async () => {
-                    // Adiciona o evento ao Analytics
-                    Linking.openURL("https://github.com/apptjdroid");
+                    Linking.openURL("https://github.com/pedropaulodf/tjdroid");
                   }}
                 >
                   {t("screens.configuracoes.github_description")}
