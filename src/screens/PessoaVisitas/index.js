@@ -9,10 +9,9 @@ import {
 } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
-import moment from "moment";
-import "moment/locale/pt";
+import moment from 'moment/min/moment-with-locales';
 import { format } from "date-fns";
-import { buscarAsyncStorageTjDroidIdioma, changeDateFormatToYearMonthDay } from "../../utils/utils";
+import { buscarAsyncStorageTjDroidIdioma, changeDateFormatToYearMonthDay, formatarLocale } from "../../utils/utils";
 
 import Header from "../../components/Header";
 import DialogModal from "../../components/DialogModal";
@@ -226,7 +225,7 @@ export default function PessoaVisitas({ route, navigation }) {
           </ItemListTextDay>
           <ItemListTextDayInfo tail numberOfLines={1}>
             {moment(changeDateFormatToYearMonthDay(item.data))
-              .locale(appLanguageLocal?.language)
+              .locale(formatarLocale(appLanguageLocal?.language))
               .format("dddd, HH:mm")}
           </ItemListTextDayInfo>
         </ItemListDay>

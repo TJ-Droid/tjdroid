@@ -4,14 +4,13 @@ import { FlatList, TouchableWithoutFeedback } from "react-native-gesture-handler
 import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from "react-i18next";
 
-import moment from "moment";
-import "moment/locale/pt";
+import moment from 'moment/min/moment-with-locales';
 import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
-import { buscarAsyncStorageTjDroidIdioma } from "../../utils/utils";
+import { buscarAsyncStorageTjDroidIdioma, formatarLocale } from "../../utils/utils";
 
 import { buscarDadosMesAnoServico, deletarRelatorio } from "../../controllers/relatoriosController";
 
@@ -164,7 +163,7 @@ export default function RelatorioMes({ route, navigation }) {
       <ItemList>
         <ItemListTopContent>
           <ItemListTopContentDayText style={{ flexShrink: 1 }}>
-            {moment(item.data).locale(appLanguageLocal?.language).format("DD/MM/yy, dddd, HH:mm")}
+            {moment(item.data).locale(formatarLocale(appLanguageLocal?.language)).format("DD/MM/yy, dddd, HH:mm")}
           </ItemListTopContentDayText>
           <ItemListTopContentHoursText>
             {minutes_to_hhmm(item.minutos)}

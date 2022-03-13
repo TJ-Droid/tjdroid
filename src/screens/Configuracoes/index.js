@@ -16,6 +16,7 @@ import {
   ItemListTitleSpace100,
   ItemListTextTitle,
   ItemListTextDescription,
+  ItemListTextDescriptionTranslation,
   ItemListBoxSpace,
   ItemListBoxButtonCircleColor,
   StyledFeatherLeftIcon,
@@ -423,12 +424,19 @@ export default function Configuracoes({ navigation }) {
           </SectionDivider>
 
           <ItemList>
-            <StyledIoniconsLeftIcon name="language-outline" />
+            <StyledFeatherLeftIcon name="globe" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <SelectPickerLanguages
                   onChangeLanguageValue={(l) => languageSelected(l)}
                 />
+                <ItemListTextDescriptionTranslation
+                  onPress={() => {
+                    Linking.openURL("https://crowdin.com/project/tjdroid/invite");
+                  }}
+                >
+                  {t("screens.configuracoes.app_translation_question")}
+                </ItemListTextDescriptionTranslation>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>
           </ItemList>
@@ -525,7 +533,7 @@ export default function Configuracoes({ navigation }) {
                 <ItemListTextDescription
                   onPress={() => setObgEscondido((o) => o + 1)}
                 >
-                  {t("screens.configuracoes.version")} 1.0.11
+                  {t("screens.configuracoes.version")} 1.0.12
                 </ItemListTextDescription>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>

@@ -32,6 +32,7 @@
         "terms_description": "Touch here to read.",
         "like_app": "Are you enjoying the app?",
         "like_app_description": "Touch here and leave your rating and comment. This helps a lot!",
+        "app_translation_question": "Is your language not here? Touch here and help translate the app!",
         "github": "Open source project",
         "github_description": "This project is open source so any contributions are welcome.",
         "color_accessibility_label_blue": "Blue color theme",

@@ -3,10 +3,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { Alert, ToastAndroid } from "react-native";
 import { BorderlessButton, FlatList, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
-import { buscarAsyncStorageTjDroidIdioma } from "../../utils/utils";
+import { buscarAsyncStorageTjDroidIdioma, formatarLocale } from "../../utils/utils";
 
-import moment from "moment";
-import "moment/locale/pt";
+import moment from 'moment/min/moment-with-locales';
 
 import Header from "../../components/Header";
 import DialogModal from "../../components/DialogModal";
@@ -203,7 +202,7 @@ export default function TerritorioResidenciasVisitas({route, navigation}) {
       <ItemList>
         <ItemListDay>
           <ItemListTextDay tail numberOfLines={1} >{moment(item.data).format('L')}</ItemListTextDay>
-          <ItemListTextDayInfo tail numberOfLines={1} >{moment(item.data).locale(appLanguageLocal?.language).format('dddd, HH:mm')}</ItemListTextDayInfo>
+          <ItemListTextDayInfo tail numberOfLines={1} >{moment(item.data).locale(formatarLocale(appLanguageLocal?.language)).format('dddd, HH:mm')}</ItemListTextDayInfo>
         </ItemListDay>
         <ItemListTextLastVisit bgColor={item.visitaBgColor} fontColor={item.visitaFontColor} >{item.visita}</ItemListTextLastVisit>
       </ItemList>

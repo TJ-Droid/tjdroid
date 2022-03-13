@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 export const Container = styled.ScrollView`
   background: ${({theme}) => theme.color.bg};
@@ -46,6 +46,12 @@ export const ItemListTextDescription = styled.Text`
   color: ${({theme}) => theme.color.text_secondary}90;
 `;
 
+export const ItemListTextDescriptionTranslation = styled.Text`
+  font-size: 16px;
+  margin-top: 10px;
+  color: ${({theme}) => theme.color.text_secondary}90;
+`;
+
 export const ItemListBoxSpace = styled.View`
   flex: 1;
   flex-direction: row;
@@ -66,12 +72,6 @@ export const ItemListBoxButtonCircleColor = styled.TouchableOpacity`
 `;
 
 export const StyledFeatherLeftIcon = styled(Feather)`
-  color: ${({theme}) => theme.color.text_secondary};
-  margin-right: 15px;
-  font-size: 25px;
-`;
-
-export const StyledIoniconsLeftIcon = styled(Ionicons)`
   color: ${({theme}) => theme.color.text_secondary};
   margin-right: 15px;
   font-size: 25px;

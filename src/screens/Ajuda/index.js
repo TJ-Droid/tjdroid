@@ -113,7 +113,7 @@ const Ajuda = () => {
           {section.identificator === "contribute" && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL("https://pedropaulodev.notion.site/Contribuir-0caa61b7894045998bba09f6deddf8d8");
+                Linking.openURL("https://crowdin.com/project/tjdroid/invite");
               }}
             >
               <StyledFeatherIcon name="external-link" size={22} />

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import i18next from 'i18next';
 import { buscarAsyncStorage, salvarAsyncStorage } from "../services/AsyncStorageMethods";
-import { buscarAsyncStorageTjDroidIdioma } from "../utils/utils";
+import { buscarAsyncStorageTjDroidIdioma, formatarLocale } from "../utils/utils";
 import moment from "moment";
 import "moment/locale/pt";
 import minutes_to_hhmm from "../utils/minutes_to_hhmm";
@@ -19,7 +19,7 @@ export default async function buscarAnosServico() {
       // Se o não existir nenhum relatório, adiciona o mês atual como opção
       if (todosRelatorios.length === 0) {
         todosRelatorios.push({
-          mes_formatado: moment(new Date()).locale(appLanguage.language).format("MMMM yy"),
+          mes_formatado: moment(new Date()).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
           mes: moment(new Date()).format("MMMM yy"),
           minutos_formatados: '0:00',
           minutos: 0,
@@ -123,7 +123,7 @@ export default async function buscarAnosServico() {
           if (mesesCorrentes.length === 0) {
             mesesCorrentes.push({
               data: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format(),
-              mes_formatado: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale(appLanguage.language).format("MMMM yy"),
+              mes_formatado: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
               mes: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format("MMMM yy"),
               minutos_formatados: '0:00',
               minutos: 0,
@@ -147,7 +147,7 @@ export default async function buscarAnosServico() {
             mesNome === '12'
           ) {
             mesesDepoisDeSetembroAnoAtual.unshift({
-              mes_formatado: moment(mesesCorrentes[0].data).locale(appLanguage.language).format("MMMM yy"),
+              mes_formatado: moment(mesesCorrentes[0].data).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
               mes: moment(mesesCorrentes[0].data).format("MMMM yy"),
               minutos_formatados: minutes_to_hhmm(totalMinutosMes),
               minutos: totalMinutosMes,
@@ -173,7 +173,7 @@ export default async function buscarAnosServico() {
             
             mesesCorrentesAnoSeguinte.push({
               data: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format(),
-              mes_formatado: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale(appLanguage.language).format("MMMM yy"),
+              mes_formatado: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
               mes: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format("MMMM yy"),
               minutos_formatados: '0:00',
               minutos: 0,
@@ -204,7 +204,7 @@ export default async function buscarAnosServico() {
             // });
           } else {
             mesesAntesDeSetembroAnoSeguinte.unshift({
-              mes_formatado: moment(mesesCorrentesAnoSeguinte[0].data).locale(appLanguage.language).format("MMMM yy"),
+              mes_formatado: moment(mesesCorrentesAnoSeguinte[0].data).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
               mes: moment(mesesCorrentesAnoSeguinte[0].data).format("MMMM yy"),
               minutos_formatados: minutes_to_hhmm(totalMinutosMesAnoSeguinte),
               minutos: totalMinutosMesAnoSeguinte,
@@ -396,7 +396,7 @@ export async function salvarNovoRelatorio(relatorio, minutos) {
         
         return { 
           mesAno: moment(novoRelatorio.data).format("MMMM yy") ,
-          mesAnoFormatado: moment(novoRelatorio.data).locale(appLanguage.language).format("MMMM yy") 
+          mesAnoFormatado: moment(novoRelatorio.data).locale(formatarLocale(appLanguage.language)).format("MMMM yy") 
         }
       })
       .catch(() => {
