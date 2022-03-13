@@ -5,7 +5,7 @@
 [![Crowdin](https://badges.crowdin.net/tjdroid/localized.svg)](https://crowdin.com/project/tjdroid)
 
 ## :iphone: About the app TJ Droid
-Feature-packed service organizer for Jehovah's Witnesses that allows to take notes, conveniently view and arrange territories and interested persons, automatically track statistics and field service time.
+[Open Source Project] Feature-packed service organizer for Jehovah's Witnesses that allows to take notes, conveniently view and arrange territories and interested persons, automatically track statistics and field service time.
 
 ### Features:
 
