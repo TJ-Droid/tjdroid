@@ -27,7 +27,7 @@ Only available on Android.
 
 **With code:** This project is open source so any contributions are welcome.
 
-**With translations:** If you want to help with translation to your language, please use [this link](https://crowdin.com/project/tjdroid/invite), register a translator account, and follow the instructions.
+**With translations:** If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
 
 ## 🚀 Tecnologies
 -   [x] React Native with Expo Bare Workflow
