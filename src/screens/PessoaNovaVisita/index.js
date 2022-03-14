@@ -3,8 +3,10 @@ import { format, formatISO } from "date-fns";
 
 import Header from "../../components/Header";
 import { VisitBox } from "../../components/VisitBox";
+import { useTranslation } from "react-i18next";
 
 export default function PessoaNovaVisita({ route }) {
+  const { t } = useTranslation();
 
   const { personId } = route.params;
 
@@ -22,7 +24,7 @@ export default function PessoaNovaVisita({ route }) {
   return (
     <>
       <Header
-        title={"Nova Visita"}
+        title={t("screens.territorioresidencianovavisita.screen_name")}
         showGoBack
         showNewPersonVisit={novaVisitaPessoa}
       />
