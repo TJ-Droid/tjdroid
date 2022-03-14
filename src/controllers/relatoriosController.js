@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import i18next from 'i18next';
 import { buscarAsyncStorage, salvarAsyncStorage } from "../services/AsyncStorageMethods";
 import { buscarAsyncStorageTjDroidIdioma, formatarLocale } from "../utils/utils";
-import moment from "moment";
-import "moment/locale/pt";
+
+import moment from 'moment/min/moment-with-locales';
 import minutes_to_hhmm from "../utils/minutes_to_hhmm";
 
 // Busca os relatorios e monta os anos de servico para a pagina PESSOAS
@@ -20,7 +20,7 @@ export default async function buscarAnosServico() {
       if (todosRelatorios.length === 0) {
         todosRelatorios.push({
           mes_formatado: moment(new Date()).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
-          mes: moment(new Date()).format("MMMM yy"),
+          mes: moment(new Date()).locale("pt").format("MMMM yy"),
           minutos_formatados: '0:00',
           minutos: 0,
           // data_MMMMyy: moment(new Date()).format("MMMM yy"),
@@ -76,8 +76,8 @@ export default async function buscarAnosServico() {
         return {
           data: relatorio.data,
           data_YYYYMMDD: moment(relatorio.data).format("YYYYMMDD"),
-          data_MMMMyy: moment(relatorio.data).format("MMMM yy"),
-          data_MMMM: moment(relatorio.data).format("MMMM"),
+          data_MMMMyy: moment(relatorio.data).locale("pt").format("MMMM yy"),
+          data_MMMM: moment(relatorio.data).locale("pt").format("MMMM"),
           data_M: parseInt(moment(relatorio.data).format("M")),
           data_yy: parseInt(moment(relatorio.data).format("yy")),
           minutos: relatorio.minutos,
@@ -124,7 +124,7 @@ export default async function buscarAnosServico() {
             mesesCorrentes.push({
               data: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format(),
               mes_formatado: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
-              mes: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format("MMMM yy"),
+              mes: moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale("pt").format("MMMM yy"),
               minutos_formatados: '0:00',
               minutos: 0,
               data_YYYYMMDD: parseInt(moment(`${ano}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format("YYYYMMDD")),
@@ -148,7 +148,7 @@ export default async function buscarAnosServico() {
           ) {
             mesesDepoisDeSetembroAnoAtual.unshift({
               mes_formatado: moment(mesesCorrentes[0].data).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
-              mes: moment(mesesCorrentes[0].data).format("MMMM yy"),
+              mes: moment(mesesCorrentes[0].data).locale("pt").format("MMMM yy"),
               minutos_formatados: minutes_to_hhmm(totalMinutosMes),
               minutos: totalMinutosMes,
               data_YYYYMMDD: parseInt(moment(mesesCorrentes[0].data).format("YYYYMMDD")),
@@ -156,7 +156,7 @@ export default async function buscarAnosServico() {
             });
           } else {
             // mesesAntesDeSetembroAnoAtual.unshift({
-            //   mes: moment(mesesCorrentes[0].data).format("MMMM yy"),
+            //   mes: moment(mesesCorrentes[0].data).locale("pt").format("MMMM yy"),
             //   minutos_formatados: minutes_to_hhmm(totalMinutosMes),
             //   minutos: totalMinutosMes,
             //   data_YYYYMMDD: moment(mesesCorrentes[0].data).format("YYYYMMDD"),
@@ -174,7 +174,7 @@ export default async function buscarAnosServico() {
             mesesCorrentesAnoSeguinte.push({
               data: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format(),
               mes_formatado: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
-              mes: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format("MMMM yy"),
+              mes: moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).locale("pt").format("MMMM yy"),
               minutos_formatados: '0:00',
               minutos: 0,
               data_YYYYMMDD: parseInt(moment(`${ano+1}${mesAtual <= 9 ? `0${mesAtual}` : mesAtual}`).format("YYYYMMDD")),
@@ -197,7 +197,7 @@ export default async function buscarAnosServico() {
             mesAnoSeguinteNome === '12'
           ) {
             // mesesDepoisDeSetembroAnoSeguinte.unshift({
-            //   mes: moment(mesesCorrentesAnoSeguinte[0].data).format("MMMM yy"),
+            //   mes: moment(mesesCorrentesAnoSeguinte[0].data).locale("pt").format("MMMM yy"),
             //   minutos_formatados: minutes_to_hhmm(totalMinutosMesAnoSeguinte),
             //   minutos: totalMinutosMesAnoSeguinte,
             //   data_YYYYMMDD: moment(mesesCorrentesAnoSeguinte[0].data).format("YYYYMMDD"),
@@ -205,7 +205,7 @@ export default async function buscarAnosServico() {
           } else {
             mesesAntesDeSetembroAnoSeguinte.unshift({
               mes_formatado: moment(mesesCorrentesAnoSeguinte[0].data).locale(formatarLocale(appLanguage.language)).format("MMMM yy"),
-              mes: moment(mesesCorrentesAnoSeguinte[0].data).format("MMMM yy"),
+              mes: moment(mesesCorrentesAnoSeguinte[0].data).locale("pt").format("MMMM yy"),
               minutos_formatados: minutes_to_hhmm(totalMinutosMesAnoSeguinte),
               minutos: totalMinutosMesAnoSeguinte,
               data_YYYYMMDD: parseInt(moment(mesesCorrentesAnoSeguinte[0].data).format("YYYYMMDD")),
@@ -265,7 +265,7 @@ export async function buscarDadosMesAnoServico(mesAno) {
 
       // Pega os relatorios do mes selecionado
       const relatoriosDoMes = todosRelatorios.filter((relatorio) => {
-        return moment(relatorio.data).format("MMMM yy") === mesAno;
+        return moment(relatorio.data).locale("pt").format("MMMM yy") === mesAno;
       });
 
       // Ordena os relatorio do mes selecionado por ordem descrescente
@@ -302,7 +302,7 @@ export async function buscarDadosMesAnoServico(mesAno) {
         // BUSCA OS ESTUDOS BÍBLICOS DO MÊS
         totalEstudosBiblicos = todasPessoas.map((pessoa) => {
           return pessoa.visitas.find((visita) => {
-            return visita.visita === 0 && moment(visita.data).format("MMMM yy") === mesAno;
+            return visita.visita === 0 && moment(visita.data).locale("pt").format("MMMM yy") === mesAno;
           })
         }).filter(v => v !== undefined);
         
@@ -315,7 +315,7 @@ export async function buscarDadosMesAnoServico(mesAno) {
 
         // // Pega todas os estudos bíblicos do mes selecionado
         // totalEstudosBiblicos = todasVisitasPessoas.filter((visita) => {
-        //   return moment(visita.data).format("MMMM yy") === mesAno && visita.visita === 0;
+        //   return moment(visita.data).locale("pt").format("MMMM yy") === mesAno && visita.visita === 0;
         // });
       }
       
@@ -346,7 +346,7 @@ export async function editarRelatorio({ relatorio, minutos }) {
 
       return await salvarAsyncStorage(todosRelatorios, '@tjdroid:relatorios')
       .then(() => {
-        return { mesAno: moment(atualRelatorio.data).format("MMMM yy")}
+        return { mesAno: moment(atualRelatorio.data).locale("pt").format("MMMM yy")}
       })
       .catch(() => {
         return false;
@@ -395,7 +395,7 @@ export async function salvarNovoRelatorio(relatorio, minutos) {
         const appLanguage = await buscarAsyncStorageTjDroidIdioma(); 
         
         return { 
-          mesAno: moment(novoRelatorio.data).format("MMMM yy") ,
+          mesAno: moment(novoRelatorio.data).locale("pt").format("MMMM yy") ,
           mesAnoFormatado: moment(novoRelatorio.data).locale(formatarLocale(appLanguage.language)).format("MMMM yy") 
         }
       })
@@ -436,7 +436,7 @@ export async function deletarRelatorio(idRelatorio, dataRelatorio) {
 
       return await salvarAsyncStorage(todosRelatorios, '@tjdroid:relatorios')
       .then(() => {
-        return { mesAno: moment(dataRelatorio, 'DD/MM/YYYY').format("MMMM yy") }
+        return { mesAno: moment(dataRelatorio, 'DD/MM/YYYY').locale("pt").format("MMMM yy") }
       })
       .catch(() => {
         return false;

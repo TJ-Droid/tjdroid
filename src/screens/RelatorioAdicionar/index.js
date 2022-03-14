@@ -2,7 +2,6 @@ import React from 'react';
 import Contador from '../../components/Contador';
 
 import moment from "moment";
-// import "moment/locale/pt-br";
 import { format } from "date-fns";
 
 export default function RelatorioAdicionar({route}) {
