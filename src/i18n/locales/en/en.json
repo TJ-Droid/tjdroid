@@ -92,6 +92,11 @@
         "report_deleted_message_error": "Error deleting report!",
         "alert_report_deleted_title": "DELETE REPORT",
         "alert_report_deleted_message": "Do you really want to delete the current report?",
+        "alert_month_report_deleted_title": "ERASE REPORT OF THE MONTH [{{mesFormatado}}]",
+        "alert_month_report_deleted_message": "Do you really want to remove all reports for the month of {{mesFormatado}}?",
+        "month_report_deleted_message_success": "Month reports successfully deleted!",
+        "month_report_deleted_message_error": "Error deleting this month's reports!",
+        "actual_month_report_delete_message_error": "Cannot delete current month reports!",
         "month_report_load_error_message": "Error searching this month's data!"
       },
       "relatorios": {

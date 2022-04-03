@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { SectionList, ToastAndroid } from "react-native";
+import { SectionList, ToastAndroid, Alert } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { RectButton } from "react-native-gesture-handler";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
-import buscarAnosServico from "../../controllers/relatoriosController";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
+
+import buscarAnosServico, {
+  deletarRelatorioMes,
+} from "../../controllers/relatoriosController";
 
 import {
   Container,
@@ -22,6 +25,7 @@ export default function Relatorios({ navigation }) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
+  const [reload, setReload] = useState(false);
   const [allAnosServicosOrdenados, setAllAnosServicosOrdenados] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
@@ -64,7 +68,51 @@ export default function Relatorios({ navigation }) {
     }
 
     return () => (continuarBuscarDados = false);
-  }, [isFocused]);
+  }, [isFocused, reload]);
+
+  // ALERTA de DELETAR RELATÓRIO do MÊS
+  const alertaExclusaoRelatorioMes = (mes, mesFormatado) =>
+    Alert.alert(
+      t("screens.relatoriomes.alert_month_report_deleted_title", {
+        mesFormatado,
+      }),
+      t("screens.relatoriomes.alert_month_report_deleted_message", {
+        mesFormatado,
+      }),
+      [
+        {
+          text: t("words.no"),
+          onPress: () => {},
+          style: "cancel",
+        },
+        { text: t("words.yes"), onPress: () => handleDeletarRelatorioMes(mes) },
+      ],
+      { cancelable: true }
+    );
+
+  // DELETAR RELATÓRIO do MÊS
+  function handleDeletarRelatorioMes(mes) {
+    deletarRelatorioMes(mes)
+      .then((dados) => {
+        // Trata o retorno
+        if (dados === 1) {
+          // Sucesso
+          // Mensagem Toast
+          ToastAndroid.show(t("screens.relatoriomes.month_report_deleted_message_success"), ToastAndroid.LONG);
+          // Faz o reload da página
+          setReload(!reload);
+        } else if(dados === 2) {
+          // Erro ao tentar excluir o mês atual
+          // Mensagem Toast
+          ToastAndroid.show(t("screens.relatoriomes.actual_month_report_delete_message_error"), ToastAndroid.LONG);
+        } else {
+          ToastAndroid.show(t("screens.relatoriomes.month_report_deleted_message_error"), ToastAndroid.LONG);
+        }
+      })
+      .catch((e) => {
+        ToastAndroid.show(t("screens.relatoriomes.month_report_deleted_message_error"), ToastAndroid.LONG);
+      });
+  }
 
   const HeaderItem = ({ section }) => (
     <HeaderItemList>
@@ -73,10 +121,17 @@ export default function Relatorios({ navigation }) {
   );
 
   const Item = ({ item }) => (
-    <RectButton
+    <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate("RelatorioMes", { mesAno: item.mes, mesAnoFormatado: item.mes_formatado });
+        navigation.navigate("RelatorioMes", {
+          mesAno: item.mes,
+          mesAnoFormatado: item.mes_formatado,
+        });
       }}
+      onLongPress={() =>
+        alertaExclusaoRelatorioMes(item.mes, item.mes_formatado.toUpperCase())
+      }
+      delayLongPress={1200} // 1.2 seconds
     >
       <ItemList>
         <ItemListMonthHour>
@@ -84,7 +139,7 @@ export default function Relatorios({ navigation }) {
           <ItemListTextHour>{item.minutos_formatados}</ItemListTextHour>
         </ItemListMonthHour>
       </ItemList>
-    </RectButton>
+    </TouchableWithoutFeedback>
   );
 
   const EmptyListMessage = () => (

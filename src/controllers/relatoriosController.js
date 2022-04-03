@@ -448,3 +448,32 @@ export async function deletarRelatorio(idRelatorio, dataRelatorio) {
   };
   return excluirRelatorio(idRelatorio);
 }
+
+// DELETAR RELATÓRIO MÊS
+export async function deletarRelatorioMes(mes) {
+  
+  // Verifica se o usuário está tentando excluir os relatório do mês atual e retorna um erro
+  if(moment(new Date()).locale("pt").format("MMMM yy") === mes){
+    return 2;
+  }
+  
+  return await buscarAsyncStorage('@tjdroid:relatorios')
+    .then(async (dados) => {
+      
+      const todosRelatorios = dados;
+      
+      // Pega os relatorios do mes selecionado
+      const todosRelatoriosMenosOExcluido = todosRelatorios.filter((relatorio) => {
+        return moment(relatorio.data).locale("pt").format("MMMM yy") !== mes;
+      });
+    
+      return await salvarAsyncStorage(todosRelatoriosMenosOExcluido, '@tjdroid:relatorios')
+      .then( async () => {
+        return 1;
+      })
+      .catch(() => {
+        return false;
+      });
+
+    })
+}

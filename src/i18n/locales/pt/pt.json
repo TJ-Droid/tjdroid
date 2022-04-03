@@ -92,6 +92,11 @@
         "report_deleted_message_error": "Erro ao deletar o relatório!",
         "alert_report_deleted_title": "DELETAR RELATÓRIO",
         "alert_report_deleted_message": "Deseja mesmo deletar o relatório atual?",
+        "alert_month_report_deleted_title": "LIMPAR RELATÓRIO DO MÊS [{{mesFormatado}}]",
+        "alert_month_report_deleted_message": "Deseja mesmo remover todos os relatórios do mês de {{mesFormatado}}?",
+        "month_report_deleted_message_success": "Relatórios do mês excluídos com sucesso!",
+        "month_report_deleted_message_error": "Erro ao excluir os relatórios desse mês!",
+        "actual_month_report_delete_message_error": "Não é possível excluir os relatórios do mês atual!",
         "month_report_load_error_message": "Erro ao buscar os dados desse mês!"
       },
       "relatorios": {
