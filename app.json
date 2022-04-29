@@ -3,7 +3,7 @@
     "name": "TJ Droid",
     "slug": "tjdroid",
     "scheme": "tjdroid",
-    "version": "1.0.15",
+    "version": "1.0.16",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -23,7 +23,7 @@
     "android": {
       "package": "dev.pedropaulo.tjdroid",
       "useNextNotificationsApi": true,
-      "versionCode": 16,
+      "versionCode": 17,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0277bd"
