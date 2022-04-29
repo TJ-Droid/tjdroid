@@ -1,4 +1,5 @@
 [
   { "language": "en", "label": "English (100%)" },
-  { "language": "pt", "label": "Português (100%)" }
+  { "language": "pt", "label": "Português (100%)" },
+  { "language": "es", "label": "Español (100%)" }
 ]

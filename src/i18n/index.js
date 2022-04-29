@@ -4,6 +4,7 @@ import * as RNLocalize from "react-native-localize";
 import { buscarAsyncStorage, salvarAsyncStorage } from "../services/AsyncStorageMethods";
 import en from "./locales/en/en.json";
 import pt from "./locales/pt/pt.json";
+import es from "./locales/es/es.json";
 
 const smartphoneLanguageCode = RNLocalize.getLocales()[0].languageCode;
 
@@ -14,6 +15,7 @@ const defaultLanguage = "en";
 const resources = {
   "en": en,
   "pt": pt,
+  "es": es,
 }
 
 // Busca o idioma salvo no AsyncStorage
