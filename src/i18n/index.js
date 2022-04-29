@@ -31,8 +31,7 @@ const languageDetector = {
     const langSelected = await verifyLanguage();
     const lang = langSelected?.choosed ? langSelected?.language : smartphoneLanguageCode;
     
-    await salvarAsyncStorage({ language: lang, choosed: false }, '@tjdroid:idioma');
-
+    await salvarAsyncStorage({ language: lang, choosed: langSelected?.choosed }, '@tjdroid:idioma');
     callback(lang);
   },
   init: () => {},
