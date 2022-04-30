@@ -4,6 +4,7 @@
     "slug": "tjdroid",
     "scheme": "tjdroid",
     "version": "1.0.16",
+    "jsEngine": "hermes",
     "assetBundlePatterns": [
       "**/*"
     ],
