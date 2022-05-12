@@ -23,13 +23,27 @@ Only available on Android.
 
 [<img src="https://img.shields.io/badge/Google_Play-414141?style=for-the-badge&logo=google-play&logoColor=white">](https://play.google.com/store/apps/details?id=dev.pedropaulo.tjdroid)
 
-## :keyboard: Contribution
+## :keyboard: Contribution with Code
 
-**With code:** This project is open source so any contributions are welcome.
+This project is open source so any contributions are welcome.
 
-**With translations:** If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
+### Pull Request
 
-**How to translate to your language:** 
+When you're finish a change, create a pull request, also known as a PR.
+
+You will want to prefix the name of your PR with the category it falls under:
+
+- [FEAT] Feature or enhancment
+- [CHORE] Admin type work (scripts, documentation etc)
+- [FIX] A bug fix
+
+For example - "[FIX] Rendering territory list bug"
+
+## :world_map: Contribution with Translations
+
+If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a free translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
+
+**How to use Crowdin to translate to your language:** 
 <p align="center">
   <img alt="Print do projeto" src=".github/translate-tutorial.gif" width="100%">
 </p>
