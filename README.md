@@ -29,6 +29,11 @@ Only available on Android.
 
 **With translations:** If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
 
+**How to translate to your language:** 
+<p align="center">
+  <img alt="Print do projeto" src=".github/translate-tutorial.gif" width="100%">
+</p>
+
 ## 🚀 Tecnologies
 -   [x] React Native with Expo Bare Workflow
 -   [x] styled-components
