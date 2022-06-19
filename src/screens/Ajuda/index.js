@@ -113,7 +113,7 @@ const Ajuda = () => {
           {section.identificator === "contribute" && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL("https://crowdin.com/project/tjdroid/invite");
+                Linking.openURL("https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations");
               }}
             >
               <StyledFeatherIcon name="external-link" size={22} />

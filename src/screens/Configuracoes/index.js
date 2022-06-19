@@ -432,7 +432,7 @@ export default function Configuracoes({ navigation }) {
                 />
                 <ItemListTextDescriptionTranslation
                   onPress={() => {
-                    Linking.openURL("https://crowdin.com/project/tjdroid/invite");
+                    Linking.openURL("https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations");
                   }}
                 >
                   {t("screens.configuracoes.app_translation_question")}
@@ -514,7 +514,7 @@ export default function Configuracoes({ navigation }) {
                 </ItemListTextTitle>
                 <ItemListTextDescription
                    onPress={async () => {
-                    Linking.openURL("https://github.com/pedropaulodf/tjdroid");
+                    Linking.openURL("https://github.com/TJ-Droid/tjdroid");
                   }}
                 >
                   {t("screens.configuracoes.github_description")}
