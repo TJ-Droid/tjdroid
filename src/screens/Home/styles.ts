@@ -1,7 +1,6 @@
 import styled from 'styled-components/native';
 import { ResponsiveSize } from '../../utils/fontResponsive'
-import { Feather } from "@expo/vector-icons";
-import { RectButton } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 import IconTerritoriosSvg from '../../images/svg/IconTerritoriosSvg';
 import IconPessoasSvg from '../../images/svg/IconPessoasSvg';
@@ -18,7 +17,7 @@ export const Container = styled.View`
   flex-wrap: wrap;
 `;
 
-export const MenuItem = styled(RectButton)`
+export const MenuItem = styled(TouchableOpacity)`
   background-color: ${({theme}) => theme.color.primary}36;
   border-radius: 17px;
   padding: 15px;
@@ -64,7 +63,7 @@ export const ContainerLand = styled.View`
   flex-wrap: wrap;
 `;
 
-export const MenuItemLand = styled(RectButton)`
+export const MenuItemLand = styled(TouchableOpacity)`
   background-color: ${({theme}) => theme.color.primary}36;
   border-radius: 17px;
   padding: 15px;

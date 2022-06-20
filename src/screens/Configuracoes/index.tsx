@@ -1,14 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, Linking, ToastAndroid } from "react-native";
 import { Switch } from "react-native-gesture-handler";
 import Rate, { AndroidMarket } from "react-native-rate";
+import { useThemeContext } from "../../contexts/Theme";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import {
   carregarConfiguracoes,
   salvarConfiguracoes,
 } from "../../controllers/configuracoesController";
-import ThemeContext from "../../contexts/Theme";
-import LoadingSpinner from "../../components/LoadingSpinner";
-
+import { analyticsCustomEvent } from "../../services/AnalyticsCustomEvents";
+import SelectPickerLanguages from "../../components/SelectPickerLanguages";
+import { useTranslation } from "react-i18next";
+import themes from "../../themes";
+import { ThemeColors, ThemeConfiguracoesScreenType } from "../../types/Theme";
 import {
   Container,
   ItemList,
@@ -20,22 +24,18 @@ import {
   ItemListBoxSpace,
   ItemListBoxButtonCircleColor,
   StyledFeatherLeftIcon,
-  StyledIoniconsLeftIcon,
   ItemListSpaceBetween,
   SectionDivider,
   SectionDividerText,
 } from "./styles";
-import { analyticsCustomEvent } from "../../services/AnalyticsCustomEvents";
-import SelectPickerLanguages from "../../components/SelectPickerLanguages";
-import { useTranslation } from "react-i18next";
 
-export default function Configuracoes({ navigation }) {
-  const { switchTheme } = useContext(ThemeContext);
+export default function Configuracoes({ navigation }: any) {
   const { t, i18n } = useTranslation();
+  const { setActualTheme, actualTheme } = useThemeContext();
 
   const [carregando, setCarregando] = useState(true);
   const [isEnabledDarkMode, setIsEnabledDarkMode] = useState(false);
-  const [tema, setTema] = useState({
+  const [temaLocal, setTemaLocal] = useState({
     azulEscuroDefault: false,
     verde: false,
     roxo: false,
@@ -43,15 +43,19 @@ export default function Configuracoes({ navigation }) {
     rosa: false,
     azulClaro: false,
     preto: false,
+    marsala: false,
   });
-  const [configuracoes, setConfiguracoes] = useState({});
+  const [configuracoes, setConfiguracoes] = useState<ThemeConfiguracoesScreenType>({
+    actualTheme: "azulEscuroDefault",
+    darkMode: false,
+  });
   const [obgEscondido, setObgEscondido] = useState(0);
-
+  
   // Altera o idioma para o selecionado
-  const languageSelected = (language) => {
+  const languageSelected = (language: string) => {
     i18n.changeLanguage(language);
   };
-
+  
   // Obrigado escondido
   useEffect(() => {
     if (obgEscondido >= 5) {
@@ -72,7 +76,7 @@ export default function Configuracoes({ navigation }) {
 
           // Seta o Switch do Dark mode
           setIsEnabledDarkMode(configs.darkMode);
-
+          
           // Seta o tema do app
           salvarTemaLocal(configs.actualTheme);
 
@@ -101,16 +105,16 @@ export default function Configuracoes({ navigation }) {
         // Trata o retorno
         if (dados) {
           // Salva nas configurações
-          setConfiguracoes({ ...configuracoes, darkMode: !isEnabledDarkMode });
+          setConfiguracoes(prev => ({ ...prev, darkMode: !isEnabledDarkMode }));
 
           // Muda o switch
           setIsEnabledDarkMode(!isEnabledDarkMode);
-
+          
           // Salva no context
           if (isEnabledDarkMode === false) {
-            switchTheme("darkMode");
+            setActualTheme && setActualTheme(themes["darkMode"]);
           } else {
-            switchTheme(configuracoes.actualTheme);
+            setActualTheme && setActualTheme(themes[configuracoes.actualTheme]);
           }
         } else {
           // Se erro, dispara o toast
@@ -135,7 +139,7 @@ export default function Configuracoes({ navigation }) {
   };
 
   // Função para salvar o tema selecionado
-  const salvarTema = async (tema) => {
+  const salvarTema = async (tema: ThemeColors) => {
     // Salva no Storage
     await salvarConfiguracoes({
       ...configuracoes,
@@ -146,7 +150,7 @@ export default function Configuracoes({ navigation }) {
         // Trata o retorno
         if (dados) {
           // Salva nas configurações
-          setConfiguracoes({ ...configuracoes, actualTheme: tema });
+          setConfiguracoes(prev => ({ ...prev, actualTheme: tema }));
 
           // Salva no estado atual
           salvarTemaLocal(tema);
@@ -155,7 +159,7 @@ export default function Configuracoes({ navigation }) {
           setIsEnabledDarkMode(false);
 
           // Salva no context
-          switchTheme(tema);
+          setActualTheme && setActualTheme(themes[tema]);
         } else {
           // Se erro, dispara o toast
           ToastAndroid.show(
@@ -177,10 +181,10 @@ export default function Configuracoes({ navigation }) {
   };
   
   // Função para salvar o tema escolhido
-  const salvarTemaLocal = (tema) => {
+  const salvarTemaLocal = (tema: ThemeColors) => {
     switch (tema) {
       case "azulEscuroDefault":
-        setTema({
+        setTemaLocal({
           azulEscuroDefault: true,
           verde: false,
           roxo: false,
@@ -192,7 +196,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "verde":
-        setTema({
+        setTemaLocal({
           verde: true,
           azulEscuroDefault: false,
           roxo: false,
@@ -204,7 +208,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "roxo":
-        setTema({
+        setTemaLocal({
           roxo: true,
           azulEscuroDefault: false,
           verde: false,
@@ -216,7 +220,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "laranja":
-        setTema({
+        setTemaLocal({
           laranja: true,
           azulEscuroDefault: false,
           verde: false,
@@ -228,7 +232,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "rosa":
-        setTema({
+        setTemaLocal({
           rosa: true,
           azulEscuroDefault: false,
           verde: false,
@@ -240,7 +244,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "azulClaro":
-        setTema({
+        setTemaLocal({
           azulClaro: true,
           azulEscuroDefault: false,
           verde: false,
@@ -252,7 +256,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "preto":
-        setTema({
+        setTemaLocal({
           preto: true,
           azulEscuroDefault: false,
           verde: false,
@@ -264,7 +268,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       case "marsala":
-        setTema({
+        setTemaLocal({
           preto: false,
           azulEscuroDefault: false,
           verde: false,
@@ -276,7 +280,7 @@ export default function Configuracoes({ navigation }) {
         });
         break;
       default:
-        setTema({
+        setTemaLocal({
           azulEscuroDefault: true,
           verde: false,
           roxo: false,
@@ -305,7 +309,6 @@ export default function Configuracoes({ navigation }) {
     Rate.rate(options, (success, errorMessage) => {
       if (success) {
         // this technically only tells us if the user successfully went to the Review Page. Whether they actually did anything, we do not know.
-        // console.log("Usuário viu a tela de review com sucesso!");
         ToastAndroid.show(":)", ToastAndroid.SHORT);
       }
       if (errorMessage) {
@@ -326,7 +329,7 @@ export default function Configuracoes({ navigation }) {
             <StyledFeatherLeftIcon name="moon" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace60>
-                <ItemListTextTitle tail numberOfLines={1}>
+                <ItemListTextTitle numberOfLines={1}>
                   {t("screens.configuracoes.night_mode")}
                 </ItemListTextTitle>
               </ItemListTitleSpace60>
@@ -346,14 +349,14 @@ export default function Configuracoes({ navigation }) {
             <StyledFeatherLeftIcon name="droplet" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
-                <ItemListTextTitle tail numberOfLines={1}>
+                <ItemListTextTitle numberOfLines={1}>
                   {t("screens.configuracoes.themes")}
                 </ItemListTextTitle>
                 <ItemListBoxSpace>
                   <ItemListBoxButtonCircleColor
                     bgColor="#3690B7"
                     onPress={() => salvarTema("azulEscuroDefault")}
-                    selected={tema.azulEscuroDefault}
+                    selected={temaLocal.azulEscuroDefault}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_blue")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_blue")}
@@ -361,7 +364,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#50B87C"
                     onPress={() => salvarTema("verde")}
-                    selected={tema.verde}
+                    selected={temaLocal.verde}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_green")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_green")}
@@ -369,7 +372,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#EC903C"
                     onPress={() => salvarTema("laranja")}
-                    selected={tema.laranja}
+                    selected={temaLocal.laranja}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_orange")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_orange")}
@@ -377,7 +380,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#EC6FAB"
                     onPress={() => salvarTema("rosa")}
-                    selected={tema.rosa}
+                    selected={temaLocal.rosa}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_pink")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_pink")}
@@ -385,7 +388,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#2DA0E1"
                     onPress={() => salvarTema("azulClaro")}
-                    selected={tema.azulClaro}
+                    selected={temaLocal.azulClaro}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_lightblue")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_lightblue")}
@@ -393,7 +396,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#581d22"
                     onPress={() => salvarTema("marsala")}
-                    selected={tema.marsala}
+                    selected={temaLocal.marsala}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_marsala")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_marsala")}
@@ -401,7 +404,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#523B73"
                     onPress={() => salvarTema("roxo")}
-                    selected={tema.roxo}
+                    selected={temaLocal.roxo}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_purple")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_purple")}
@@ -409,7 +412,7 @@ export default function Configuracoes({ navigation }) {
                   <ItemListBoxButtonCircleColor
                     bgColor="#383838"
                     onPress={() => salvarTema("preto")}
-                    selected={tema.preto}
+                    selected={temaLocal.preto}
                     accessible={true}
                     accessibilityLabel={t("screens.configuracoes.color_accessibility_label_black")}
                     accessibilityHint={t("screens.configuracoes.color_accessibility_hint_black")}
@@ -428,7 +431,7 @@ export default function Configuracoes({ navigation }) {
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <SelectPickerLanguages
-                  onChangeLanguageValue={(l) => languageSelected(l)}
+                  onChangeLanguageValue={(l: string) => languageSelected(l)}
                 />
                 <ItemListTextDescriptionTranslation
                   onPress={() => {
@@ -449,7 +452,7 @@ export default function Configuracoes({ navigation }) {
             <StyledFeatherLeftIcon name="help-circle" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
-                <ItemListTextTitle tail numberOfLines={1}>
+                <ItemListTextTitle numberOfLines={1}>
                 {t("screens.configuracoes.help")}
                 </ItemListTextTitle>
                 <ItemListTextDescription
@@ -465,7 +468,7 @@ export default function Configuracoes({ navigation }) {
             <StyledFeatherLeftIcon name="file-text" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
-                <ItemListTextTitle tail numberOfLines={1}>
+                <ItemListTextTitle numberOfLines={1}>
                 {t("screens.configuracoes.terms")}
                 </ItemListTextTitle>
                 <ItemListTextDescription>
@@ -489,7 +492,7 @@ export default function Configuracoes({ navigation }) {
             <StyledFeatherLeftIcon name="smile" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
-                <ItemListTextTitle tail numberOfLines={1}>
+                <ItemListTextTitle numberOfLines={1}>
                 {t("screens.configuracoes.like_app")}
                 </ItemListTextTitle>
                 <ItemListTextDescription
@@ -509,7 +512,7 @@ export default function Configuracoes({ navigation }) {
             <StyledFeatherLeftIcon name="github" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
-                <ItemListTextTitle tail numberOfLines={1}>
+                <ItemListTextTitle numberOfLines={1}>
                 {t("screens.configuracoes.github")}
                 </ItemListTextTitle>
                 <ItemListTextDescription

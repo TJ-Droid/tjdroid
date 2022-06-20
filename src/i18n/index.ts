@@ -27,7 +27,7 @@ const verifyLanguage = async () => {
 const languageDetector = {
   type: 'languageDetector',
   async: true,
-  detect: async (callback) => {
+  detect: async (callback: any) => {
     const langSelected = await verifyLanguage();
     const lang = langSelected?.choosed ? langSelected?.language : smartphoneLanguageCode;
     
@@ -41,7 +41,7 @@ const languageDetector = {
 // Deixei esse código aqui no erro para evitar problemas de carregamento errado dos idiomas
   // Seta o idioma
   i18next
-  .use(languageDetector)
+  .use<any>(languageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: defaultLanguage,

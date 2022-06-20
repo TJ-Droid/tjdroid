@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Função para salvar os dados
-export const salvarAsyncStorage = async (value, identificador) => {
+export const salvarAsyncStorage = async (value: any, identificador: string) => {
   try {
     const json = JSON.stringify(value);
     await AsyncStorage.setItem(identificador, json);
@@ -11,9 +11,9 @@ export const salvarAsyncStorage = async (value, identificador) => {
 };
 
 // Função para buscar os dados
-export const buscarAsyncStorage = async (identificador) => {
+export const buscarAsyncStorage = async (identificador: string) => {
   try {
-    const json = JSON.parse(await AsyncStorage.getItem(identificador));
+    const json = JSON.parse(await AsyncStorage.getItem(identificador) || "[]");
 
     // Verifica se o retorno é null.
     // ele retorna null quando não existe
@@ -23,7 +23,7 @@ export const buscarAsyncStorage = async (identificador) => {
     // Se não existir nada, adiciona um array vazio e retorna o novo array vazio
     await AsyncStorage.setItem(identificador, JSON.stringify([]))
       .then(async () => {
-        return JSON.parse(await AsyncStorage.getItem(identificador));
+        return JSON.parse(await AsyncStorage.getItem(identificador) || "[]");
       })
       .catch(() => {
         return false;

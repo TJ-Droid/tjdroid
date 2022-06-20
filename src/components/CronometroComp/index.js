@@ -102,7 +102,7 @@ export default function CronometroComp() {
     () => {
       setMinutos((m) => m + 1);
     },
-    statusUseTmIntMinutos === "running" ? 60000 : null
+    statusUseTmIntMinutos === "running" ? 60000 : undefined
   );
 
   // Hook para monitorar o piscar dos minutos
@@ -110,7 +110,7 @@ export default function CronometroComp() {
     () => {
       setPiscar((piscar) => !piscar);
     },
-    statusUseTmIntPiscar === "running" ? 1000 : null
+    statusUseTmIntPiscar === "running" ? 1000 : undefined
   );
 
   // Recebe os dados para configurar os estado inicial do contador

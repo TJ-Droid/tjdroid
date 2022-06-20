@@ -1,8 +1,9 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import analytics from "@react-native-firebase/analytics";
-import { ThemeContext } from "styled-components";
+import { useTranslation } from 'react-i18next'
+
 import Header from "../components/Header";
 import Home from "../screens/Home";
 import Configuracoes from "../screens/Configuracoes";
@@ -24,26 +25,32 @@ import TerritorioResidenciaEditarVisita from "../screens/TerritorioResidenciaEdi
 import TerritorioInformacao from "../screens/TerritorioInformacao";
 import Ajuda from "../screens/Ajuda";
 import Backup from "../screens/Backup";
-import { useTranslation } from 'react-i18next'
+
+import { ThemeColors } from "../types/Theme";
 
 const { Navigator, Screen } = createStackNavigator();
 
-export default function Routes(props) {
-  const routeNameRef = React.useRef();
-  const navigationRef = React.useRef();
+type RoutesTypeProps = {
+  deepLinkingProp: any;
+  actualTheme?: ThemeColors;
+}
+
+export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
+  const routeNameRef = React.useRef<string | undefined>(undefined);
+  const navigationRef = React.useRef<NavigationContainerRef>(null);
 
   const {t} = useTranslation();
 
   return (
     <NavigationContainer
-      linking={props.deepLinkingProp}
+      linking={deepLinkingProp}
       ref={navigationRef}
       onReady={() => {
-        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name;
       }}
       onStateChange={async () => {
-        const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+        const previousRouteName = routeNameRef?.current;
+        const currentRouteName = navigationRef?.current?.getCurrentRoute()?.name;
 
         if (previousRouteName !== currentRouteName) {
           await analytics().logScreenView({
@@ -57,7 +64,7 @@ export default function Routes(props) {
       <Navigator
         screenOptions={{
           headerShown: true,
-          cardStyle: { backgroundColor: ThemeContext._currentValue.color.bg },
+          // cardStyle: { backgroundColor: ThemeContext._currentValue.color.bg},
         }}
       >
         <Screen
@@ -68,8 +75,6 @@ export default function Routes(props) {
               <Header
                 title="TJ Droid"
                 isHomePage
-                showSave={false}
-                showDelete={false}
               />
             ),
           }}

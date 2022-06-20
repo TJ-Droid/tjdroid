@@ -57,7 +57,7 @@ import {
 
 export default function Header({
   title,
-  capitalize,
+  capitalize = true,
   showGoBack = false,
   showGoBackHome = false,
   showGoBackPersons = false,

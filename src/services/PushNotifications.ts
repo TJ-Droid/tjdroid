@@ -5,7 +5,7 @@ export async function dismissAllNotifications(){
   await Notifications.dismissAllNotificationsAsync();
 }
 
-export async function schedulePushNotificationStart(horaInicio) {
+export async function schedulePushNotificationStart(horaInicio: string) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: `${i18next.t("services.push_chronometer_started_title")} ⏳`,
@@ -19,7 +19,7 @@ export async function schedulePushNotificationStart(horaInicio) {
   });
 }
 
-export async function schedulePushNotificationPaused(horaInicio) {
+export async function schedulePushNotificationPaused(horaInicio: string) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: `${i18next.t("services.push_chronometer_paused_title")} ⏸`,

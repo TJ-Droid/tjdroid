@@ -9,6 +9,7 @@
       "**/*"
     ],
     "orientation": "portrait",
+    "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",

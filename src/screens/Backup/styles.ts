@@ -12,7 +12,6 @@ export const ItemList = styled.View`
   height: auto;
   flex-direction: row;
   align-items: center;
-  /* background: ${({ theme }) => theme.color.bg}; */
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
@@ -22,7 +21,6 @@ export const ItemListColumn = styled.View`
   width: 100%;
   height: auto;
   align-items: center;
-  /* background: ${({ theme }) => theme.color.bg}; */
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
@@ -97,14 +95,16 @@ export const StyledZipIcon = styled.Text`
   margin-left: 10px;
 `;
 
-export const StyledFeatherButtonWrapper = styled.View`
-  /* width: 100%; */
+export const StyledFeatherButtonWrapper = styled.View<{
+  bgColor: string;
+  marginBottom: string;
+}>`
   flex: 1;
-  background-color: ${props => props.bgColor};
+  background-color: ${(props) => props.bgColor};
   flex-direction: row;
   align-items: center;
   border-radius: 50px;
-  margin-bottom: ${props => props.marginBottom};
+  margin-bottom: ${(props) => props.marginBottom};
   padding-right: 14px;
 `;
 
