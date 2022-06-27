@@ -43,13 +43,17 @@ For example - "[FIX] Rendering territory list bug"
 
 If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a free translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
 
-**How to use Crowdin to translate to your language:** 
+### ⭐ Acknowledgment for helping in translations:
+- Евгений Пудовкин (Russian)
+
+### ➡️ How to use Crowdin to translate to your language:
 <p align="center">
   <img alt="Print do projeto" src=".github/translate-tutorial.gif" width="100%">
 </p>
 
 ## 🚀 Tecnologies
 -   [x] React Native with Expo Bare Workflow
+-   [x] Typescript
 -   [x] styled-components
 -   [x] moment
 -   [x] date-fns
@@ -77,4 +81,4 @@ If you want to help with translation to your language, please use [the link belo
 -   [x] react-native-svg-transformer
 -   [x] react-native-zip-archive
 
-*TJ Droid app its based on the old JW Droid app, develped by Artem Chivchalov.*
+*TJ Droid app its based on the old JW Droid app, developed by Artem Chivchalov.*

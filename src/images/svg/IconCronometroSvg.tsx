@@ -1,15 +1,21 @@
 import React from 'react'
 import Svg, { Path } from "react-native-svg"
 
-export default function IconCronometroSvg({iconColor, width = 76, height = 87, widthVB = 76, heightVB = 87}) {
+type IconCronometroSvgProps = {
+  iconColor: string;
+  width: number;
+  height: number;
+  widthVB: number;
+  heightVB: number;
+}
+
+export default function IconCronometroSvg({ iconColor, width = 76, height = 87, widthVB = 76, heightVB = 87 }: IconCronometroSvgProps) {
   return (
     <Svg
       width={width}
       height={height}
-      viewBox="0 0 87 87"
       viewBox={`0 0 ${widthVB} ${heightVB}`}
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <Path
         d="M67.206 25.903l2.24-2.24a1.45 1.45 0 000-2.05l-4.101-4.101a1.449 1.449 0 00-2.05 0l-2.24 2.24a37.486 37.486 0 00-19.025-7.9V8.697h1.45c1.6 0 2.898-1.298 2.898-2.899V2.9C46.378 1.298 45.08 0 43.48 0H31.885a2.899 2.899 0 00-2.899 2.899v2.898c0 1.6 1.298 2.899 2.9 2.899h1.448v3.157a37.486 37.486 0 00-19.024 7.9l-2.24-2.241a1.449 1.449 0 00-2.05 0l-4.102 4.101a1.449 1.449 0 000 2.05l2.24 2.24c-12.236 15.43-10.529 37.68 3.919 51.061s36.763 13.381 51.21 0c14.448-13.382 16.156-35.631 3.919-51.06zM64.32 20.58l2.058 2.058-1.055 1.057a37.702 37.702 0 00-2.054-2.054l1.051-1.06zM31.885 2.9H43.48v2.898H31.885V2.9zm4.348 5.797h2.899v2.934c-.482-.017-.964-.036-1.45-.036-.485 0-.968.02-1.449.037V8.695zM8.986 22.638l2.058-2.058 1.057 1.055a37.74 37.74 0 00-2.054 2.054l-1.061-1.05zM37.682 84.06C18.472 84.06 2.9 68.486 2.9 49.276s15.573-34.783 34.783-34.783 34.783 15.573 34.783 34.783c-.022 19.201-15.582 34.76-34.783 34.783z"

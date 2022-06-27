@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import {
   ButtonsContainer,
@@ -22,14 +22,14 @@ export default function DialogModal({
   dialogCloseFunction,
   keyboardTypeNumber = false,
 }) {
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   // Dialog states
   const [firstValue, setFirstValue] = useState(true);
   const [dialogTextInputValue, setDialogTextInputValue] = useState(dialogValue);
   const [dialogTextInputError, setDialogTextInputError] = useState(false);
-  const [dialogTextInputErrorMessage, setDialogTextInputErrorMessage] = useState(t("components.dialogmodal.empty_error_message"));
+  const [dialogTextInputErrorMessage, setDialogTextInputErrorMessage] =
+    useState(t("components.dialogmodal.empty_error_message"));
 
   // useEffect(() => {
   //   setDialogTextInputValue(dialogValue);
@@ -46,7 +46,9 @@ export default function DialogModal({
   function handleDialogTextInputChange(text) {
     setDialogTextInputValue(text);
     if (text === "") {
-      setDialogTextInputErrorMessage(t("components.dialogmodal.empty_error_message"));
+      setDialogTextInputErrorMessage(
+        t("components.dialogmodal.empty_error_message")
+      );
       setDialogTextInputError(true);
     } else {
       setDialogTextInputError(false);
@@ -56,28 +58,35 @@ export default function DialogModal({
 
   // Handle Submit modal function
   function handleSubmitButton() {
-    
-    
-    if(keyboardTypeNumber === true && dialogTextInputValue < 1){
-      setDialogTextInputErrorMessage(t("components.dialogmodal.less_than_1_error_message"));
+    if (keyboardTypeNumber === true && dialogTextInputValue < 1) {
+      setDialogTextInputErrorMessage(
+        t("components.dialogmodal.less_than_1_error_message")
+      );
       setDialogTextInputValue("");
       setDialogTextInputError(true);
       return;
     }
-    
-    if(keyboardTypeNumber === true && dialogTextInputValue > 100){
-      setDialogTextInputErrorMessage(t("components.dialogmodal.more_than_100_error_message"));
+
+    if (keyboardTypeNumber === true && dialogTextInputValue > 100) {
+      setDialogTextInputErrorMessage(
+        t("components.dialogmodal.more_than_100_error_message")
+      );
       setDialogTextInputError(true);
-      setDialogTextInputValue('100');
+      setDialogTextInputValue("100");
       return;
     }
 
-    if (dialogValue !== '' && firstValue === true && dialogValue !== undefined) {
+    if (
+      dialogValue !== "" &&
+      firstValue === true &&
+      dialogValue !== undefined
+    ) {
       return dialogFunction(dialogValue);
     } else {
-
-      if (dialogTextInputValue === '' || dialogTextInputValue === undefined) {
-        setDialogTextInputErrorMessage(t("components.dialogmodal.empty_error_message"));
+      if (dialogTextInputValue === "" || dialogTextInputValue === undefined) {
+        setDialogTextInputErrorMessage(
+          t("components.dialogmodal.empty_error_message")
+        );
         setDialogTextInputError(true);
       } else {
         return dialogFunction(dialogTextInputValue);
@@ -92,7 +101,6 @@ export default function DialogModal({
         onBackdropPress={handleCancelDialog}
       >
         <TextsContainer>
-
           <StyledDialogTitle>{dialogTitle}</StyledDialogTitle>
           <StyledDialogDescription>{dialogMessage}</StyledDialogDescription>
 
@@ -101,7 +109,6 @@ export default function DialogModal({
               {dialogTextInputErrorMessage}
             </StyledDialogDescriptionErrorMessage>
           )}
-
         </TextsContainer>
 
         <StyledDialogInput
@@ -110,16 +117,27 @@ export default function DialogModal({
           multiline
           numberOfLines={1}
           onChangeText={(e) => handleDialogTextInputChange(e)}
-          value={firstValue ? dialogValue !== '' ? dialogValue : dialogTextInputValue : dialogTextInputValue}
-          keyboardType={keyboardTypeNumber ? 'numeric' : 'default'}
+          value={
+            firstValue
+              ? dialogValue !== ""
+                ? dialogValue
+                : dialogTextInputValue
+              : dialogTextInputValue
+          }
+          keyboardType={keyboardTypeNumber ? "numeric" : "default"}
           maxLength={keyboardTypeNumber ? 3 : 200}
         />
-        
-        <ButtonsContainer>
-          <StyledDialogButtonCancel label={t("words.cancel")} onPress={handleCancelDialog} />
-          <StyledDialogButtonOk label={t("words.add")} onPress={handleSubmitButton} />
-        </ButtonsContainer>
 
+        <ButtonsContainer>
+          <StyledDialogButtonCancel
+            label={t("words.cancel")}
+            onPress={handleCancelDialog}
+          />
+          <StyledDialogButtonOk
+            label={t("words.add")}
+            onPress={handleSubmitButton}
+          />
+        </ButtonsContainer>
       </StyledDialogContainer>
     </>
   );

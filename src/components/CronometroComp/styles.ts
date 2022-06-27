@@ -63,7 +63,10 @@ export const ActionsButtonsArea = styled.View`
   width: 100%;
 `;
 
-export const ActionsButtonsStyle = styled.View`
+export const ActionsButtonsStyle = styled.View<{
+  lightColor?: boolean;
+  darkBlueColor?: boolean;
+}>`
   padding: 9px 20px;
   flex-direction: row;
   justify-content: center;
@@ -142,12 +145,14 @@ export const BottomSectionButtonsArea = styled.View`
   align-items: center;
 `;
 
-export const BottomSectionButtonWrapper = styled.View`
+export const BottomSectionButtonWrapper = styled.View<{
+  marginRight?: number;
+}>`
   background: ${({ theme }) => theme.color.primary}30;
   border-radius: 7px;
   padding: 8px;
   margin-right: ${({ marginRight }) =>
-    marginRight ? marginRight + "px" : "0px"};
+    marginRight ? `${marginRight}px` : "0px"};
 `;
 
 export const BottomSectionQuantityText = styled.Text`

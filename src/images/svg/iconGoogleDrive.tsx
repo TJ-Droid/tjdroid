@@ -1,14 +1,14 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg";
 
-export default function IconGoogleDrive({ iconColor }) {
+export default function IconGoogleDrive({ iconColor }: { iconColor: string }) {
   return (
     <Svg
       width={21}
       height={21}
       viewBox="0 0 21 21"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      // xmlns="http://www.w3.org/2000/svg"
     >
       <Path
         d="M13.2604 1.27148H7.7726C7.55271 1.27148 7.34961 1.38862 7.23968 1.5791C7.12976 1.76958 7.12972 2.00386 7.23968 2.19434L13.1066 12.3457H20.027L13.7927 1.57849C13.6828 1.38863 13.4797 1.27148 13.2604 1.27148Z"

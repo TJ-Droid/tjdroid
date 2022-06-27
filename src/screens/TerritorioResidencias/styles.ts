@@ -1,7 +1,7 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.SafeAreaView`
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   flex: 1;
 `;
 
@@ -10,15 +10,17 @@ export const ItemList = styled.View`
   flex: 1;
   height: auto;
   flex-direction: column;
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   border-bottom-width: 1px;
-  border-bottom-color: ${({theme}) => theme.color.primary}20;
+  border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
 
-export const ItemListTerritoryColor = styled.View`
+export const ItemListTerritoryColor = styled.View<{
+  bgColor: string;
+}>`
   width: 10px;
   height: 100%;
-  background: ${props => props.bgColor};
+  background: ${(props) => props.bgColor};
   margin-right: 10px;
   /* opacity: 0.7; */
 `;
@@ -32,20 +34,20 @@ export const ItemListTerritory = styled.View`
 
 export const ItemListTerritoryTitle = styled.Text`
   font-size: 18px;
-  color: ${({theme}) => theme.color.text_primary}99;
+  color: ${({ theme }) => theme.color.text_primary}99;
   text-transform: capitalize;
   font-weight: bold;
   padding: 0px 0px 8px 0px;
 `;
 
 export const ItemListTerritoryQuantityVisits = styled.Text`
-  color: ${({theme}) => theme.color.primary};
+  color: ${({ theme }) => theme.color.primary};
   font-size: 14px;
   font-weight: bold;
   text-align: center;
   border-radius: 50px;
   padding: 4px 10px;
-  background: ${({theme}) => theme.color.primary}20;
+  background: ${({ theme }) => theme.color.primary}20;
 `;
 
 export const ItemListTerritoryQuantityZeroVisits = styled.Text`
@@ -61,14 +63,14 @@ export const ItemListTerritoryQuantityZeroVisits = styled.Text`
 
 export const ItemListTerritoryDescription = styled.Text`
   font-size: 16px;
-  color: ${({theme}) => theme.color.text_secondary}80;
+  color: ${({ theme }) => theme.color.text_secondary}80;
   padding: 0px 10px 12px 0px;
   width: 100%;
 `;
 
 export const ItemListTerritoryTextBold = styled.Text`
   font-size: 16px;
-  color: ${({theme}) => theme.color.text_secondary}80;
+  color: ${({ theme }) => theme.color.text_secondary}80;
   font-weight: bold;
 `;
 

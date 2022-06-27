@@ -1,7 +1,7 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.SafeAreaView`
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   width: 100%;
   height: 100%;
   flex-direction: column;
@@ -15,9 +15,9 @@ export const ItemList = styled.View`
   width: 100%;
   height: 60px;
   flex-direction: row;
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   border-bottom-width: 1px;
-  border-bottom-color: ${({theme}) => theme.color.primary}20;
+  border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
 
 export const ItemListMonthHour = styled.View`
@@ -29,13 +29,13 @@ export const ItemListMonthHour = styled.View`
 
 export const ItemListTextMonth = styled.Text`
   font-size: 20px;
-  color: ${({theme}) => theme.color.text_secondary};
+  color: ${({ theme }) => theme.color.text_secondary};
   text-transform: capitalize;
 `;
 
 export const ItemListTextHour = styled.Text`
   font-size: 20px;
-  color: ${({theme}) => theme.color.text_secondary};
+  color: ${({ theme }) => theme.color.text_secondary};
 `;
 
 export const HeaderItemList = styled.View`
@@ -45,9 +45,9 @@ export const HeaderItemList = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: ${({theme}) => theme.color.bg_list_divider};
+  background: ${({ theme }) => theme.color.bg_list_divider};
   border-bottom-width: 1px;
-  border-bottom-color: ${({theme}) => theme.color.primary}20;
+  border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
 
 export const HeaderItemListText = styled.Text`
@@ -55,6 +55,6 @@ export const HeaderItemListText = styled.Text`
   font-weight: bold;
   height: 40px;
   padding-top: 6px;
-  color: ${({theme}) => theme.color.text_list_divider};
+  color: ${({ theme }) => theme.color.text_list_divider};
   align-self: center;
 `;

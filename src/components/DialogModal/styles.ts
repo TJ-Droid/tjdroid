@@ -20,7 +20,8 @@ export const StyledDialogInput = styled(Dialog.Input).attrs(({ theme }) => ({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
-    paddingVertical: 3,
+    paddingTop: 3,
+    lineHeight: 30,
     borderColor: `${theme.color.text_secondary}40`,
   },
 }))`

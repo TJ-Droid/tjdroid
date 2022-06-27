@@ -8,7 +8,7 @@ export default function IconSmileTristeSvg() {
       height={70}
       viewBox="0 0 512 512"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      // xmlns="http://www.w3.org/2000/svg"
     >
       <Path
         d="M256 0C114.841 0 0 114.841 0 256s114.841 256 256 256 256-114.841 256-256S397.159 0 256 0zm0 482C131.383 482 30 380.617 30 256S131.383 30 256 30s226 101.383 226 226-101.383 226-226 226z"

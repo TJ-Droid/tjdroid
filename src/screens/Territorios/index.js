@@ -19,6 +19,7 @@ import {
   ItemListTextDateSelected,
   ItemListTextDateWorked,
 } from "./styles";
+import { TerritoriesType } from "../../types/Territories";
 
 export default function Territorios({ navigation }) {
   
@@ -120,7 +121,7 @@ export default function Territorios({ navigation }) {
     >
       <ItemList>
         <ItemListTerritory>
-          <ItemListTerritoryTextName tail numberOfLines={2} >{item.nome}</ItemListTerritoryTextName>
+          <ItemListTerritoryTextName ellipsizeMode="tail" numberOfLines={2} >{item.nome}</ItemListTerritoryTextName>
         </ItemListTerritory>
         <View style={{flex: 1, flexDirection: 'column'}}>
           <ItemListTextDateSelected>{item.dataSelecionado}</ItemListTextDateSelected>

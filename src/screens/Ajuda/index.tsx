@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-
-// import all the components we are going to use
 import { Linking, SafeAreaView, ScrollView } from "react-native";
 import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
-
-//import for the Accordion view
 import Accordion from "react-native-collapsible/Accordion";
 
 import {
@@ -17,14 +13,20 @@ import {
   HeaderText,
   HeaderDescriptionContainer,
   HeaderTextContainer,
-  StyledFeatherIcon
+  StyledFeatherIcon,
 } from "./styles";
 
+type HelperTextsProps = {
+  identificator: string;
+  title: string;
+  content: string;
+};
+
 const Ajuda = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   // Ddefault active selector
-  const [activeSections, setActiveSections] = useState([]);
+  const [activeSections, setActiveSections] = useState<string[] | number[]>([]);
 
   const HELP_TEXTS = [
     {
@@ -73,17 +75,17 @@ const Ajuda = () => {
       content: t("screens.ajuda.contribute_content"),
     },
   ];
-  
+
   //setting up a active section state
-  const setSections = (sections) => {
-    setActiveSections(sections.includes(undefined) ? [] : sections);
+  const setSections = (sections: string[] | number[]) => {
+    setActiveSections(sections.includes(undefined as never) ? [] : sections);
   };
 
   //Accordion Header view
-  const renderHeader = (section, index, isActive) => {
+  const renderHeader = (section: any, index: any, isActive: any) => {
     return (
       <HeaderTextContainer
-        durationProp={400}
+        // durationProp={400}
         isActiveProp={isActive}
         transition="backgroundColor"
       >
@@ -103,7 +105,9 @@ const Ajuda = () => {
           {section.identificator === "privaciandpolicy" && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL("https://pedropaulodev.notion.site/Pol-tica-de-Privacidade-e-LGPD-dc8a17a00aa14566a9238f5024674d9a");
+                Linking.openURL(
+                  "https://pedropaulodev.notion.site/Pol-tica-de-Privacidade-e-LGPD-dc8a17a00aa14566a9238f5024674d9a"
+                );
               }}
             >
               <StyledFeatherIcon name="external-link" size={22} />
@@ -113,7 +117,9 @@ const Ajuda = () => {
           {section.identificator === "contribute" && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL("https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations");
+                Linking.openURL(
+                  "https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations"
+                );
               }}
             >
               <StyledFeatherIcon name="external-link" size={22} />
@@ -125,20 +131,22 @@ const Ajuda = () => {
   };
 
   //Accordion Content view
-  const renderContent = (section, _, isActive) => {
+  const renderContent = (section: any, index: any, isActive: any) => {
     return (
       <HeaderDescriptionContainer
         duration={400}
         isActiveProp={isActive}
         transition="backgroundColor"
       >
-        <DescriptionText animationProp={isActive}>
+        <DescriptionText
+        // animationProp={isActive}
+        >
           {section.content}
         </DescriptionText>
       </HeaderDescriptionContainer>
     );
   };
-  
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>

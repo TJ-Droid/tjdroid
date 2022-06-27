@@ -112,12 +112,14 @@ export const BottomSectionButtonsArea = styled.View`
   align-items: center;
 `;
 
-export const BottomSectionButtonWrapper = styled.View`
+export const BottomSectionButtonWrapper = styled.View<{
+  marginRight?: number;
+}>`
   background: ${({ theme }) => theme.color.primary}20;
   border-radius: 7px;
   padding: 8px;
   margin-right: ${({ marginRight }) =>
-    marginRight ? marginRight + "px" : "0px"};
+    marginRight ? `${marginRight}px` : "0px"};
 `;
 
 export const BottomSectionQuantityText = styled.Text`

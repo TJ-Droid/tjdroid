@@ -1,7 +1,7 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.SafeAreaView`
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   height: 100%;
   flex-direction: column;
   justify-content: center;
@@ -14,9 +14,9 @@ export const HeaderTotalsBox = styled.View`
   width: 100%;
   height: auto;
   flex-direction: column;
-  background: ${({theme}) => theme.color.primary}20;
+  background: ${({ theme }) => theme.color.primary}20;
   border-bottom-width: 1px;
-  border-bottom-color: ${({theme}) => theme.color.primary}30;
+  border-bottom-color: ${({ theme }) => theme.color.primary}30;
 `;
 
 export const HeaderTotalsTopSection = styled.View`
@@ -29,13 +29,13 @@ export const HeaderTotalsTopSection = styled.View`
 `;
 
 export const HeaderTotalsTopSectionText = styled.Text`
-  color: ${({theme}) => theme.color.primary_dark};
+  color: ${({ theme }) => theme.color.primary_dark};
   font-size: 20px;
   font-weight: bold;
 `;
 
 export const HeaderTotalsTopSectionHours = styled.Text`
-  color: ${({theme}) => theme.color.primary_dark};
+  color: ${({ theme }) => theme.color.primary_dark};
   font-size: 22px;
   font-weight: bold;
 `;
@@ -48,7 +48,7 @@ export const HeaderTotalsBottomSection = styled.View`
 `;
 
 export const HeaderTotalsBottomSectionText = styled.Text`
-  color: ${({theme}) => theme.color.text_primary};
+  color: ${({ theme }) => theme.color.text_primary};
   font-size: 17px;
 `;
 
@@ -57,9 +57,9 @@ export const ItemList = styled.View`
   width: 100%;
   height: auto;
   flex-direction: column;
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   border-bottom-width: 1px;
-  border-bottom-color: ${({theme}) => theme.color.primary}20;
+  border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
 
 export const ItemListTopContent = styled.View`
@@ -71,12 +71,12 @@ export const ItemListTopContent = styled.View`
 
 export const ItemListTopContentDayText = styled.Text`
   font-size: 16px;
-  color: ${({theme}) => theme.color.text_secondary};
+  color: ${({ theme }) => theme.color.text_secondary};
 `;
 
 export const ItemListTopContentHoursText = styled.Text`
-  background: ${({theme}) => theme.color.primary}20;
-  color: ${({theme}) => theme.color.primary_dark};
+  background: ${({ theme }) => theme.color.primary}20;
+  color: ${({ theme }) => theme.color.primary_dark};
   font-size: 16px;
   font-weight: bold;
   padding: 6px 10px;
@@ -89,9 +89,8 @@ export const ItemListMidleContent = styled.View`
 
 export const ItemListMidleContentText = styled.Text`
   font-size: 16px;
-  color: ${({theme}) => theme.color.text_secondary}90;
+  color: ${({ theme }) => theme.color.text_secondary}90;
 `;
-
 
 export const ItemListBottomContent = styled.View`
   width: 100%;
@@ -100,5 +99,5 @@ export const ItemListBottomContent = styled.View`
 
 export const ItemListBottomContentText = styled.Text`
   font-size: 14px;
-  color: ${({theme}) => theme.color.text_secondary}70;
+  color: ${({ theme }) => theme.color.text_secondary}70;
 `;
