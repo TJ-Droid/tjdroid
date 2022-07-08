@@ -16,7 +16,8 @@ export const buscarAsyncStorageTjDroidIdioma = async () => {
 
 // Formata o idioma do celular
 export const formatarLocale = (locale = "en") => {
-  const language = locale.indexOf("-") === -1 ? locale : locale.substr(0, locale.indexOf("-"));
-  const actualAppLanguages = ["pt", "es", "en"];
+  const language =
+    locale.indexOf("-") === -1 ? locale : locale.substr(0, locale.indexOf("-"));
+  const actualAppLanguages = ["pt", "es", "ru", "en"];
   return !actualAppLanguages.includes(language) ? "en" : language;
 };
