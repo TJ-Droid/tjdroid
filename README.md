@@ -16,7 +16,7 @@
 * 🏡 **Territories:** Organize your personal territory in a simple way.
 * 👥 **People:** Make notes about each visit made, mark the amount of posts left, videos shown and select the types of visits.
 * ⭐ **Modern and varied layout:** Get all the features of the application in an easy, intuitive and pleasant way to see.
-* 🗣️ **Supported languages:** English, Portuguese, Spanish.
+* 🗣️ **Supported languages:** English, Portuguese, Spanish, Russian (89%).
 
 ## 📲 Get the app
 Only available on Android. 
