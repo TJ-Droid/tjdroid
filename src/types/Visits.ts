@@ -6,3 +6,15 @@ export type VisitsType = {
   anotacoes: string;
   videosMostrados: number;
 };
+
+export type VisitDataType = {
+  anotacoes: string;
+  colocacoes: number;
+  data: string;
+  dia: string;
+  hora: string;
+  idPessoa: string;
+  idVisita: string;
+  videosMostrados: number;
+  visita: number;
+};

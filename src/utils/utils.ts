@@ -1,8 +1,8 @@
 import { parseISO } from "date-fns";
 import { buscarAsyncStorage } from "../services/AsyncStorageMethods";
 
-export function changeDateFormatToYearMonthDay(date: any, time = false) {
-  if (time) {
+export function changeDateFormatToYearMonthDay(date: any, time?: string) {
+  if (!!time) {
     return parseISO(`${date.split("/").reverse().join("-")}T${time}`);
   } else {
     return parseISO(date.split("/").reverse().join("-"));

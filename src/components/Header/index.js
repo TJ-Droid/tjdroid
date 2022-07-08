@@ -3,7 +3,7 @@ import { Alert, View, Share, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BorderlessButton } from "react-native-gesture-handler";
 import { Menu, Divider } from "react-native-paper";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import "react-native-get-random-values";
 // import "moment/locale/pt-br";
@@ -55,6 +55,41 @@ import {
   StyledIoniconsHeaderButtons,
 } from "./styles";
 
+// type HeaderPropsType = {
+//   title: string,
+//   capitalize = true,
+//   showGoBack = false,
+//   showGoBackHome = false,
+//   showGoBackPersons = false,
+//   showGoBackReportDetails = false,
+//   isHomePage = false,
+//   showCancel = false,
+//   showContadorSave = false,
+//   showReportSave = false,
+//   showNewReportSave = false,
+//   showReportAdd = false,
+//   showReportSend = false,
+//   showAddNewPerson = false,
+//   showDeletePerson = false,
+//   showAddPersonVisit = false,
+//   showEditPersonVisit: VisitDataType,
+//   showNewPersonVisit = false,
+//   showAddNewTerritory = false,
+//   showOptionAddNewResidences = false,
+//   showChangeDisposition = false,
+//   showChangeDispositionFunc = false,
+//   showTerritoryMenu = false,
+//   handleChangeTerritoryNameFunc = false,
+//   territoryData = {},
+//   showDeleteTerritoryHome = false,
+//   showAddHomeVisit = false,
+//   showEditHomeIdentifier = false,
+//   showNewHomeVisit = false,
+//   handleChangeHomeIdentifierFunc = false,
+//   showEditHomeVisit = false,
+//   showEditTerritoryInfo = false,
+// }
+
 export default function Header({
   title,
   capitalize = true,
@@ -72,7 +107,7 @@ export default function Header({
   showAddNewPerson = false,
   showDeletePerson = false,
   showAddPersonVisit = false,
-  showEditPersonVisit = false,
+  showEditPersonVisit = {},
   showNewPersonVisit = false,
   showAddNewTerritory = false,
   showOptionAddNewResidences = false,
@@ -89,8 +124,7 @@ export default function Header({
   showEditHomeVisit = false,
   showEditTerritoryInfo = false,
 }) {
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
 
@@ -180,10 +214,27 @@ export default function Header({
         // Monta o texto para o compartilhamento
         // Capitaliza o mês do ano
         await Share.share({
-          message: `${t("components.header.share_report_title")} ${relatorio.mesAnoFormatado.replace(/^\w/, (c) =>c.toUpperCase())}\n\n${t("components.header.share_report_hours")}: ${minutes_to_hhmm(totalMinutos)}\n${t("components.header.share_report_bible_studies")}: ${totalEstudosBiblicos} \n${t("components.header.share_report_revisits")}: ${totalRevisitas}\n${t("components.header.share_report_placements")}: ${totalColocacoes}\n${t("components.header.share_report_videos_showed")}: ${totalVideosMostrados}`,
+          message: `${t(
+            "components.header.share_report_title"
+          )} ${relatorio.mesAnoFormatado.replace(/^\w/, (c) =>
+            c.toUpperCase()
+          )}\n\n${t("components.header.share_report_hours")}: ${minutes_to_hhmm(
+            totalMinutos
+          )}\n${t(
+            "components.header.share_report_bible_studies"
+          )}: ${totalEstudosBiblicos} \n${t(
+            "components.header.share_report_revisits"
+          )}: ${totalRevisitas}\n${t(
+            "components.header.share_report_placements"
+          )}: ${totalColocacoes}\n${t(
+            "components.header.share_report_videos_showed"
+          )}: ${totalVideosMostrados}`,
         });
       } catch (e) {
-        ToastAndroid.show(t("components.header.share_report_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.share_report_error_message"),
+          ToastAndroid.LONG
+        );
       }
     };
     compartilhar();
@@ -343,7 +394,9 @@ export default function Header({
   const alertaExclusaoTerritorio = (idTerritorio, nomeTerritorio) =>
     Alert.alert(
       t("components.header.alert_delete_territory_title"),
-      t("components.header.alert_delete_territory_description", {nomeTerritorio}),
+      t("components.header.alert_delete_territory_description", {
+        nomeTerritorio,
+      }),
       [
         {
           text: t("words.no"),
@@ -370,12 +423,18 @@ export default function Header({
           navigation.navigate("RelatorioMes", dados.mesAno);
         } else {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.report_edit_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.report_edit_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
         // Mensagem Toast
-        ToastAndroid.show(t("components.header.report_edit_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.report_edit_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -386,7 +445,10 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.new_report_add_success_message"), ToastAndroid.SHORT);
+          ToastAndroid.show(
+            t("components.header.new_report_add_success_message"),
+            ToastAndroid.SHORT
+          );
 
           // Se vier do contador, usa o REPLACE, se nao, usa o NAVIGATE
           // Isso é para facilitar a navegação nativa
@@ -403,7 +465,10 @@ export default function Header({
       })
       .catch((e) => {
         // Mensagem Toast
-        ToastAndroid.show(t("components.header.new_report_add_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.new_report_add_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -423,12 +488,18 @@ export default function Header({
           navigation.navigate("RelatorioMes", dados);
         } else {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.report_delete_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.report_delete_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
         // Mensagem Toast
-        ToastAndroid.show(t("components.header.report_delete_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.report_delete_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -469,15 +540,24 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.person_delete_success_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.person_delete_success_message"),
+            ToastAndroid.LONG
+          );
           // Navega até a página abaixo
           navigation.replace("Pessoas");
         } else {
-          ToastAndroid.show(t("components.header.person_delete_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.person_delete_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.person_delete_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.person_delete_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -488,15 +568,24 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.house_delete_success_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.house_delete_success_message"),
+            ToastAndroid.LONG
+          );
           // Navega até a página abaixo
           navigation.goBack("TerritorioResidencias", dados);
         } else {
-          ToastAndroid.show(t("components.header.house_delete_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.house_delete_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.house_delete_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.house_delete_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -507,15 +596,24 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.house_visit_delete_success_message"), ToastAndroid.SHORT);
+          ToastAndroid.show(
+            t("components.header.house_visit_delete_success_message"),
+            ToastAndroid.SHORT
+          );
           // Navega até a página abaixo
           navigation.goBack();
         } else {
-          ToastAndroid.show(t("components.header.house_visit_delete_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.house_visit_delete_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.house_visit_delete_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.house_visit_delete_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -526,15 +624,24 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.person_visit_success_message"), ToastAndroid.SHORT);
+          ToastAndroid.show(
+            t("components.header.person_visit_success_message"),
+            ToastAndroid.SHORT
+          );
           // Navega até a página abaixo
           navigation.navigate("PessoaVisitas", dados);
         } else {
-          ToastAndroid.show(t("components.header.person_visit_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.person_visit_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.person_visit_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.person_visit_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -546,11 +653,17 @@ export default function Header({
         if (dados) {
           navigation.navigate("PessoaVisitas", dados);
         } else {
-          ToastAndroid.show(t("components.header.person_edit_visit_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.person_edit_visit_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.person_edit_visit_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.person_edit_visit_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -562,11 +675,17 @@ export default function Header({
         if (dados) {
           navigation.goBack();
         } else {
-          ToastAndroid.show(t("components.header.house_edit_visit_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.house_edit_visit_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.house_edit_visit_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.house_edit_visit_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -578,11 +697,17 @@ export default function Header({
         if (dados) {
           navigation.goBack();
         } else {
-          ToastAndroid.show(t("components.header.territory_edit_infos_error_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.territory_edit_infos_error_message"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.territory_edit_infos_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.territory_edit_infos_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -593,7 +718,10 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.person_add_visit_success_message"), ToastAndroid.SHORT);
+          ToastAndroid.show(
+            t("components.header.person_add_visit_success_message"),
+            ToastAndroid.SHORT
+          );
           // Navega até a página abaixo
           navigation.navigate("PessoaVisitas", dados);
         } else {
@@ -618,7 +746,10 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.house_add_visit_success_message"), ToastAndroid.SHORT);
+          ToastAndroid.show(
+            t("components.header.house_add_visit_success_message"),
+            ToastAndroid.SHORT
+          );
           // Navega até a página TerritorioResidenciasVisitas
           navigation.goBack();
         } else {
@@ -686,11 +817,17 @@ export default function Header({
           // NÃO FAZ NADA SE DER CERTO
           // A RESPOSTA SERÁ VISUAL AO USUÁRIO
         } else {
-          ToastAndroid.show(t("components.header.change_territories_disposition_error_message"), ToastAndroid.SHORT);
+          ToastAndroid.show(
+            t("components.header.change_territories_disposition_error_message"),
+            ToastAndroid.SHORT
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.change_territories_disposition_error_message"), ToastAndroid.SHORT);
+        ToastAndroid.show(
+          t("components.header.change_territories_disposition_error_message"),
+          ToastAndroid.SHORT
+        );
       });
   }
 
@@ -701,7 +838,10 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.territory_edit_name_succes_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.territory_edit_name_succes_message"),
+            ToastAndroid.LONG
+          );
 
           // Altera o nome da tela também
           handleChangeTerritoryNameFunc(territorioNome);
@@ -734,7 +874,10 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.territory_edit_identificator_succes_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.territory_edit_identificator_succes_message"),
+            ToastAndroid.LONG
+          );
 
           // Altera o nome da tela também
           handleChangeHomeIdentifierFunc(newIdentifier);
@@ -749,7 +892,10 @@ export default function Header({
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("components.header.territory_edit_identificator_error_message"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("components.header.territory_edit_identificator_error_message"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -760,7 +906,10 @@ export default function Header({
         // Trata o retorno
         if (dados) {
           // Mensagem Toast
-          ToastAndroid.show(t("components.header.add_house_success_message"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("components.header.add_house_success_message"),
+            ToastAndroid.LONG
+          );
           // Navega até a página abaixo
           navigation.replace("TerritorioResidencias", dados);
           // Apos salvar a pessoa, fecha o modal
@@ -815,7 +964,9 @@ export default function Header({
       <DialogModal
         dialogVisibleProp={dialogNewPersonVisible}
         dialogTitle={t("components.header.dialogmodal_add_person_title")}
-        dialogMessage={t("components.header.dialogmodal_add_person_description")}
+        dialogMessage={t(
+          "components.header.dialogmodal_add_person_description"
+        )}
         dialogFunction={(personName) => handleAdicionarPessoa(personName)}
         dialogCloseFunction={() => handleCancelDialogNewPerson()}
       />
@@ -823,7 +974,9 @@ export default function Header({
       <DialogModal
         dialogVisibleProp={dialogNewTerritoryVisible}
         dialogTitle={t("components.header.dialogmodal_add_territory_title")}
-        dialogMessage={t("components.header.dialogmodal_add_territory_description")}
+        dialogMessage={t(
+          "components.header.dialogmodal_add_territory_description"
+        )}
         dialogFunction={(territorioNome) =>
           handleAdicionarTerritorio(territorioNome)
         }
@@ -833,8 +986,12 @@ export default function Header({
       <DialogModal
         dialogVisibleProp={dialogChangeNameTerritoryVisible}
         dialogValue={territoryData.nome}
-        dialogTitle={t("components.header.dialogmodal_edit_territory_name_title")}
-        dialogMessage={t("components.header.dialogmodal_edit_territory_name_description")}
+        dialogTitle={t(
+          "components.header.dialogmodal_edit_territory_name_title"
+        )}
+        dialogMessage={t(
+          "components.header.dialogmodal_edit_territory_name_description"
+        )}
         dialogFunction={(newName) =>
           handleEditarNomeTerritorio(newName, territoryData.id)
         }
@@ -845,7 +1002,9 @@ export default function Header({
         dialogVisibleProp={dialogAddTerritoryHomeVisible}
         keyboardTypeNumber
         dialogTitle={t("components.header.dialogmodal_add_many_houses_title")}
-        dialogMessage={t("components.header.dialogmodal_add_many_houses_description")}
+        dialogMessage={t(
+          "components.header.dialogmodal_add_many_houses_description"
+        )}
         dialogFunction={(qttToAdd) =>
           handleAdicionarVariasResidencias(territoryData.id, qttToAdd)
         }
@@ -855,8 +1014,12 @@ export default function Header({
       <DialogModal
         dialogVisibleProp={dialogChangeHomeIdentifierVisible}
         dialogValue={territoryData.nome}
-        dialogTitle={t("components.header.dialogmodal_edit_territory_identificador_title")}
-        dialogMessage={t("components.header.dialogmodal_edit_territory_identificador_description")}
+        dialogTitle={t(
+          "components.header.dialogmodal_edit_territory_identificador_title"
+        )}
+        dialogMessage={t(
+          "components.header.dialogmodal_edit_territory_identificador_description"
+        )}
         dialogFunction={(newName) =>
           handleEditarIdentificadorResidencia(
             newName,
@@ -911,7 +1074,10 @@ export default function Header({
             <View style={{ flexDirection: "row" }}>
               <WrapperButton>
                 <BorderlessButton onPress={() => navigation.navigate("Backup")}>
-                  <StyledFeatherHeaderButtons name="arrow-down-circle" size={29} />
+                  <StyledFeatherHeaderButtons
+                    name="arrow-down-circle"
+                    size={29}
+                  />
                 </BorderlessButton>
               </WrapperButton>
               <WrapperButton>
@@ -1146,7 +1312,7 @@ export default function Header({
             <View></View>
           )}
 
-          {showEditPersonVisit ? (
+          {Object.keys(showEditPersonVisit).length !== 0 ? (
             <>
               <WrapperButton>
                 <StyledBorderlessButtonSave
