@@ -27,6 +27,7 @@ import {
   ItemListSpaceBetween,
   SectionDivider,
   SectionDividerText,
+  ItemListTextDescriptionTranslationIcon,
 } from "./styles";
 
 export default function Configuracoes({ navigation }: any) {
@@ -45,21 +46,25 @@ export default function Configuracoes({ navigation }: any) {
     preto: false,
     marsala: false,
   });
-  const [configuracoes, setConfiguracoes] = useState<ThemeConfiguracoesScreenType>({
-    actualTheme: "azulEscuroDefault",
-    darkMode: false,
-  });
+  const [configuracoes, setConfiguracoes] =
+    useState<ThemeConfiguracoesScreenType>({
+      actualTheme: "azulEscuroDefault",
+      darkMode: false,
+    });
   const [obgEscondido, setObgEscondido] = useState(0);
-  
+
   // Altera o idioma para o selecionado
   const languageSelected = (language: string) => {
     i18n.changeLanguage(language);
   };
-  
+
   // Obrigado escondido
   useEffect(() => {
     if (obgEscondido >= 5) {
-      ToastAndroid.show(`${t("screens.configuracoes.hide_message")} 😁`, ToastAndroid.LONG);
+      ToastAndroid.show(
+        `${t("screens.configuracoes.hide_message")} 😁`,
+        ToastAndroid.LONG
+      );
       setObgEscondido(0);
     }
   }, [obgEscondido]);
@@ -76,7 +81,7 @@ export default function Configuracoes({ navigation }: any) {
 
           // Seta o Switch do Dark mode
           setIsEnabledDarkMode(configs.darkMode);
-          
+
           // Seta o tema do app
           salvarTemaLocal(configs.actualTheme);
 
@@ -105,11 +110,14 @@ export default function Configuracoes({ navigation }: any) {
         // Trata o retorno
         if (dados) {
           // Salva nas configurações
-          setConfiguracoes(prev => ({ ...prev, darkMode: !isEnabledDarkMode }));
+          setConfiguracoes((prev) => ({
+            ...prev,
+            darkMode: !isEnabledDarkMode,
+          }));
 
           // Muda o switch
           setIsEnabledDarkMode(!isEnabledDarkMode);
-          
+
           // Salva no context
           if (isEnabledDarkMode === false) {
             setActualTheme && setActualTheme(themes["darkMode"]);
@@ -150,7 +158,7 @@ export default function Configuracoes({ navigation }: any) {
         // Trata o retorno
         if (dados) {
           // Salva nas configurações
-          setConfiguracoes(prev => ({ ...prev, actualTheme: tema }));
+          setConfiguracoes((prev) => ({ ...prev, actualTheme: tema }));
 
           // Salva no estado atual
           salvarTemaLocal(tema);
@@ -179,7 +187,7 @@ export default function Configuracoes({ navigation }: any) {
     // Adiciona o evento ao Analytics
     await analyticsCustomEvent("config_toque_cor", { cor: tema });
   };
-  
+
   // Função para salvar o tema escolhido
   const salvarTemaLocal = (tema: ThemeColors) => {
     switch (tema) {
@@ -358,64 +366,96 @@ export default function Configuracoes({ navigation }: any) {
                     onPress={() => salvarTema("azulEscuroDefault")}
                     selected={temaLocal.azulEscuroDefault}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_blue")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_blue")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_blue"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_blue"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#50B87C"
                     onPress={() => salvarTema("verde")}
                     selected={temaLocal.verde}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_green")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_green")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_green"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_green"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#EC903C"
                     onPress={() => salvarTema("laranja")}
                     selected={temaLocal.laranja}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_orange")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_orange")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_orange"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_orange"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#EC6FAB"
                     onPress={() => salvarTema("rosa")}
                     selected={temaLocal.rosa}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_pink")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_pink")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_pink"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_pink"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#2DA0E1"
                     onPress={() => salvarTema("azulClaro")}
                     selected={temaLocal.azulClaro}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_lightblue")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_lightblue")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_lightblue"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_lightblue"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#581d22"
                     onPress={() => salvarTema("marsala")}
                     selected={temaLocal.marsala}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_marsala")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_marsala")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_marsala"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_marsala"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#523B73"
                     onPress={() => salvarTema("roxo")}
                     selected={temaLocal.roxo}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_purple")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_purple")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_purple"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_purple"
+                    )}
                   />
                   <ItemListBoxButtonCircleColor
                     bgColor="#383838"
                     onPress={() => salvarTema("preto")}
                     selected={temaLocal.preto}
                     accessible={true}
-                    accessibilityLabel={t("screens.configuracoes.color_accessibility_label_black")}
-                    accessibilityHint={t("screens.configuracoes.color_accessibility_hint_black")}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_black"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_black"
+                    )}
                   />
                 </ItemListBoxSpace>
               </ItemListTitleSpace100>
@@ -423,7 +463,9 @@ export default function Configuracoes({ navigation }: any) {
           </ItemList>
 
           <SectionDivider>
-            <SectionDividerText>{t("screens.configuracoes.languages")}</SectionDividerText>
+            <SectionDividerText>
+              {t("screens.configuracoes.languages")}
+            </SectionDividerText>
           </SectionDivider>
 
           <ItemList>
@@ -435,17 +477,22 @@ export default function Configuracoes({ navigation }: any) {
                 />
                 <ItemListTextDescriptionTranslation
                   onPress={() => {
-                    Linking.openURL("https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations");
+                    Linking.openURL(
+                      "https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations"
+                    );
                   }}
                 >
-                  {t("screens.configuracoes.app_translation_question")}
+                  {t("screens.configuracoes.app_translation_question")}{" "}
+                  <ItemListTextDescriptionTranslationIcon name="external-link" />
                 </ItemListTextDescriptionTranslation>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>
           </ItemList>
 
           <SectionDivider>
-            <SectionDividerText>{t("screens.configuracoes.infos")}</SectionDividerText>
+            <SectionDividerText>
+              {t("screens.configuracoes.infos")}
+            </SectionDividerText>
           </SectionDivider>
 
           <ItemList>
@@ -453,7 +500,7 @@ export default function Configuracoes({ navigation }: any) {
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <ItemListTextTitle numberOfLines={1}>
-                {t("screens.configuracoes.help")}
+                  {t("screens.configuracoes.help")}
                 </ItemListTextTitle>
                 <ItemListTextDescription
                   onPress={() => navigation.navigate("Ajuda")}
@@ -469,7 +516,7 @@ export default function Configuracoes({ navigation }: any) {
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <ItemListTextTitle numberOfLines={1}>
-                {t("screens.configuracoes.terms")}
+                  {t("screens.configuracoes.terms")}
                 </ItemListTextTitle>
                 <ItemListTextDescription>
                   <Text
@@ -493,7 +540,7 @@ export default function Configuracoes({ navigation }: any) {
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <ItemListTextTitle numberOfLines={1}>
-                {t("screens.configuracoes.like_app")}
+                  {t("screens.configuracoes.like_app")}
                 </ItemListTextTitle>
                 <ItemListTextDescription
                   onPress={async () => {
@@ -507,16 +554,16 @@ export default function Configuracoes({ navigation }: any) {
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>
           </ItemList>
-          
+
           <ItemList>
             <StyledFeatherLeftIcon name="github" />
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <ItemListTextTitle numberOfLines={1}>
-                {t("screens.configuracoes.github")}
+                  {t("screens.configuracoes.github")}
                 </ItemListTextTitle>
                 <ItemListTextDescription
-                   onPress={async () => {
+                  onPress={async () => {
                     Linking.openURL("https://github.com/TJ-Droid/tjdroid");
                   }}
                 >

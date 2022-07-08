@@ -52,6 +52,11 @@ export const ItemListTextDescriptionTranslation = styled.Text`
   color: ${({ theme }) => theme.color.text_secondary}90;
 `;
 
+export const ItemListTextDescriptionTranslationIcon = styled(Feather)`
+  color: ${({ theme }) => theme.color.text_secondary}90;
+  font-size: 15px;
+`;
+
 export const ItemListBoxSpace = styled.View`
   flex: 1;
   flex-direction: row;
