@@ -2180,13 +2180,6 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.5.tgz#75a2a8e7d8ab4b230414505d92335d1dcb53a6df"
   integrity sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ==
 
-"@types/react-native-dialog@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-native-dialog/-/react-native-dialog-8.0.0.tgz#2532a9b76787ddb4e63fbb02fd8daf42d601e0c8"
-  integrity sha512-SFqgfUm3agAs7bWH2Wk5uMy58aEwMRN4WBFT7xYnRlz32PpXqzgnxuMtqeUPuq416r5FybtxwbLgJtAtGfBesA==
-  dependencies:
-    react-native-dialog "*"
-
 "@types/react-native@^0.65":
   version "0.65.22"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.65.22.tgz#58eaf2f64eb37fcb5fa9725547a8e043c4ecbc07"
@@ -6782,17 +6775,10 @@ react-native-collapsible@^1.6.0:
   resolved "https://registry.yarnpkg.com/react-native-collapsible/-/react-native-collapsible-1.6.0.tgz#ca261ffff16914f872059bb0972e3a78c4b37f9c"
   integrity sha512-beZjdgbT9Y/Pg591Xy5XkKG20HffJiVad4n9bfcUF/f783A+tvOVXnqvbS58Lkaym93mi4jcDPMuW9Vc1t6rqg==
 
-react-native-dialog@*:
+react-native-dialog@^9.2.2:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/react-native-dialog/-/react-native-dialog-9.2.2.tgz#f16921dd071d17daf1e5d98fb084e1837694f009"
   integrity sha512-d2w3fyqB6G8Os0DYJKnfVl6PgqQwplW8dHSvzkQpczXzmX5V4BXOJTTXqoiKwI+nsS6QEHYb6Bk8VG7vV9WuXQ==
-
-react-native-dialog@6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-dialog/-/react-native-dialog-6.2.0.tgz#d84123d6b5a3485891ffd6db9f571502f76f84cb"
-  integrity sha512-J16bhTGTDTQYFtWbfKIMD5GM4QFIupNm3hFjm7/X/VZ1ZeOsiTKTRt/JGeX6QPTAOhRiN1A+IPIfXPzgUmhUVw==
-  dependencies:
-    prop-types "^15.7.2"
 
 react-native-fs@^2.18.0:
   version "2.19.0"
