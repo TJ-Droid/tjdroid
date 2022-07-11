@@ -2,7 +2,7 @@ import RNFS, {
   DocumentDirectoryPath,
   DownloadDirectoryPath,
 } from "react-native-fs";
-import i18next from 'i18next';
+import i18next from "i18next";
 import { zip, unzip } from "react-native-zip-archive";
 
 import { PermissionsAndroid, ToastAndroid, Alert } from "react-native";
@@ -21,16 +21,20 @@ const BACKUP_FOLDER_NAME = "backuptjdroid";
 const BACKUP_ZIP_NAME = `tjdroid-backup-${format(
   new Date(),
   "dd-MM-yyyy-HH-mm-ss"
-)}_${Device.modelName.replace(/\s/g, "")}`;
+)}_${(Device.modelName || "").replace(/\s/g, "")}`;
 
 // GUARDA TEMPORARIAMENTE O CAMINHO DO ARQUIVO ZIPADO
 let ARQUIVO_ZIPADO_PATH_TEMP = "";
 
 // Função que dispara um alert de erro
-function simpleAlert(title = false, errorMessage = false) {
+function simpleAlert(title = null, errorMessage = null) {
   Alert.alert(
     `${title ? title : i18next.t("controllers.backupcontroller_alert_title")}`,
-    `${errorMessage ? `${errorMessage}` : i18next.t("controllers.backupcontroller_alert_message")} `,
+    `${
+      errorMessage
+        ? `${errorMessage}`
+        : i18next.t("controllers.backupcontroller_alert_message")
+    } `,
     [
       {
         text: i18next.t("words.ok"),
@@ -43,12 +47,14 @@ function simpleAlert(title = false, errorMessage = false) {
 }
 
 // Função que dispara um alert de erro
-function errorAlert(errorMessage = false) {
+function errorAlert(errorMessage = null) {
   Alert.alert(
     `${i18next.t("controllers.backupcontroller_alert_error_title")} ❌`,
     `${
       errorMessage
-        ? i18next.t("controllers.backupcontroller_alert_error_message_1", {errorMessage})
+        ? i18next.t("controllers.backupcontroller_alert_error_message_1", {
+            errorMessage,
+          })
         : i18next.t("controllers.backupcontroller_alert_error_message_2")
     } `,
     [
@@ -64,7 +70,6 @@ function errorAlert(errorMessage = false) {
 
 // Função para gerar o .zip manual
 export async function generateManualBackup() {
-
   getPermissionWhiteExternalStorage().then((permissionResponse) => {
     // Confere se o usuario permitiu salvar nos Downloads
     if (permissionResponse)
@@ -86,7 +91,9 @@ export async function generateManualBackup() {
                                 .then(() => {
                                   // Mensagem Toast
                                   ToastAndroid.show(
-                                    `${i18next.t("controllers.backupcontroller_toast_backup_generate_success")} 👏`,
+                                    `${i18next.t(
+                                      "controllers.backupcontroller_toast_backup_generate_success"
+                                    )} 👏`,
                                     ToastAndroid.SHORT
                                   );
 
@@ -126,14 +133,13 @@ export async function generateManualBackup() {
           // console.log("111-createBackupFolder:",err);
         });
   });
-  
+
   // Adiciona o evento ao Analytics
-  await analyticsCustomEvent('backupmanual_gerar');
+  await analyticsCustomEvent("backupmanual_gerar");
 }
 
 // Função restaurar o .zip do backup manual
 export async function restoreManualBackup() {
-
   await DocumentPicker.getDocumentAsync({ type: "application/zip" }).then(
     (result) => {
       if (result.type === "cancel") {
@@ -149,7 +155,9 @@ export async function restoreManualBackup() {
               if (unzipResponse)
                 restoreBackupToAsyncStorage().then(() => {
                   ToastAndroid.show(
-                    `${i18next.t("controllers.backupcontroller_toast_backup_restore_success")} 👏`,
+                    `${i18next.t(
+                      "controllers.backupcontroller_toast_backup_restore_success"
+                    )} 👏`,
                     ToastAndroid.LONG
                   );
                 });
@@ -160,9 +168,9 @@ export async function restoreManualBackup() {
         });
     }
   );
-  
+
   // Adiciona o evento ao Analytics
-  await analyticsCustomEvent('backupmanual_restaurar');
+  await analyticsCustomEvent("backupmanual_restaurar");
 }
 
 // Abre o Expo Share para a pessoa poder salvar o arquivo arquivo onde desejar logo de cara
@@ -170,7 +178,9 @@ export const shareBackupFile = async () => {
   const response = await Sharing.isAvailableAsync();
   if (response) {
     // Continua com o Expo Sharing
-    await Sharing.shareAsync(`file:///${ARQUIVO_ZIPADO_PATH_TEMP}`, {dialogTitle: i18next.t("controllers.backupcontroller_share_file")});
+    await Sharing.shareAsync(`file:///${ARQUIVO_ZIPADO_PATH_TEMP}`, {
+      dialogTitle: i18next.t("controllers.backupcontroller_share_file"),
+    });
   }
   // Se não foi possivel, finaliza o processo
 };
@@ -208,10 +218,13 @@ export const createBackupFolder = async () => {
 };
 
 // Função para criar cada arquivo json
-export const createJsonFileFromAsyncStorage = async (nomeArquivoStorage) => {
+export const createJsonFileFromAsyncStorage = async (
+  nomeArquivoStorage: string
+) => {
   const pathJsonFile = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${nomeArquivoStorage}.json`;
 
-  let response = await AsyncStorage.getItem(`@tjdroid:${nomeArquivoStorage}`);
+  let response =
+    (await AsyncStorage.getItem(`@tjdroid:${nomeArquivoStorage}`)) ?? "{}";
 
   // Cria o arquivo json
   return await RNFS.writeFile(
@@ -246,7 +259,9 @@ export const zipBackupFolder = async () => {
     })
     .catch((err) => {
       // Alert de erro
-      errorAlert(i18next.t("controllers.backupcontroller_alert_backup_zip_folder_error"));
+      errorAlert(
+        i18next.t("controllers.backupcontroller_alert_backup_zip_folder_error")
+      );
       // console.log("Houve um erro ao zipar a pasta, tente de novo");
       // console.error(err);
       return false;
@@ -254,7 +269,7 @@ export const zipBackupFolder = async () => {
 };
 
 // Função para deszippar o backup - local informado
-export const unzipBackupFolderURI = async (uri) => {
+export const unzipBackupFolderURI = async (uri: string) => {
   const sourcePath = uri;
   const targetPath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`;
   const charset = "UTF-8";
@@ -266,7 +281,9 @@ export const unzipBackupFolderURI = async (uri) => {
       return true;
     })
     .catch((err) => {
-      errorAlert(i18next.t("controllers.backupcontroller_alert_backup_file_invalid"));
+      errorAlert(
+        i18next.t("controllers.backupcontroller_alert_backup_file_invalid")
+      );
       return false;
     });
 };
@@ -283,13 +300,15 @@ export const unzipBackupFolder = async () => {
       // console.log(`Unzip completed at ${path}`);
     })
     .catch((err) => {
-      errorAlert(i18next.t("controllers.backupcontroller_alert_backup_unzip_error"));
+      errorAlert(
+        i18next.t("controllers.backupcontroller_alert_backup_unzip_error")
+      );
       return false;
     });
 };
 
 // Função para deletar arquivos, zips e pastas
-export const deleteFile = async (nomeArquivoStorage, extensao = "") => {
+export const deleteFile = async (nomeArquivoStorage = "", extensao = "") => {
   const path = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${nomeArquivoStorage}${extensao}`;
   return await RNFS.unlink(path)
     .then(() => {
@@ -330,7 +349,9 @@ export async function restoreBackupToAsyncStorage() {
             .catch((err) => {
               // console.log("102:",err);
               errorAlert(
-                i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+                i18next.t(
+                  "controllers.backupcontroller_alert_backup_restore_error"
+                )
               );
             });
         }
@@ -344,7 +365,9 @@ export async function restoreBackupToAsyncStorage() {
             .catch((err) => {
               // console.log("102:",err);
               errorAlert(
-                i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+                i18next.t(
+                  "controllers.backupcontroller_alert_backup_restore_error"
+                )
               );
             });
         }
@@ -358,7 +381,9 @@ export async function restoreBackupToAsyncStorage() {
             .catch((err) => {
               // console.log("102:",err);
               errorAlert(
-                i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+                i18next.t(
+                  "controllers.backupcontroller_alert_backup_restore_error"
+                )
               );
             });
         }
@@ -372,7 +397,9 @@ export async function restoreBackupToAsyncStorage() {
             .catch((err) => {
               // console.log("102:",err);
               errorAlert(
-                i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+                i18next.t(
+                  "controllers.backupcontroller_alert_backup_restore_error"
+                )
               );
             });
         }
@@ -380,7 +407,9 @@ export async function restoreBackupToAsyncStorage() {
     })
     .catch((err) => {
       // SETAR UM ALERT DE ERRO
-      errorAlert(i18next.t("controllers.backupcontroller_alert_backup_restore_error"));
+      errorAlert(
+        i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+      );
       // console.log("Erro ao restaurar os dados #1: ", err.message, err.code);
       return false;
     });

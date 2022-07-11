@@ -13,6 +13,16 @@ import {
   StyledDialogContainer,
 } from "./styles";
 
+type DialogModalPropsType = {
+  dialogVisibleProp: boolean;
+  dialogMessage: string;
+  dialogTitle: string;
+  dialogValue: string | undefined;
+  dialogFunction: (value: string | undefined) => void;
+  dialogCloseFunction: () => void;
+  keyboardTypeNumber: boolean;
+};
+
 export default function DialogModal({
   dialogVisibleProp,
   dialogMessage,
@@ -21,7 +31,7 @@ export default function DialogModal({
   dialogFunction,
   dialogCloseFunction,
   keyboardTypeNumber = false,
-}) {
+}: DialogModalPropsType) {
   const { t } = useTranslation();
 
   // Dialog states
@@ -29,7 +39,7 @@ export default function DialogModal({
   const [dialogTextInputValue, setDialogTextInputValue] = useState(dialogValue);
   const [dialogTextInputError, setDialogTextInputError] = useState(false);
   const [dialogTextInputErrorMessage, setDialogTextInputErrorMessage] =
-    useState(t("components.dialogmodal.empty_error_message"));
+    useState<string>(t("components.dialogmodal.empty_error_message"));
 
   // useEffect(() => {
   //   setDialogTextInputValue(dialogValue);
@@ -43,7 +53,7 @@ export default function DialogModal({
   }
 
   // Handle Dialog Text Input Change
-  function handleDialogTextInputChange(text) {
+  function handleDialogTextInputChange(text: string) {
     setDialogTextInputValue(text);
     if (text === "") {
       setDialogTextInputErrorMessage(
@@ -58,7 +68,11 @@ export default function DialogModal({
 
   // Handle Submit modal function
   function handleSubmitButton() {
-    if (keyboardTypeNumber === true && dialogTextInputValue < 1) {
+    if (
+      keyboardTypeNumber === true &&
+      dialogTextInputValue &&
+      parseInt(dialogTextInputValue) < 1
+    ) {
       setDialogTextInputErrorMessage(
         t("components.dialogmodal.less_than_1_error_message")
       );
@@ -67,7 +81,11 @@ export default function DialogModal({
       return;
     }
 
-    if (keyboardTypeNumber === true && dialogTextInputValue > 100) {
+    if (
+      keyboardTypeNumber === true &&
+      dialogTextInputValue &&
+      parseInt(dialogTextInputValue) >= 100
+    ) {
       setDialogTextInputErrorMessage(
         t("components.dialogmodal.more_than_100_error_message")
       );
@@ -126,6 +144,7 @@ export default function DialogModal({
           }
           keyboardType={keyboardTypeNumber ? "numeric" : "default"}
           maxLength={keyboardTypeNumber ? 3 : 200}
+          underlineColorAndroid="transparent"
         />
 
         <ButtonsContainer>

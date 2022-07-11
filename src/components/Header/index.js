@@ -1577,7 +1577,7 @@ export default function Header({
                     }
                     title={t("components.header.menu_item_remove")}
                     icon="trash-can-outline"
-                    style={{ backgroundColor: "#F8D8D8" }}
+                    style={{ backgroundColor: "#ff000030" }}
                   />
                 </Menu>
               </View>

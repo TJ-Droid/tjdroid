@@ -9,8 +9,8 @@ import {
 } from "../../services/AsyncStorageMethods";
 
 type SelectPickerLanguagesPropsType = {
-  language: string;
-  onChangeLanguageValue: (language: string) => {};
+  language?: string;
+  onChangeLanguageValue: (language: string) => void;
 };
 
 export default function SelectPickerLanguages({
