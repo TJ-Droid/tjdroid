@@ -44,7 +44,8 @@ For example - "[FIX] Rendering territory list bug"
 If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a free translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
 
 ### ⭐ Acknowledgment for helping in translations:
-- Евгений Пудовкин (Russian)
+* #### Russian
+  * Евгений Пудовкин
 
 ### ➡️ How to use Crowdin to translate to your language:
 <p align="center">
