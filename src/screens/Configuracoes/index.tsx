@@ -583,7 +583,7 @@ export default function Configuracoes({ navigation }: any) {
                 <ItemListTextDescription
                   onPress={() => setObgEscondido((o) => o + 1)}
                 >
-                  {t("screens.configuracoes.version")} 1.1.0
+                  {t("screens.configuracoes.version")} 1.1.1
                 </ItemListTextDescription>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>
