@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { Alert, ToastAndroid } from "react-native";
+import { Alert, ToastAndroid, TouchableOpacity } from "react-native";
 import {
-  BorderlessButton,
   FlatList,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
-import moment from 'moment/min/moment-with-locales';
+import moment from "moment";
 import { format } from "date-fns";
-import { buscarAsyncStorageTjDroidIdioma, changeDateFormatToYearMonthDay, formatarLocale } from "../../utils/utils";
+import {
+  buscarAsyncStorageTjDroidIdioma,
+  changeDateFormatToYearMonthDay,
+  formatarLocale,
+} from "../../utils/utils";
 
 import Header from "../../components/Header";
 import DialogModal from "../../components/DialogModal";
@@ -22,6 +25,8 @@ import {
   excluirVisita,
   buscarVisitasPessoa,
   editarNomePessoa,
+  BuscarVisitasPessoaType,
+  CustomVisitsType,
 } from "../../controllers/pessoasController";
 
 import {
@@ -35,23 +40,36 @@ import {
   HeaderPersonName,
   HeaderPersonNameIcon,
 } from "./styles";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { AppLanguages } from "../../types/Languages";
 
-export default function PessoaVisitas({ route, navigation }) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "PessoaVisitas"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function PessoaVisitas({ route, navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
   // Estado local para setar o idioma nos locais
-  const [appLanguageLocal, setAppLanguageLocal] = useState("");
-  
+  const [appLanguageLocal, setAppLanguageLocal] = useState<{
+    language: AppLanguages | undefined;
+  }>({ language: undefined });
+
   // Dialog states
   const [reload, setReload] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [allVisitasPessoas, setAllVisitasPessoas] = useState({});
+  const [allVisitasPessoas, setAllVisitasPessoas] =
+    useState<BuscarVisitasPessoaType>({} as BuscarVisitasPessoaType);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     // Pega o ID da pessoa via props da rota
-    const pessoaId = route.params.pessoaId;
+    const { idPessoa } = route.params;
 
     // Mostra a mensagem de carregando
     setCarregando(true);
@@ -64,7 +82,7 @@ export default function PessoaVisitas({ route, navigation }) {
       const buscarDados = async () => {
         if (continuarBuscarDados) {
           // Busca os anos de Servico no Controller para setar no SectionList
-          await buscarVisitasPessoa(pessoaId)
+          await buscarVisitasPessoa(idPessoa)
             .then((dados) => {
               // Trata o retorno
               if (dados) {
@@ -101,18 +119,18 @@ export default function PessoaVisitas({ route, navigation }) {
       // Busca o idioma salvo no AsyncStorage
       setAppLanguageLocal(await buscarAsyncStorageTjDroidIdioma());
       setCarregando(false);
-    }
+    };
     getAppLanguage();
-    
+
     // Quando sair da tela, para de buscar
     return () => {
       continuarBuscarDados = false;
-      setAppLanguageLocal("");
+      setAppLanguageLocal({ language: undefined });
     };
   }, [isFocused, reload]);
 
   // Abrir dialod do nome
-  function handleOpenDialog(showDialogBoolean) {
+  function handleOpenDialog(showDialogBoolean: boolean) {
     setDialogVisible(showDialogBoolean);
   }
 
@@ -122,7 +140,13 @@ export default function PessoaVisitas({ route, navigation }) {
   }
 
   // ALERTA de DELETAR VISITA PESSOA
-  const alertaDeletarVisitaPessoa = ({ idPessoa, idVisita }) =>
+  const alertaDeletarVisitaPessoa = ({
+    idPessoa,
+    idVisita,
+  }: {
+    idPessoa: string;
+    idVisita: string;
+  }) =>
     Alert.alert(
       t("screens.pessoasvisitas.visit_deleted_alert_title"),
       t("screens.pessoasvisitas.visit_deleted_alert_message"),
@@ -141,8 +165,8 @@ export default function PessoaVisitas({ route, navigation }) {
     );
 
   // DELETAR VISITA PESSOA
-  function handleChangePersonName(pessoaNome, pessoaId) {
-    editarNomePessoa(pessoaNome, pessoaId)
+  function handleChangePersonName(pessoaNome: string, idPessoa: string) {
+    editarNomePessoa(pessoaNome, idPessoa)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -175,7 +199,7 @@ export default function PessoaVisitas({ route, navigation }) {
   }
 
   // DELETAR VISITA PESSOA
-  function handleDeletarVisitaPessoa(idPessoa, idVisita) {
+  function handleDeletarVisitaPessoa(idPessoa: string, idVisita: string) {
     excluirVisita(idPessoa, idVisita)
       .then((dados) => {
         // Trata o retorno
@@ -203,27 +227,27 @@ export default function PessoaVisitas({ route, navigation }) {
       });
   }
 
-  const Item = ({ item }) => (
+  const Item = ({ item }: { item: CustomVisitsType }) => (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate("PessoaEditarVisita", {
           idVisita: item.id,
-          idPessoa: allVisitasPessoas.id,
+          idPessoa: allVisitasPessoas?.id,
         })
       }
       onLongPress={() =>
         alertaDeletarVisitaPessoa({
           idVisita: item.id,
-          idPessoa: allVisitasPessoas.id,
+          idPessoa: allVisitasPessoas?.id,
         })
       }
     >
       <ItemList>
         <ItemListDay>
-          <ItemListTextDay tail numberOfLines={1}>
+          <ItemListTextDay ellipsizeMode="tail" numberOfLines={1}>
             {format(changeDateFormatToYearMonthDay(item.data), "dd/MM/yyyy")}
           </ItemListTextDay>
-          <ItemListTextDayInfo tail numberOfLines={1}>
+          <ItemListTextDayInfo ellipsizeMode="tail" numberOfLines={1}>
             {moment(changeDateFormatToYearMonthDay(item.data))
               .locale(formatarLocale(appLanguageLocal?.language))
               .format("dddd, HH:mm")}
@@ -233,7 +257,7 @@ export default function PessoaVisitas({ route, navigation }) {
           bgColor={item.visitaBgColor}
           fontColor={item.visitaFontColor}
         >
-          {item.visita}
+          {item.visitaLabel}
         </ItemListTextLastVisit>
       </ItemList>
     </TouchableWithoutFeedback>
@@ -270,11 +294,9 @@ export default function PessoaVisitas({ route, navigation }) {
 
       <HeaderBoxPersonName>
         <HeaderPersonName>{allVisitasPessoas.nome}</HeaderPersonName>
-        <BorderlessButton
-          onPress={() => handleOpenDialog(true, allVisitasPessoas.nome)}
-        >
+        <TouchableOpacity onPress={() => handleOpenDialog(true)}>
           <HeaderPersonNameIcon name="edit-2" size={22} />
-        </BorderlessButton>
+        </TouchableOpacity>
       </HeaderBoxPersonName>
 
       {carregando ? (

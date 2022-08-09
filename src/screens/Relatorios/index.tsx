@@ -4,11 +4,16 @@ import { useIsFocused } from "@react-navigation/native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
+import { StackScreenProps } from "@react-navigation/stack";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
 
+import { RootStackParamListType } from "../../routes";
+
 import buscarAnosServico, {
   deletarRelatorioMes,
+  MonthTotalsType,
+  SectionHeadersType,
 } from "../../controllers/relatoriosController";
 
 import {
@@ -21,57 +26,67 @@ import {
   HeaderItemListText,
 } from "./styles";
 
-export default function Relatorios({ navigation }) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "Relatorios"
+>;
+
+interface Props extends ProfileScreenRouteProp {
+  // route: ProfileScreenRouteProp;
+}
+export default function Relatorios({ navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
   const [reload, setReload] = useState(false);
-  const [allAnosServicosOrdenados, setAllAnosServicosOrdenados] = useState([]);
+  const [allAnosServicosOrdenados, setAllAnosServicosOrdenados] = useState<
+    SectionHeadersType[]
+  >([]);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     setCarregando(true);
 
-    let continuarBuscarDados = true;
+    // let continuarBuscarDados = true;
 
     if (isFocused) {
       const buscarDados = async () => {
-        if (continuarBuscarDados) {
-          // Busca os anos de Servico para setar no SectionList
-          await buscarAnosServico()
-            .then((dados) => {
-              // Trata o retorno
-              if (dados) {
-                // Seta o estado com todos os anos de servicos para o SectionList
-                setAllAnosServicosOrdenados(dados);
-              } else {
-                // Mensagem Toast
-                ToastAndroid.show(
-                  t("screens.relatorios.reports_load_message_error"),
-                  ToastAndroid.SHORT
-                );
-              }
-
-              // Retira a mensagem de carregando
-              setCarregando(false);
-            })
-            .catch((error) => {
+        // if (continuarBuscarDados) {
+        // Busca os anos de Servico para setar no SectionList
+        await buscarAnosServico()
+          .then((dados) => {
+            // Trata o retorno
+            if (dados) {
+              // Seta o estado com todos os anos de servicos para o SectionList
+              setAllAnosServicosOrdenados(dados);
+            } else {
               // Mensagem Toast
               ToastAndroid.show(
                 t("screens.relatorios.reports_load_message_error"),
                 ToastAndroid.SHORT
               );
-            });
-        }
+            }
+
+            // Retira a mensagem de carregando
+            setCarregando(false);
+          })
+          .catch((error) => {
+            // Mensagem Toast
+            ToastAndroid.show(
+              t("screens.relatorios.reports_load_message_error"),
+              ToastAndroid.SHORT
+            );
+          });
+        // }
       };
       buscarDados();
     }
 
-    return () => (continuarBuscarDados = false);
+    // return () => (continuarBuscarDados = false);
   }, [isFocused, reload]);
 
   // ALERTA de DELETAR RELATÓRIO do MÊS
-  const alertaExclusaoRelatorioMes = (mes, mesFormatado) =>
+  const alertaExclusaoRelatorioMes = (mes: string, mesFormatado: string) =>
     Alert.alert(
       t("screens.relatoriomes.alert_month_report_deleted_title", {
         mesFormatado,
@@ -91,36 +106,50 @@ export default function Relatorios({ navigation }) {
     );
 
   // DELETAR RELATÓRIO do MÊS
-  function handleDeletarRelatorioMes(mes) {
+  function handleDeletarRelatorioMes(mes: string) {
     deletarRelatorioMes(mes)
       .then((dados) => {
         // Trata o retorno
         if (dados === 1) {
           // Sucesso
           // Mensagem Toast
-          ToastAndroid.show(t("screens.relatoriomes.month_report_deleted_message_success"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("screens.relatoriomes.month_report_deleted_message_success"),
+            ToastAndroid.LONG
+          );
           // Faz o reload da página
           setReload(!reload);
-        } else if(dados === 2) {
+        } else if (dados === 2) {
           // Erro ao tentar excluir o mês atual
           // Mensagem Toast
-          ToastAndroid.show(t("screens.relatoriomes.actual_month_report_delete_message_error"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("screens.relatoriomes.actual_month_report_delete_message_error"),
+            ToastAndroid.LONG
+          );
         } else {
-          ToastAndroid.show(t("screens.relatoriomes.month_report_deleted_message_error"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            t("screens.relatoriomes.month_report_deleted_message_error"),
+            ToastAndroid.LONG
+          );
         }
       })
       .catch((e) => {
-        ToastAndroid.show(t("screens.relatoriomes.month_report_deleted_message_error"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("screens.relatoriomes.month_report_deleted_message_error"),
+          ToastAndroid.LONG
+        );
       });
   }
 
-  const HeaderItem = ({ section }) => (
+  const HeaderItem = ({ section }: { section: { title: string } }) => (
     <HeaderItemList>
-      <HeaderItemListText>{section.title}</HeaderItemListText>
+      <HeaderItemListText numberOfLines={1} adjustsFontSizeToFit>
+        {section.title}
+      </HeaderItemListText>
     </HeaderItemList>
   );
 
-  const Item = ({ item }) => (
+  const Item = ({ item }: { item: MonthTotalsType }) => (
     <TouchableWithoutFeedback
       onPress={() => {
         navigation.navigate("RelatorioMes", {

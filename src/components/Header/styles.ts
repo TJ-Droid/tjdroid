@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
-import { StatusBar } from "react-native";
+import { StatusBar, TouchableOpacity } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.color.header_bg};
@@ -10,6 +9,7 @@ export const Container = styled.View`
   align-items: center;
   height: 56px;
   position: relative;
+  elevation: 5;
 `;
 
 export const ContainerTitleButtons = styled.View`
@@ -67,7 +67,7 @@ export const StyledStatusBar = styled(StatusBar).attrs(({ theme }) => ({
   backgroundColor: theme.color.statusbar_bg,
 }))``;
 
-export const StyledBorderlessButtonSave = styled(BorderlessButton)`
+export const StyledButtonSave = styled(TouchableOpacity)`
   background-color: ${({ theme }) => theme.color.black_translucent10};
   padding: 0px 5px;
   flex: 1;
@@ -78,7 +78,7 @@ export const StyledBorderlessButtonSave = styled(BorderlessButton)`
   /* width: 120px; */
 `;
 
-export const StyledBorderlessButton = styled(BorderlessButton)`
+export const StyledButton = styled(TouchableOpacity)`
   background-color: ${({ theme }) => theme.color.black_translucent10};
   padding: 0px 5px;
   flex: 1;
@@ -89,7 +89,7 @@ export const StyledBorderlessButton = styled(BorderlessButton)`
   margin-left: -6px;
 `;
 
-export const StyledBorderlessButtonDelete = styled(BorderlessButton)`
+export const StyledButtonDelete = styled(TouchableOpacity)`
   background-color: ${({ theme }) => theme.color.red_translucent40};
   padding: 0px 5px;
   flex: 1;
@@ -100,7 +100,7 @@ export const StyledBorderlessButtonDelete = styled(BorderlessButton)`
   margin-left: -6px;
 `;
 
-export const StyledBorderlessButtonGoBack = styled(BorderlessButton)`
+export const StyledButtonGoBack = styled(TouchableOpacity)`
   margin-right: 5px;
   padding: 6px 0px;
 `;

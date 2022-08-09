@@ -1,5 +1,6 @@
 import { parseISO } from "date-fns";
 import { buscarAsyncStorage } from "../services/AsyncStorageMethods";
+import { AppLanguages } from "../types/Languages";
 
 export function changeDateFormatToYearMonthDay(date: any, time?: string) {
   if (!!time) {
@@ -11,7 +12,9 @@ export function changeDateFormatToYearMonthDay(date: any, time?: string) {
 
 // Busca o idioma salvo no AsyncStorage
 export const buscarAsyncStorageTjDroidIdioma = async () => {
-  return await buscarAsyncStorage("@tjdroid:idioma");
+  return (await buscarAsyncStorage("@tjdroid:idioma")) as {
+    language: AppLanguages;
+  };
 };
 
 // Formata o idioma do celular

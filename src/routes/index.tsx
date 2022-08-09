@@ -1,8 +1,11 @@
 import React from "react";
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import analytics from "@react-native-firebase/analytics";
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next";
 
 import Header from "../components/Header";
 import Home from "../screens/Home";
@@ -27,19 +30,44 @@ import Ajuda from "../screens/Ajuda";
 import Backup from "../screens/Backup";
 
 import { ThemeColors } from "../types/Theme";
-
-const { Navigator, Screen } = createStackNavigator();
+import { ReportType } from "../types/Reports";
 
 type RoutesTypeProps = {
   deepLinkingProp: any;
   actualTheme?: ThemeColors;
+};
+
+export interface RootStackParamListType
+  extends Record<string, object | undefined> {
+  Home: undefined;
+  Cronometro: undefined;
+  CronometroParado: undefined;
+  Pessoas: undefined;
+  PessoaVisitas: { idPessoa: string };
+  PessoaEditarVisita: { idVisita: string; idPessoa: string };
+  PessoaNovaVisita: { personId: string };
+  Territorios: undefined;
+  TerritorioResidencias: undefined;
+  TerritorioResidenciasVisitas: undefined;
+  TerritorioResidenciaNovaVisita: { residenciaId: string; territoryId: string };
+  TerritorioResidenciaEditarVisita: undefined;
+  TerritorioInformacao: undefined;
+  Relatorios: undefined;
+  RelatorioMes: { mesAno: string; mesAnoFormatado?: string };
+  RelatorioDetalhes: ReportType;
+  RelatorioAdicionar: { mesAno: string };
+  Ajuda: undefined;
+  Backup: undefined;
+  Configuracoes: undefined;
 }
 
-export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
+const { Navigator, Screen } = createStackNavigator<RootStackParamListType>();
+
+export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
   const routeNameRef = React.useRef<string | undefined>(undefined);
   const navigationRef = React.useRef<NavigationContainerRef>(null);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <NavigationContainer
@@ -50,7 +78,8 @@ export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
       }}
       onStateChange={async () => {
         const previousRouteName = routeNameRef?.current;
-        const currentRouteName = navigationRef?.current?.getCurrentRoute()?.name;
+        const currentRouteName =
+          navigationRef?.current?.getCurrentRoute()?.name;
 
         if (previousRouteName !== currentRouteName) {
           await analytics().logScreenView({
@@ -72,10 +101,7 @@ export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
           component={Home}
           options={{
             header: () => (
-              <Header
-                title="TJ Droid"
-                isHomePage
-              />
+              <Header title="TJ Droid" isHomePage capitalize={false} />
             ),
           }}
         />
@@ -156,7 +182,12 @@ export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
           name="Relatorios"
           component={Relatorios}
           options={{
-            header: () => <Header title={t("screens.relatorios.screen_name")} showGoBackHome />,
+            header: () => (
+              <Header
+                title={t("screens.relatorios.screen_name")}
+                showGoBackHome
+              />
+            ),
           }}
         />
 
@@ -182,7 +213,9 @@ export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
           name="Ajuda"
           component={Ajuda}
           options={{
-            header: () => <Header title={t("screens.ajuda.screen_name")} showGoBack />,
+            header: () => (
+              <Header title={t("screens.ajuda.screen_name")} showGoBack />
+            ),
           }}
         />
 
@@ -190,7 +223,9 @@ export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
           name="Backup"
           component={Backup}
           options={{
-            header: () => <Header title={t("screens.backup.screen_name")} showGoBack />,
+            header: () => (
+              <Header title={t("screens.backup.screen_name")} showGoBack />
+            ),
           }}
         />
 
@@ -198,7 +233,12 @@ export default function Routes({deepLinkingProp, actualTheme}:RoutesTypeProps) {
           name="Configuracoes"
           component={Configuracoes}
           options={{
-            header: () => <Header title={t("screens.configuracoes.screen_name")} showGoBackHome />,
+            header: () => (
+              <Header
+                title={t("screens.configuracoes.screen_name")}
+                showGoBackHome
+              />
+            ),
           }}
         />
       </Navigator>

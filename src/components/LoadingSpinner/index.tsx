@@ -1,10 +1,10 @@
 import React from "react";
-import { Container, StyuledActivityIndicator } from "./styles";
+import { Container, StyledActivityIndicator } from "./styles";
 
 export default function LoadingSpinner() {
   return (
     <Container>
-      <StyuledActivityIndicator size={80} />
+      <StyledActivityIndicator size={80} />
     </Container>
   );
 }

@@ -13,8 +13,10 @@ export type VisitDataType = {
   data: string;
   dia: string;
   hora: string;
-  idPessoa: string;
-  idVisita: string;
   videosMostrados: number;
   visita: number;
+  idPessoa: string;
+  idVisita: string;
+  territoryId?: string;
+  residenciaId?: string;
 };

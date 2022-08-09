@@ -9,12 +9,10 @@ import {
 } from "../../services/AsyncStorageMethods";
 
 type SelectPickerLanguagesPropsType = {
-  language?: string;
   onChangeLanguageValue: (language: string) => void;
 };
 
 export default function SelectPickerLanguages({
-  language = "en",
   onChangeLanguageValue,
 }: SelectPickerLanguagesPropsType) {
   const [pickerOptions, setPickerOptions] = useState({ language: "en" });
@@ -40,9 +38,7 @@ export default function SelectPickerLanguages({
       .then((response) => {
         setPickerOptions({ language: response.language });
       })
-      .catch((err) => {
-        // console.log("err",err);
-      });
+      .catch((err) => {});
   }, []);
 
   return (

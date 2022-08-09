@@ -1,4 +1,4 @@
-export type ReportsType = {
+export type ReportType = {
   id: string;
   data: string;
   minutos: number;
@@ -6,4 +6,4 @@ export type ReportsType = {
   videosMostrados: number;
   revisitas: number;
   anotacoes: string;
-}
+};

@@ -1,15 +1,21 @@
-import React from 'react'
-import Svg, { Path } from "react-native-svg"
+import React from "react";
+import Svg, { Path } from "react-native-svg";
 
 type IconPessoasSvgProps = {
-  iconColor: string;
-  width: number;
-  height: number;
-  widthVB: number;
-  heightVB: number;
-}
+  iconColor?: string;
+  width?: number;
+  height?: number;
+  widthVB?: number;
+  heightVB?: number;
+};
 
-export default function IconPessoasSvg({ iconColor, width = 87, height = 87, widthVB = 87, heightVB = 87 }: IconPessoasSvgProps) {
+export default function IconPessoasSvg({
+  iconColor,
+  width = 87,
+  height = 87,
+  widthVB = 87,
+  heightVB = 87,
+}: IconPessoasSvgProps) {
   return (
     <Svg
       width={width}
@@ -27,5 +33,5 @@ export default function IconPessoasSvg({ iconColor, width = 87, height = 87, wid
         fill={iconColor}
       />
     </Svg>
-  )
+  );
 }

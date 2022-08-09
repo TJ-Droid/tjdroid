@@ -5,13 +5,24 @@ import moment from "moment";
 
 import Header from "../../components/Header";
 import { VisitBox } from "../../components/VisitBox";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { VisitDataType } from "../../types/Visits";
 
-export default function TerritorioResidenciaNovaVisita({ route }) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "TerritorioResidenciaNovaVisita"
+>;
 
+interface Props extends ProfileScreenRouteProp {
+  // route: ProfileScreenRouteProp;
+}
+
+export default function TerritorioResidenciaNovaVisita({ route }: Props) {
   const { t } = useTranslation();
   const { residenciaId, territoryId } = route.params;
 
-  const [novaVisita, setNovaVisita] = useState({
+  const [novaVisita, setNovaVisita] = useState<VisitDataType>({
     territoryId: territoryId,
     residenciaId: residenciaId,
     dia: moment(new Date()).format("DD/MM/YYYY"),
@@ -21,11 +32,17 @@ export default function TerritorioResidenciaNovaVisita({ route }) {
     videosMostrados: 0,
     anotacoes: "",
     data: moment(new Date()).format(),
+    idPessoa: "",
+    idVisita: "",
   });
 
   return (
     <>
-      <Header title={t("screens.territorioresidencianovavisita.screen_name")} showGoBack showNewHomeVisit={novaVisita} />
+      <Header
+        title={t("screens.territorioresidencianovavisita.screen_name")}
+        showGoBack
+        showNewHomeVisit={novaVisita}
+      />
 
       <VisitBox
         visitData={novaVisita}

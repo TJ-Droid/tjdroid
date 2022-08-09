@@ -1,3 +1,4 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ToastAndroid } from "react-native";
@@ -7,9 +8,17 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { VisitBox } from "../../components/VisitBox";
 
 import { buscarVisitaPessoa } from "../../controllers/pessoasController";
+import { RootStackParamListType } from "../../routes";
 import { VisitDataType } from "../../types/Visits";
 
-export default function PessoaEditarVisitaStyles({ route }: any) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "PessoaEditarVisita"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function PessoaEditarVisita({ route }: Props) {
   const { t } = useTranslation();
   const [visitaPessoa, setVisitaPessoa] = useState<VisitDataType>(
     {} as VisitDataType
@@ -29,9 +38,9 @@ export default function PessoaEditarVisitaStyles({ route }: any) {
       await buscarVisitaPessoa(idPessoa, idVisita)
         .then((dados) => {
           // Trata o retorno
-          if (Object.keys(dados).length !== 0) {
+          if (dados && Object.keys(dados).length !== 0) {
             // Seta o estado com todos as visitas da pessoa para o SectionList
-            setVisitaPessoa({ ...(dados as VisitDataType) });
+            setVisitaPessoa({ ...dados });
 
             // Retira a mensagem de carregando
             setCarregando(false);

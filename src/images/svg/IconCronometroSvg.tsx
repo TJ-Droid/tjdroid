@@ -1,15 +1,21 @@
-import React from 'react'
-import Svg, { Path } from "react-native-svg"
+import React from "react";
+import Svg, { Path } from "react-native-svg";
 
 type IconCronometroSvgProps = {
-  iconColor: string;
-  width: number;
-  height: number;
-  widthVB: number;
-  heightVB: number;
-}
+  iconColor?: string;
+  width?: number;
+  height?: number;
+  widthVB?: number;
+  heightVB?: number;
+};
 
-export default function IconCronometroSvg({ iconColor, width = 76, height = 87, widthVB = 76, heightVB = 87 }: IconCronometroSvgProps) {
+export default function IconCronometroSvg({
+  iconColor,
+  width = 76,
+  height = 87,
+  widthVB = 76,
+  heightVB = 87,
+}: IconCronometroSvgProps) {
   return (
     <Svg
       width={width}
@@ -26,5 +32,5 @@ export default function IconCronometroSvg({ iconColor, width = 76, height = 87, 
         fill={iconColor}
       />
     </Svg>
-  )
+  );
 }

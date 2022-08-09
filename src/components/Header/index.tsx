@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, View, Share, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { BorderlessButton } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { Menu, Divider } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 
@@ -14,6 +14,7 @@ import {
   editarRelatorio,
   salvarNovoRelatorio,
   deletarRelatorio,
+  SelectedMonthServiceDataType,
 } from "../../controllers/relatoriosController";
 import {
   excluirVisita,
@@ -21,6 +22,7 @@ import {
   editarVisita,
   salvarVisita,
   deletarPessoa,
+  SalvarVisitaType,
 } from "../../controllers/pessoasController";
 import {
   salvarNovoTerritorio,
@@ -35,8 +37,13 @@ import {
   excluirVisitaCasa,
   editarVisitaCasa,
   salvarInformacoesTerritorio,
+  SalvarVisitaCasaType,
 } from "../../controllers/territoriosController";
 
+import { VisitDataType } from "../../types/Visits";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ReportCounterType } from "../../types/ReportCounter";
+import { RootStackParamListType } from "../../routes";
 import {
   Container,
   ContainerTitleButtons,
@@ -46,52 +53,57 @@ import {
   StyledFeatherHeaderButtons,
   ButtonText,
   StyledStatusBar,
-  StyledBorderlessButton,
-  StyledBorderlessButtonDelete,
-  StyledBorderlessButtonSave,
+  StyledButton,
+  StyledButtonDelete,
+  StyledButtonSave,
   StyledFeatherHeaderButtonsIcon,
   StyledFeatherHeaderButtonsIconRed,
-  StyledBorderlessButtonGoBack,
+  StyledButtonGoBack,
   StyledIoniconsHeaderButtons,
 } from "./styles";
 
-// type HeaderPropsType = {
-//   title: string,
-//   capitalize = true,
-//   showGoBack = false,
-//   showGoBackHome = false,
-//   showGoBackPersons = false,
-//   showGoBackReportDetails = false,
-//   isHomePage = false,
-//   showCancel = false,
-//   showContadorSave = false,
-//   showReportSave = false,
-//   showNewReportSave = false,
-//   showReportAdd = false,
-//   showReportSend = false,
-//   showAddNewPerson = false,
-//   showDeletePerson = false,
-//   showAddPersonVisit = false,
-//   showEditPersonVisit: VisitDataType,
-//   showNewPersonVisit = false,
-//   showAddNewTerritory = false,
-//   showOptionAddNewResidences = false,
-//   showChangeDisposition = false,
-//   showChangeDispositionFunc = false,
-//   showTerritoryMenu = false,
-//   handleChangeTerritoryNameFunc = false,
-//   territoryData = {},
-//   showDeleteTerritoryHome = false,
-//   showAddHomeVisit = false,
-//   showEditHomeIdentifier = false,
-//   showNewHomeVisit = false,
-//   handleChangeHomeIdentifierFunc = false,
-//   showEditHomeVisit = false,
-//   showEditTerritoryInfo = false,
-// }
+type ShowReportSendType = {
+  totaisDoMes: Partial<SelectedMonthServiceDataType>;
+  mesAnoFormatado?: string;
+};
+
+type HeaderPropsType = {
+  title?: string;
+  capitalize?: boolean;
+  showGoBack?: boolean;
+  showGoBackHome?: boolean;
+  showGoBackPersons?: boolean;
+  showGoBackReportDetails?: boolean;
+  isHomePage?: boolean;
+  showCancel?: boolean;
+  showContadorSave?: ReportCounterType;
+  showReportSave?: ReportCounterType;
+  showNewReportSave?: ReportCounterType;
+  showReportAdd?: { mesAno: string };
+  showReportSend?: ShowReportSendType;
+  showAddNewPerson?: boolean;
+  showDeletePerson?: { personId: string };
+  showAddPersonVisit?: { personId: string };
+  showEditPersonVisit?: VisitDataType;
+  showNewPersonVisit?: SalvarVisitaType;
+  showAddNewTerritory?: boolean;
+  showOptionAddNewResidences?: boolean;
+  showChangeDisposition?: boolean;
+  showChangeDispositionFunc?: boolean;
+  showTerritoryMenu?: boolean;
+  handleChangeTerritoryNameFunc?: boolean;
+  territoryData?: {};
+  showDeleteTerritoryHome?: boolean;
+  showAddHomeVisit?: { residenciaId: string; territoryId: string };
+  showEditHomeIdentifier?: boolean;
+  showNewHomeVisit?: VisitDataType;
+  handleChangeHomeIdentifierFunc?: boolean;
+  showEditHomeVisit?: boolean;
+  showEditTerritoryInfo?: boolean;
+};
 
 export default function Header({
-  title,
+  title = "",
   capitalize = true,
   showGoBack = false,
   showGoBackHome = false,
@@ -99,16 +111,16 @@ export default function Header({
   showGoBackReportDetails = false,
   isHomePage = false,
   showCancel = false,
-  showContadorSave = false,
-  showReportSave = false,
-  showNewReportSave = false,
-  showReportAdd = false,
-  showReportSend = false,
+  showContadorSave = undefined,
+  showReportSave = undefined,
+  showNewReportSave = undefined,
+  showReportAdd = undefined,
+  showReportSend = undefined,
   showAddNewPerson = false,
-  showDeletePerson = false,
-  showAddPersonVisit = false,
-  showEditPersonVisit = {},
-  showNewPersonVisit = false,
+  showDeletePerson = undefined,
+  showAddPersonVisit = undefined,
+  showEditPersonVisit = undefined,
+  showNewPersonVisit = undefined,
   showAddNewTerritory = false,
   showOptionAddNewResidences = false,
   showChangeDisposition = false,
@@ -117,16 +129,17 @@ export default function Header({
   handleChangeTerritoryNameFunc = false,
   territoryData = {},
   showDeleteTerritoryHome = false,
-  showAddHomeVisit = false,
+  showAddHomeVisit = undefined,
   showEditHomeIdentifier = false,
-  showNewHomeVisit = false,
+  showNewHomeVisit = undefined,
   handleChangeHomeIdentifierFunc = false,
   showEditHomeVisit = false,
   showEditTerritoryInfo = false,
-}) {
+}: HeaderPropsType) {
   const { t } = useTranslation();
 
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamListType>>();
 
   const [addMenu, setAddMenu] = useState(false);
   const openAddMenu = () => setAddMenu(true);
@@ -165,20 +178,20 @@ export default function Header({
   }
 
   // Dialog Open Function
-  function handleOpenDialogNewPerson(boolVal) {
-    setDialogNewPersonVisible(boolVal);
+  function handleOpenDialogNewPerson(value: boolean) {
+    setDialogNewPersonVisible(value);
   }
-  function handleOpenDialogNewTerritory(boolVal) {
-    setDialogNewTerritoryVisible(boolVal);
+  function handleOpenDialogNewTerritory(value: boolean) {
+    setDialogNewTerritoryVisible(value);
   }
-  function handleOpenDialogChangeNameTerritory(boolVal) {
-    setDialogChangeNameTerritoryVisible(boolVal);
+  function handleOpenDialogChangeNameTerritory(value: boolean) {
+    setDialogChangeNameTerritoryVisible(value);
   }
-  function handleOpenDialogChangeHomeIdentifier(boolVal) {
-    setDialogChangeHomeIdentifierVisible(boolVal);
+  function handleOpenDialogChangeHomeIdentifier(value: boolean) {
+    setDialogChangeHomeIdentifierVisible(value);
   }
-  function handleOpenDialogTerritoryHome(boolVal) {
-    setDialogAddTerritoryHomeVisible(boolVal);
+  function handleOpenDialogTerritoryHome(value: boolean) {
+    setDialogAddTerritoryHomeVisible(value);
   }
 
   // Dialog Cancel Function
@@ -200,7 +213,7 @@ export default function Header({
 
   // Script do botão de Compartilhar
   // COMPARTILHAR RELATÓRIO
-  function compartilharRelatorio(relatorio) {
+  function compartilharRelatorio(relatorio: ShowReportSendType) {
     const compartilhar = async () => {
       const {
         totalColocacoes,
@@ -214,13 +227,11 @@ export default function Header({
         // Monta o texto para o compartilhamento
         // Capitaliza o mês do ano
         await Share.share({
-          message: `${t(
-            "components.header.share_report_title"
-          )} ${relatorio.mesAnoFormatado.replace(/^\w/, (c) =>
-            c.toUpperCase()
-          )}\n\n${t("components.header.share_report_hours")}: ${minutes_to_hhmm(
-            totalMinutos
-          )}\n${t(
+          message: `${t("components.header.share_report_title")} ${(
+            relatorio.mesAnoFormatado ?? ""
+          ).replace(/^\w/, (c) => c.toUpperCase())}\n\n${t(
+            "components.header.share_report_hours"
+          )}: ${minutes_to_hhmm(totalMinutos ?? 0)}\n${t(
             "components.header.share_report_bible_studies"
           )}: ${totalEstudosBiblicos} \n${t(
             "components.header.share_report_revisits"
@@ -240,7 +251,7 @@ export default function Header({
     compartilhar();
   }
 
-  const alertaExclusaoPessoa = (pessoaId) =>
+  const alertaExclusaoPessoa = (idPessoa: string) =>
     Alert.alert(
       t("components.header.alert_delete_person_title"),
       t("components.header.alert_delete_person_description"),
@@ -250,7 +261,7 @@ export default function Header({
           onPress: () => {},
           style: "cancel",
         },
-        { text: t("words.yes"), onPress: () => handleDeletarPessoa(pessoaId) },
+        { text: t("words.yes"), onPress: () => handleDeletarPessoa(idPessoa) },
       ],
       { cancelable: true }
     );
@@ -273,7 +284,10 @@ export default function Header({
       { cancelable: true }
     );
 
-  const alertaExclusaoRelatorioAtual = (idRelatorio, dataRelatorio) =>
+  const alertaExclusaoRelatorioAtual = (
+    idRelatorio: string,
+    dataRelatorio: string
+  ) =>
     Alert.alert(
       t("components.header.alert_delete_report_title"),
       t("components.header.alert_delete_report_description"),
@@ -291,7 +305,7 @@ export default function Header({
       { cancelable: true }
     );
 
-  const alertaCancelarNovoRelatorio = (caminhoParaVoltar) =>
+  const alertaCancelarNovoRelatorio = (caminhoParaVoltar: "Home" | "voltar") =>
     Alert.alert(
       t("components.header.alert_delete_new_report_title"),
       t("components.header.alert_delete_new_report_description"),
@@ -312,7 +326,7 @@ export default function Header({
       { cancelable: true }
     );
 
-  const alertaDeletarVisitaPessoa = (idPessoa, idVisita) =>
+  const alertaDeletarVisitaPessoa = (idPessoa: string, idVisita: string) =>
     Alert.alert(
       t("components.header.alert_delete_visit_person_title"),
       t("components.header.alert_delete_visit_person_description"),
@@ -349,7 +363,7 @@ export default function Header({
       { cancelable: true }
     );
 
-  const alertaCancelarAdicaoVisitaPessoa = (caminhoParaVoltar) =>
+  const alertaCancelarAdicaoVisitaPessoa = (caminhoParaVoltar: "voltar") =>
     Alert.alert(
       t("components.header.alert_cancel_new_visit_person_title"),
       t("components.header.alert_cancel_new_visit_person_description"),
@@ -370,7 +384,7 @@ export default function Header({
       { cancelable: true }
     );
 
-  const alertaCancelarAdicaoVisitaCasa = (caminhoParaVoltar) =>
+  const alertaCancelarAdicaoVisitaCasa = (caminhoParaVoltar: "voltar") =>
     Alert.alert(
       t("components.header.alert_cancel_new_visit_house_title"),
       t("components.header.alert_cancel_new_visit_house_description"),
@@ -415,12 +429,12 @@ export default function Header({
     );
 
   // Editar Relatório
-  function handleEditarRelatorio({ relatorio, minutos }) {
-    editarRelatorio({ relatorio, minutos })
+  function handleEditarRelatorio(relatorio: ReportCounterType) {
+    editarRelatorio(relatorio)
       .then((dados) => {
         // Trata o retorno
-        if (dados) {
-          navigation.navigate("RelatorioMes", dados.mesAno);
+        if (dados?.mesAno) {
+          navigation.navigate("RelatorioMes", { mesAno: dados.mesAno });
         } else {
           // Mensagem Toast
           ToastAndroid.show(
@@ -439,11 +453,14 @@ export default function Header({
   }
 
   // Salvar Relatorio
-  function handleSalvarNovoRelatorio({ relatorio, minutos }, origem) {
-    salvarNovoRelatorio(relatorio, minutos)
+  function handleSalvarNovoRelatorio(
+    relatorio: ReportCounterType,
+    origem: "contador" | "relatorio"
+  ) {
+    salvarNovoRelatorio(relatorio)
       .then((dados) => {
         // Trata o retorno
-        if (dados) {
+        if (dados?.mesAno) {
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.new_report_add_success_message"),
@@ -504,8 +521,8 @@ export default function Header({
   }
 
   // ADICIONAR NOVA PESSOA
-  function handleAdicionarPessoa(personName) {
-    salvarPessoa(personName)
+  function handleAdicionarPessoa(personNewName: string) {
+    salvarPessoa(personNewName)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -534,7 +551,7 @@ export default function Header({
   }
 
   // DELETAR PESSOA
-  function handleDeletarPessoa(personId) {
+  function handleDeletarPessoa(personId: string) {
     deletarPessoa(personId)
       .then((dados) => {
         // Trata o retorno
@@ -618,18 +635,18 @@ export default function Header({
   }
 
   // DELETAR VISITA PESSOA
-  function handleDeletarVisitaPessoa(idPessoa, idVisita) {
+  function handleDeletarVisitaPessoa(idPessoa: string, idVisita: string) {
     excluirVisita(idPessoa, idVisita)
       .then((dados) => {
         // Trata o retorno
-        if (dados) {
+        if (dados?.idPessoa) {
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.person_visit_success_message"),
             ToastAndroid.SHORT
           );
           // Navega até a página abaixo
-          navigation.navigate("PessoaVisitas", dados);
+          navigation.navigate("PessoaVisitas", { idPessoa: dados?.idPessoa });
         } else {
           ToastAndroid.show(
             t("components.header.person_visit_error_message"),
@@ -646,12 +663,12 @@ export default function Header({
   }
 
   // EDITAR UMA VISITA FEITA
-  function handleEditarVisitaFeita(dadosVisita) {
+  function handleEditarVisitaFeita(dadosVisita: VisitDataType) {
     editarVisita(dadosVisita)
       .then((dados) => {
         // Trata o retorno
-        if (dados) {
-          navigation.navigate("PessoaVisitas", dados);
+        if (dados?.idPessoa) {
+          navigation.navigate("PessoaVisitas", { idPessoa: dados?.idPessoa });
         } else {
           ToastAndroid.show(
             t("components.header.person_edit_visit_error_message"),
@@ -712,18 +729,18 @@ export default function Header({
   }
 
   // ADICIONAR VISITA DA PESSOA
-  function handleAdicionarVisitaFeita(dadosNovaVisita) {
+  function handleAdicionarVisitaFeita(dadosNovaVisita: SalvarVisitaType) {
     salvarVisita(dadosNovaVisita)
       .then((dados) => {
         // Trata o retorno
-        if (dados) {
+        if (dados?.idPessoa) {
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.person_add_visit_success_message"),
             ToastAndroid.SHORT
           );
           // Navega até a página abaixo
-          navigation.navigate("PessoaVisitas", dados);
+          navigation.navigate("PessoaVisitas", { idPessoa: dados?.idPessoa });
         } else {
           ToastAndroid.show(
             t("components.header.person_add_visit_error_message"),
@@ -740,7 +757,7 @@ export default function Header({
   }
 
   // ADICIONAR VISITA DA CASA
-  function handleAdicionarVisitaFeitaCasa(dadosNovaVisita) {
+  function handleAdicionarVisitaFeitaCasa(dadosNovaVisita: VisitDataType) {
     salvarVisitaCasa(dadosNovaVisita)
       .then((dados) => {
         // Trata o retorno
@@ -768,7 +785,7 @@ export default function Header({
   }
 
   // ADICIONAR NOVO TERRITÓRIO
-  function handleAdicionarTerritorio(territorioNome) {
+  function handleAdicionarTerritorio(territorioNome: string) {
     salvarNovoTerritorio(territorioNome)
       .then((dados) => {
         // Trata o retorno
@@ -960,7 +977,7 @@ export default function Header({
   }
 
   return (
-    <Container elevation={5}>
+    <Container>
       <DialogModal
         dialogVisibleProp={dialogNewPersonVisible}
         dialogTitle={t("components.header.dialogmodal_add_person_title")}
@@ -1033,39 +1050,43 @@ export default function Header({
       <StyledStatusBar />
 
       {showGoBack && (
-        <StyledBorderlessButtonGoBack
+        <StyledButtonGoBack
           onPress={() => {
             voltarAtras();
           }}
         >
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
-        </StyledBorderlessButtonGoBack>
+        </StyledButtonGoBack>
       )}
 
       {showGoBackHome && (
-        <StyledBorderlessButtonGoBack onPress={() => voltarHome()}>
+        <StyledButtonGoBack onPress={() => voltarHome()}>
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
-        </StyledBorderlessButtonGoBack>
+        </StyledButtonGoBack>
       )}
 
       {showGoBackPersons && (
-        <StyledBorderlessButtonGoBack onPress={() => voltarPessoas()}>
+        <StyledButtonGoBack onPress={() => voltarPessoas()}>
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
-        </StyledBorderlessButtonGoBack>
+        </StyledButtonGoBack>
       )}
 
       {showGoBackReportDetails && (
-        <StyledBorderlessButtonGoBack
+        <StyledButtonGoBack
           onPress={() => {
             navigation.navigate("Relatorios");
           }}
         >
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
-        </StyledBorderlessButtonGoBack>
+        </StyledButtonGoBack>
       )}
 
       <ContainerTitleButtons>
-        <Title tail numberOfLines={2} style={capitalize}>
+        <Title
+          ellipsizeMode="tail"
+          numberOfLines={2}
+          style={{ textTransform: capitalize ? "capitalize" : "none" }}
+        >
           {title}
         </Title>
 
@@ -1073,24 +1094,24 @@ export default function Header({
           {isHomePage ? (
             <View style={{ flexDirection: "row" }}>
               <WrapperButton>
-                <BorderlessButton onPress={() => navigation.navigate("Backup")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Backup")}>
                   <StyledFeatherHeaderButtons
                     name="arrow-down-circle"
                     size={29}
                   />
-                </BorderlessButton>
+                </TouchableOpacity>
               </WrapperButton>
               <WrapperButton>
-                <BorderlessButton onPress={() => navigation.navigate("Ajuda")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Ajuda")}>
                   <StyledFeatherHeaderButtons name="help-circle" size={29} />
-                </BorderlessButton>
+                </TouchableOpacity>
               </WrapperButton>
               <WrapperButton>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => navigation.navigate("Configuracoes")}
                 >
                   <StyledFeatherHeaderButtons name="settings" size={29} />
-                </BorderlessButton>
+                </TouchableOpacity>
               </WrapperButton>
             </View>
           ) : (
@@ -1100,7 +1121,7 @@ export default function Header({
           {showContadorSave ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai levar para o relatório do mês informado na hora de salvar */
                     handleSalvarNovoRelatorio(showContadorSave, "contador")
@@ -1111,17 +1132,17 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButton
+                <StyledButton
                   onPress={() => alertaCancelarNovoRelatorio("Home")}
                 >
                   <StyledFeatherHeaderButtonsIconRed
                     name="x-square"
                     size={29}
                   />
-                </StyledBorderlessButton>
+                </StyledButton>
               </WrapperButton>
             </>
           ) : (
@@ -1131,7 +1152,7 @@ export default function Header({
           {showReportSave ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai levar para o relatório do mês informado na hora de salvar */
                     handleEditarRelatorio(showReportSave)
@@ -1142,19 +1163,19 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButtonDelete
+                <StyledButtonDelete
                   onPress={() =>
                     alertaExclusaoRelatorioAtual(
-                      showReportSave.relatorio.id,
-                      showReportSave.relatorio.dia
+                      showReportSave.id,
+                      showReportSave.dia
                     )
                   }
                 >
                   <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
-                </StyledBorderlessButtonDelete>
+                </StyledButtonDelete>
               </WrapperButton>
             </>
           ) : (
@@ -1164,7 +1185,7 @@ export default function Header({
           {showNewReportSave ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai levar para o relatório do mês informado na hora de salvar */
                     handleSalvarNovoRelatorio(showNewReportSave, "relatorio")
@@ -1175,17 +1196,17 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButton
+                <StyledButton
                   onPress={() => alertaCancelarNovoRelatorio("voltar")}
                 >
                   <StyledFeatherHeaderButtonsIconRed
                     name="x-square"
                     size={29}
                   />
-                </StyledBorderlessButton>
+                </StyledButton>
               </WrapperButton>
             </>
           ) : (
@@ -1194,9 +1215,9 @@ export default function Header({
 
           {showCancel ? (
             <WrapperButton>
-              <StyledBorderlessButton onPress={() => voltarAtras()}>
+              <StyledButton onPress={() => voltarAtras()}>
                 <StyledFeatherHeaderButtons name="x-square" size={29} />
-              </StyledBorderlessButton>
+              </StyledButton>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1204,13 +1225,13 @@ export default function Header({
 
           {showReportAdd ? (
             <WrapperButton>
-              <BorderlessButton
+              <TouchableOpacity
                 onPress={() =>
                   navigation.push("RelatorioAdicionar", showReportAdd)
                 }
               >
                 <StyledFeatherHeaderButtons name="file-plus" size={29} />
-              </BorderlessButton>
+              </TouchableOpacity>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1218,11 +1239,11 @@ export default function Header({
 
           {showReportSend ? (
             <WrapperButton>
-              <BorderlessButton
+              <TouchableOpacity
                 onPress={() => compartilharRelatorio(showReportSend)}
               >
                 <StyledIoniconsHeaderButtons name="share-social" size={29} />
-              </BorderlessButton>
+              </TouchableOpacity>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1230,9 +1251,9 @@ export default function Header({
 
           {showAddNewPerson ? (
             <WrapperButton>
-              <BorderlessButton onPress={() => handleOpenDialogNewPerson(true)}>
+              <TouchableOpacity onPress={() => handleOpenDialogNewPerson(true)}>
                 <StyledFeatherHeaderButtons name="user-plus" size={29} />
-              </BorderlessButton>
+              </TouchableOpacity>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1240,7 +1261,7 @@ export default function Header({
 
           {showAddPersonVisit ? (
             <WrapperButton>
-              <StyledBorderlessButton
+              <StyledButton
                 onPress={() =>
                   navigation.navigate("PessoaNovaVisita", {
                     personId: showAddPersonVisit.personId,
@@ -1248,7 +1269,7 @@ export default function Header({
                 }
               >
                 <StyledFeatherHeaderButtons name="plus-square" size={29} />
-              </StyledBorderlessButton>
+              </StyledButton>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1256,7 +1277,7 @@ export default function Header({
 
           {showAddHomeVisit ? (
             <WrapperButton>
-              <StyledBorderlessButton
+              <StyledButton
                 onPress={() =>
                   navigation.navigate("TerritorioResidenciaNovaVisita", {
                     residenciaId: showAddHomeVisit.residenciaId,
@@ -1265,7 +1286,7 @@ export default function Header({
                 }
               >
                 <StyledFeatherHeaderButtons name="plus-square" size={29} />
-              </StyledBorderlessButton>
+              </StyledButton>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1273,11 +1294,11 @@ export default function Header({
 
           {showEditHomeIdentifier ? (
             <WrapperButton>
-              <StyledBorderlessButton
+              <StyledButton
                 onPress={() => handleOpenDialogChangeHomeIdentifier(true)}
               >
                 <StyledFeatherHeaderButtons name="edit-2" size={24} />
-              </StyledBorderlessButton>
+              </StyledButton>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1285,11 +1306,11 @@ export default function Header({
 
           {showDeletePerson ? (
             <WrapperButton>
-              <StyledBorderlessButtonDelete
+              <StyledButtonDelete
                 onPress={() => alertaExclusaoPessoa(showDeletePerson.personId)}
               >
                 <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
-              </StyledBorderlessButtonDelete>
+              </StyledButtonDelete>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1297,7 +1318,7 @@ export default function Header({
 
           {showDeleteTerritoryHome ? (
             <WrapperButton>
-              <StyledBorderlessButtonDelete
+              <StyledButtonDelete
                 onPress={() =>
                   alertaExclusaoCasa(
                     showDeleteTerritoryHome.residenciaId,
@@ -1306,16 +1327,17 @@ export default function Header({
                 }
               >
                 <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
-              </StyledBorderlessButtonDelete>
+              </StyledButtonDelete>
             </WrapperButton>
           ) : (
             <View></View>
           )}
 
-          {Object.keys(showEditPersonVisit).length !== 0 ? (
+          {showEditPersonVisit &&
+          Object.keys(showEditPersonVisit).length !== 0 ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai voltar para a página da pessoa na hora de salvar */
                     handleEditarVisitaFeita(showEditPersonVisit)
@@ -1326,10 +1348,10 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButtonDelete
+                <StyledButtonDelete
                   onPress={() =>
                     alertaDeletarVisitaPessoa(
                       showEditPersonVisit.idPessoa,
@@ -1338,7 +1360,7 @@ export default function Header({
                   }
                 >
                   <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
-                </StyledBorderlessButtonDelete>
+                </StyledButtonDelete>
               </WrapperButton>
             </>
           ) : (
@@ -1348,7 +1370,7 @@ export default function Header({
           {showEditHomeVisit ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai voltar para a página da pessoa na hora de salvar */
                     handleEditarVisitaCasa(showEditHomeVisit)
@@ -1359,10 +1381,10 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButtonDelete
+                <StyledButtonDelete
                   onPress={() =>
                     alertaDeletarVisitaCasa(
                       showEditHomeVisit.idVisita,
@@ -1372,7 +1394,7 @@ export default function Header({
                   }
                 >
                   <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
-                </StyledBorderlessButtonDelete>
+                </StyledButtonDelete>
               </WrapperButton>
             </>
           ) : (
@@ -1382,7 +1404,7 @@ export default function Header({
           {showEditTerritoryInfo ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai voltar para a página da pessoa na hora de salvar */
                     handleEditarInformacoesTerritorio(showEditTerritoryInfo)
@@ -1393,7 +1415,7 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
             </>
           ) : (
@@ -1403,7 +1425,7 @@ export default function Header({
           {showNewPersonVisit ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai voltar para a página da pessoa na hora de salvar */
                     handleAdicionarVisitaFeita(showNewPersonVisit)
@@ -1414,17 +1436,17 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButton
+                <StyledButton
                   onPress={() => alertaCancelarAdicaoVisitaPessoa("voltar")}
                 >
                   <StyledFeatherHeaderButtonsIconRed
                     name="x-square"
                     size={29}
                   />
-                </StyledBorderlessButton>
+                </StyledButton>
               </WrapperButton>
             </>
           ) : (
@@ -1434,7 +1456,7 @@ export default function Header({
           {showNewHomeVisit ? (
             <>
               <WrapperButton>
-                <StyledBorderlessButtonSave
+                <StyledButtonSave
                   onPress={() =>
                     /* Vai voltar para a página da pessoa na hora de salvar */
                     handleAdicionarVisitaFeitaCasa(showNewHomeVisit)
@@ -1445,17 +1467,17 @@ export default function Header({
                     name="check-circle"
                     size={24}
                   />
-                </StyledBorderlessButtonSave>
+                </StyledButtonSave>
               </WrapperButton>
               <WrapperButton>
-                <StyledBorderlessButton
+                <StyledButton
                   onPress={() => alertaCancelarAdicaoVisitaCasa("voltar")}
                 >
                   <StyledFeatherHeaderButtonsIconRed
                     name="x-square"
                     size={29}
                   />
-                </StyledBorderlessButton>
+                </StyledButton>
               </WrapperButton>
             </>
           ) : (
@@ -1464,11 +1486,9 @@ export default function Header({
 
           {showAddNewTerritory ? (
             <WrapperButton>
-              <StyledBorderlessButton
-                onPress={() => handleOpenDialogNewTerritory(true)}
-              >
+              <StyledButton onPress={() => handleOpenDialogNewTerritory(true)}>
                 <StyledFeatherHeaderButtons name="plus-square" size={29} />
-              </StyledBorderlessButton>
+              </StyledButton>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1487,12 +1507,12 @@ export default function Header({
                   visible={addMenu}
                   onDismiss={closeAddMenu}
                   anchor={
-                    <StyledBorderlessButton onPress={openAddMenu}>
+                    <StyledButton onPress={openAddMenu}>
                       <StyledFeatherHeaderButtons
                         name="plus-square"
                         size={29}
                       />
-                    </StyledBorderlessButton>
+                    </StyledButton>
                   }
                 >
                   <Menu.Item
@@ -1516,7 +1536,7 @@ export default function Header({
 
           {showChangeDisposition ? (
             <WrapperButton>
-              <StyledBorderlessButton
+              <StyledButton
                 onPress={() => handleChangeDisposition(showChangeDisposition)}
               >
                 {showChangeDisposition.visualDisposition === "linhas" ? (
@@ -1524,7 +1544,7 @@ export default function Header({
                 ) : (
                   <StyledFeatherHeaderButtons name="list" size={29} />
                 )}
-              </StyledBorderlessButton>
+              </StyledButton>
             </WrapperButton>
           ) : (
             <View></View>
@@ -1543,12 +1563,12 @@ export default function Header({
                   visible={dotsMenu}
                   onDismiss={closeDotsMenu}
                   anchor={
-                    <StyledBorderlessButton onPress={openDotsMenu}>
+                    <StyledButton onPress={openDotsMenu}>
                       <StyledFeatherHeaderButtons
                         name="more-vertical"
                         size={29}
                       />
-                    </StyledBorderlessButton>
+                    </StyledButton>
                   }
                 >
                   <Menu.Item

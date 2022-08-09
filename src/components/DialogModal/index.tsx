@@ -17,10 +17,10 @@ type DialogModalPropsType = {
   dialogVisibleProp: boolean;
   dialogMessage: string;
   dialogTitle: string;
-  dialogValue: string | undefined;
-  dialogFunction: (value: string | undefined) => void;
+  dialogValue?: string | undefined;
+  dialogFunction: (value: string) => void;
   dialogCloseFunction: () => void;
-  keyboardTypeNumber: boolean;
+  keyboardTypeNumber?: boolean;
 };
 
 export default function DialogModal({

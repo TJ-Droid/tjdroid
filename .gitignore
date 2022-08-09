@@ -54,3 +54,5 @@ buck-out/
 web-build/
 
 android/app/google-services.json
+
+.vscode

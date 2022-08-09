@@ -40,7 +40,6 @@ import {
 const numColumns = 6;
 
 export default function TerritorioResidencias({ route, navigation }) {
-  
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
@@ -81,7 +80,10 @@ export default function TerritorioResidencias({ route, navigation }) {
       })
       .catch((error) => {
         // Mensagem Toast
-        ToastAndroid.show(t("screens.territorioresidencias.homes_load_message_error"), ToastAndroid.LONG);
+        ToastAndroid.show(
+          t("screens.territorioresidencias.homes_load_message_error"),
+          ToastAndroid.LONG
+        );
       });
   }
 
@@ -106,14 +108,19 @@ export default function TerritorioResidencias({ route, navigation }) {
   const alertaExclusaoResidencia = ({ residenciaId, residenciaNome }) => {
     Alert.alert(
       t("screens.territorioresidencias.alert_home_deleted_title"),
-      t("screens.territorioresidencias.alert_home_deleted_message", {residenciaNome}),
+      t("screens.territorioresidencias.alert_home_deleted_message", {
+        residenciaNome,
+      }),
       [
         {
           text: t("words.no"),
           onPress: () => {},
           style: "cancel",
         },
-        { text: t("words.yes"), onPress: () => handleDeletarResidencia(residenciaId) },
+        {
+          text: t("words.yes"),
+          onPress: () => handleDeletarResidencia(residenciaId),
+        },
       ],
       { cancelable: true }
     );
@@ -179,7 +186,7 @@ export default function TerritorioResidencias({ route, navigation }) {
         <ItemListTerritoryColor bgColor={item.corVisita} />
         <ItemList>
           <ItemListTerritory>
-            <ItemListTerritoryTitle tail numberOfLines={2}>
+            <ItemListTerritoryTitle ellipsizeMode="tail" numberOfLines={2}>
               {item.titulo}
             </ItemListTerritoryTitle>
 
@@ -197,7 +204,10 @@ export default function TerritorioResidencias({ route, navigation }) {
           </ItemListTerritory>
 
           {item.qtdVisitas !== 0 ? (
-            <ItemListTerritoryDescription tail numberOfLines={2}>
+            <ItemListTerritoryDescription
+              ellipsizeMode="tail"
+              numberOfLines={2}
+            >
               <ItemListTerritoryTextBold>{`${item.descData}`}</ItemListTerritoryTextBold>
 
               {item.descNome !== "" ? (
@@ -213,7 +223,10 @@ export default function TerritorioResidencias({ route, navigation }) {
             </ItemListTerritoryDescription>
           ) : item.descNome !== "" ? (
             <>
-              <ItemListTerritoryDescription tail numberOfLines={2}>
+              <ItemListTerritoryDescription
+                ellipsizeMode="tail"
+                numberOfLines={2}
+              >
                 <ItemListTerritoryTextBold>
                   {item.descNome}
                 </ItemListTerritoryTextBold>

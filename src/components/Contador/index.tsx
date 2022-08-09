@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { format, parseISO, formatISO } from "date-fns";
-import {
-  BorderlessButton,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";
 
@@ -33,21 +30,34 @@ import {
   BottomSectionLabelDateTimeText,
 } from "./styles";
 
+export type ContadorPropsType = {
+  relatorioId?: string;
+  diaProp?: string;
+  horaProp?: string;
+  minutosProp?: number;
+  revisitasProp?: number;
+  colocacoesProp?: number;
+  videosMostradosProp?: number;
+  observacoesProp?: string;
+  paginaCronometroParado?: boolean;
+  paginaRelatorioDetalhes?: boolean;
+  paginaRelatorioAdicionar?: boolean;
+};
+
 export default function Contador({
-  relatorioId = false,
+  relatorioId = "",
   diaProp = "00/00/0000",
   horaProp = "00:00",
   minutosProp = 0,
   revisitasProp = 0,
   colocacoesProp = 0,
   videosMostradosProp = 0,
-  observacoesProp = false,
+  observacoesProp = "",
   paginaCronometroParado = false,
   paginaRelatorioDetalhes = false,
   paginaRelatorioAdicionar = false,
-}) {
-
-  const {t} = useTranslation();
+}: ContadorPropsType) {
+  const { t } = useTranslation();
 
   // Date e time Picker
   const [time, setTime] = useState(
@@ -62,10 +72,13 @@ export default function Contador({
   // Estados gerais
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [timerBotaoPrecionado, setTimerBotaoPrecionado] = useState(0);
+  const [timerBotaoPrecionado, setTimerBotaoPrecionado] = useState<
+    ReturnType<typeof setTimeout>
+  >(setTimeout(() => {}));
 
   const [minutos, setMinutos] = useState(0);
   const [relatorio, setRelatorio] = useState({
+    id: "",
     dia: "00/00/0000",
     hora: "00:00",
     revisitas: 0,
@@ -118,7 +131,7 @@ export default function Contador({
   };
 
   // Trata o retorno da DATE PICKER modo CALENDARIO
-  const onChangeDatePicker = (_, selectedDate) => {
+  const onChangeDatePicker = (_: any, selectedDate: Date) => {
     const currentDate = selectedDate || date;
     const currentDateFormatted = format(currentDate, "dd/MM/yyyy");
     setShowDatePicker(false);
@@ -132,7 +145,7 @@ export default function Contador({
   };
 
   // Trata o retorno da DATE PICKER modo HORA
-  const onChangeTimePicker = (_, selectedTime) => {
+  const onChangeTimePicker = (_: any, selectedTime: Date) => {
     const currentTime = selectedTime || time; // 2021-09-22T21:58:00.000Z
     const currentTimeFormatted = format(
       parseISO(formatISO(currentTime)),
@@ -144,9 +157,11 @@ export default function Contador({
   };
 
   // FUNCAO PARA OS BOTOES DO CONTADOR
-  async function contar(local, tipo) {
-
-    if(local === 'minutos'){
+  async function contar(
+    local: "minutos" | "colocacoes" | "videosMostrados" | "revisitas",
+    tipo: "soma" | ""
+  ) {
+    if (local === "minutos") {
       if (tipo === "soma") {
         return setMinutos(minutos + 1);
       } else {
@@ -156,7 +171,7 @@ export default function Contador({
       }
     }
 
-    if(local === 'colocacoes'){
+    if (local === "colocacoes") {
       if (tipo === "soma") {
         return setRelatorio({
           ...relatorio,
@@ -172,7 +187,7 @@ export default function Contador({
       }
     }
 
-    if(local === 'videosMostrados'){
+    if (local === "videosMostrados") {
       if (tipo === "soma") {
         return setRelatorio({
           ...relatorio,
@@ -188,7 +203,7 @@ export default function Contador({
       }
     }
 
-    if(local === 'revisitas'){
+    if (local === "revisitas") {
       if (tipo === "soma") {
         return setRelatorio({
           ...relatorio,
@@ -225,28 +240,27 @@ export default function Contador({
 
   return (
     <>
-
       {paginaCronometroParado && (
         <Header
-          title={t("components.contador.header_title_chronometer")} 
+          title={t("components.contador.header_title_chronometer")}
           showGoBackHome
-          showContadorSave={{ relatorio, minutos: minutos }}
+          showContadorSave={{ ...relatorio, minutos: minutos }}
         />
       )}
 
       {paginaRelatorioDetalhes && (
         <Header
-          title={t("components.contador.header_title_report")} 
+          title={t("components.contador.header_title_report")}
           showGoBack
-          showReportSave={{ relatorio, minutos: minutos }}
+          showReportSave={{ ...relatorio, minutos: minutos }}
         />
       )}
 
       {paginaRelatorioAdicionar && (
         <Header
-          title={t("components.contador.header_title_new_report")} 
+          title={t("components.contador.header_title_new_report")}
           showGoBack
-          showNewReportSave={{ relatorio, minutos: minutos }}
+          showNewReportSave={{ ...relatorio, minutos: minutos }}
         />
       )}
 
@@ -257,7 +271,7 @@ export default function Contador({
             mode="date"
             is24Hour={true}
             display="default"
-            onChange={onChangeDatePicker}
+            onChange={(evt: any, date: any) => onChangeDatePicker(evt, date)}
           />
         )}
 
@@ -267,7 +281,7 @@ export default function Contador({
             mode="time"
             is24Hour={true}
             display="default"
-            onChange={onChangeTimePicker}
+            onChange={(evt: any, date: any) => onChangeTimePicker(evt, date)}
           />
         )}
 
@@ -302,8 +316,9 @@ export default function Contador({
             <TopSectionTextInput
               multiline
               autoCorrect
-              placeholder={t("components.contador.input_description_placeholder")}
-              elevation={3}
+              placeholder={t(
+                "components.contador.input_description_placeholder"
+              )}
               onChangeText={(texto) =>
                 setRelatorio({ ...relatorio, observacoes: texto })
               }
@@ -317,31 +332,39 @@ export default function Contador({
           <BottomSectionActionButtonsContainer>
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
-                <BottomSectionLabelText>{t("words.date")}:</BottomSectionLabelText>
+                <BottomSectionLabelText>
+                  {t("words.date")}:
+                </BottomSectionLabelText>
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton onPress={showDatepicker}>
+                <TouchableOpacity onPress={showDatepicker}>
                   <BottomSectionButtonWrapper marginRight={5}>
-                    <BottomSectionLabelDateTimeText>{relatorio.dia}</BottomSectionLabelDateTimeText>
+                    <BottomSectionLabelDateTimeText>
+                      {relatorio.dia}
+                    </BottomSectionLabelDateTimeText>
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
-                <BorderlessButton onPress={showTimepicker}>
+                <TouchableOpacity onPress={showTimepicker}>
                   <BottomSectionButtonWrapper>
-                    <BottomSectionLabelDateTimeText>{relatorio.hora}</BottomSectionLabelDateTimeText>
+                    <BottomSectionLabelDateTimeText>
+                      {relatorio.hora}
+                    </BottomSectionLabelDateTimeText>
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
-                <BottomSectionLabelText>{t("words.placements")}:</BottomSectionLabelText>
+                <BottomSectionLabelText>
+                  {t("words.placements")}:
+                </BottomSectionLabelText>
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("colocacoes", "");
                   }}
@@ -349,13 +372,13 @@ export default function Contador({
                   <BottomSectionButtonWrapper>
                     <StyledFeatherIconSectionButton name="minus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
                 <BottomSectionQuantityText>
                   {relatorio.colocacoes}
                 </BottomSectionQuantityText>
 
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("colocacoes", "soma");
                   }}
@@ -363,7 +386,7 @@ export default function Contador({
                   <BottomSectionButtonWrapper>
                     <StyledFeatherIconSectionButton name="plus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
@@ -375,7 +398,7 @@ export default function Contador({
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("videosMostrados", "");
                   }}
@@ -383,13 +406,13 @@ export default function Contador({
                   <BottomSectionButtonWrapper>
                     <StyledFeatherIconSectionButton name="minus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
                 <BottomSectionQuantityText>
                   {relatorio.videosMostrados}
                 </BottomSectionQuantityText>
 
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("videosMostrados", "soma");
                   }}
@@ -397,17 +420,19 @@ export default function Contador({
                   <BottomSectionButtonWrapper>
                     <StyledFeatherIconSectionButton name="plus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
-                <BottomSectionLabelText>{t("words.revisits")}:</BottomSectionLabelText>
+                <BottomSectionLabelText>
+                  {t("words.revisits")}:
+                </BottomSectionLabelText>
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("revisitas", "");
                   }}
@@ -415,13 +440,13 @@ export default function Contador({
                   <BottomSectionButtonWrapper>
                     <StyledFeatherIconSectionButton name="minus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
                 <BottomSectionQuantityText>
                   {relatorio.revisitas}
                 </BottomSectionQuantityText>
 
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("revisitas", "soma");
                   }}
@@ -429,7 +454,7 @@ export default function Contador({
                   <BottomSectionButtonWrapper>
                     <StyledFeatherIconSectionButton name="plus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
           </BottomSectionActionButtonsContainer>

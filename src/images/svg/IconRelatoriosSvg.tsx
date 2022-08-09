@@ -1,15 +1,21 @@
-import React from 'react'
-import Svg, { Path } from "react-native-svg"
+import React from "react";
+import Svg, { Path } from "react-native-svg";
 
 type IconRelatoriosSvgProps = {
-  iconColor: string;
-  width: number;
-  height: number;
-  widthVB: number;
-  heightVB: number;
-}
+  iconColor?: string;
+  width?: number;
+  height?: number;
+  widthVB?: number;
+  heightVB?: number;
+};
 
-export default function IconRelatoriosSvg({ iconColor, width = 87, height = 87, widthVB = 87, heightVB = 87 }:IconRelatoriosSvgProps) {
+export default function IconRelatoriosSvg({
+  iconColor,
+  width = 87,
+  height = 87,
+  widthVB = 87,
+  heightVB = 87,
+}: IconRelatoriosSvgProps) {
   return (
     <Svg
       width={width}
@@ -31,5 +37,5 @@ export default function IconRelatoriosSvg({ iconColor, width = 87, height = 87, 
         fill={iconColor}
       />
     </Svg>
-  )
+  );
 }
