@@ -11,7 +11,9 @@ import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
 
-import buscarTerritorios from "../../controllers/territoriosController";
+import buscarTerritorios, {
+  CustomTerritoriesType,
+} from "../../controllers/territoriosController";
 import { deletarTerritorio } from "../../controllers/territoriosController";
 
 import {
@@ -22,61 +24,71 @@ import {
   ItemListTextDateSelected,
   ItemListTextDateWorked,
 } from "./styles";
-import { TerritoriesType } from "../../types/Territories";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
 
-export default function Territorios({ navigation }) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "Territorios"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function Territorios({ navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
   const [reload, setReload] = useState(false);
-  const [allTerritorios, setAllTerritorios] = useState([]);
+  const [allTerritorios, setAllTerritorios] = useState<CustomTerritoriesType[]>(
+    []
+  );
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     setCarregando(true);
-    let continuarBuscarDados = true;
+    // let continuarBuscarDados = true;
 
     if (isFocused) {
       const buscarDados = async () => {
-        if (continuarBuscarDados) {
-          // Busca os anos de Servico para setar no SectionList
-          await buscarTerritorios()
-            .then((dados) => {
-              // Trata o retorno
-              if (dados) {
-                // Seta o estado com todos os territórios para o SectionList
-                setAllTerritorios(dados);
+        // if (continuarBuscarDados) {
+        // Busca os anos de Servico para setar no SectionList
+        await buscarTerritorios()
+          .then((dados) => {
+            // Trata o retorno
+            if (dados) {
+              // Seta o estado com todos os territórios para o SectionList
+              setAllTerritorios(dados);
 
-                // Retira a mensagem de carregando
-                setCarregando(false);
-              } else {
-                // Retira a mensagem de carregando
-                setCarregando(false);
+              // Retira a mensagem de carregando
+              setCarregando(false);
+            } else {
+              // Retira a mensagem de carregando
+              setCarregando(false);
 
-                // Mensagem Toast
-                ToastAndroid.show(
-                  t("screens.territorios.territory_load_message_error"),
-                  ToastAndroid.LONG
-                );
-              }
-            })
-            .catch((error) => {
               // Mensagem Toast
               ToastAndroid.show(
                 t("screens.territorios.territory_load_message_error"),
                 ToastAndroid.LONG
               );
-            });
-        }
+            }
+          })
+          .catch((error) => {
+            // Mensagem Toast
+            ToastAndroid.show(
+              t("screens.territorios.territory_load_message_error"),
+              ToastAndroid.LONG
+            );
+          });
+        // }
       };
       buscarDados();
     }
 
-    return () => (continuarBuscarDados = false);
+    // return () => (continuarBuscarDados = false);
   }, [isFocused, reload]);
 
   // ALERTA de DELETAR TERRITÓRIO
-  const alertaExclusaoTerritorio = ({ territorioId }) => {
+  const alertaExclusaoTerritorio = (territorioId: string) => {
     Alert.alert(
       t("screens.territorios.alert_territory_deleted_title"),
       t("screens.territorios.alert_territory_deleted_message"),
@@ -96,7 +108,7 @@ export default function Territorios({ navigation }) {
   };
 
   // DELETAR TERRITÓRIO
-  function handleDeletarTerritorio(territorioId) {
+  function handleDeletarTerritorio(territorioId: string) {
     deletarTerritorio(territorioId)
       .then((dados) => {
         //Trata o retorno
@@ -125,10 +137,10 @@ export default function Territorios({ navigation }) {
       });
   }
 
-  const Item = ({ item }) => (
+  const Item = ({ item }: { item: CustomTerritoriesType }) => (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate("TerritorioResidencias", item)}
-      onLongPress={() => alertaExclusaoTerritorio({ territorioId: item.id })}
+      onLongPress={() => alertaExclusaoTerritorio(item.id)}
       delayLongPress={800}
     >
       <ItemList>

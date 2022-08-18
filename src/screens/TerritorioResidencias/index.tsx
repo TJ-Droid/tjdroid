@@ -21,6 +21,7 @@ import EmptyMessage from "../../components/EmptyMessage";
 import {
   buscarTerritoriosResidencias,
   deletarResidenciaTerritorio,
+  TerritoryHomesInterface,
 } from "../../controllers/territoriosController";
 
 import {
@@ -35,11 +36,21 @@ import {
   ItemListTerritoryTextBold,
   TerritoryBoxText,
 } from "./styles";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { TerritoryDispositionType } from "../../types/Territories";
 
 // Número de linhas
-const numColumns = 6;
+const NUM_COLUMNS = 6;
 
-export default function TerritorioResidencias({ route, navigation }) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "TerritorioResidencias"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function TerritorioResidencias({ route, navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
@@ -51,9 +62,9 @@ export default function TerritorioResidencias({ route, navigation }) {
 
   const [visualDisposition, setVisualDisposition] = useState(disposicao);
   const [reload, setReload] = useState(false);
-  const [allTerritoriosResidencias, setAllTerritoriosResidencias] = useState(
-    []
-  );
+  const [allTerritoriosResidencias, setAllTerritoriosResidencias] = useState<
+    TerritoryHomesInterface[]
+  >([]);
   const [carregando, setCarregando] = useState(true);
 
   async function buscarDados() {
@@ -105,7 +116,13 @@ export default function TerritorioResidencias({ route, navigation }) {
   }, [isFocused, reload]);
 
   // ALERTA de DELETAR TERRITÓRIO
-  const alertaExclusaoResidencia = ({ residenciaId, residenciaNome }) => {
+  const alertaExclusaoResidencia = ({
+    residenciaId,
+    residenciaNome,
+  }: {
+    residenciaId: string;
+    residenciaNome: string;
+  }) => {
     Alert.alert(
       t("screens.territorioresidencias.alert_home_deleted_title"),
       t("screens.territorioresidencias.alert_home_deleted_message", {
@@ -127,7 +144,7 @@ export default function TerritorioResidencias({ route, navigation }) {
   };
 
   // DELETAR TERRITÓRIO
-  function handleDeletarResidencia(residenciaId) {
+  function handleDeletarResidencia(residenciaId: string) {
     deletarResidenciaTerritorio(residenciaId, territoryId)
       .then((dados) => {
         //Trata o retorno
@@ -157,16 +174,18 @@ export default function TerritorioResidencias({ route, navigation }) {
   }
 
   // Função que altera a disposição dos itens na tela
-  function handleChangeVisualDisposition(newDisposition) {
+  function handleChangeVisualDisposition(
+    newDisposition: TerritoryDispositionType
+  ) {
     setVisualDisposition(newDisposition);
   }
   // Função que altera o nome do territorio na tela
-  function handleChangeTerritoryName(newTerritoryName) {
+  function handleChangeTerritoryName(newTerritoryName: string) {
     setTerritoryName(newTerritoryName);
   }
 
   // ITEM PARA A DISPOSIÇÃO VISUAL DE LINHAS
-  const Item = ({ item }) => (
+  const Item = ({ item }: { item: TerritoryHomesInterface }) => (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate("TerritorioResidenciasVisitas", {
@@ -241,14 +260,14 @@ export default function TerritorioResidencias({ route, navigation }) {
   );
 
   // ITEM PARA A DISPOSIÇÃO VISUAL DE CAIXAS
-  const ItemBox = ({ item }) => {
+  const ItemBox = ({ item }: { item: TerritoryHomesInterface }) => {
     return (
       <View
         style={{
           backgroundColor: item.corVisita,
           flex: 1,
           margin: 3,
-          height: Dimensions.get("window").width / numColumns - 8,
+          height: Dimensions.get("window").width / NUM_COLUMNS - 8,
           borderRadius: 7,
         }}
       >
@@ -294,7 +313,7 @@ export default function TerritorioResidencias({ route, navigation }) {
         showGoBack
         showOptionAddNewResidences
         showTerritoryMenu
-        territoryData={{ nome: territoryName, id }}
+        territoryData={{ nome: territoryName, territoryId: id }}
         showChangeDisposition={{ visualDisposition, id }}
         showChangeDispositionFunc={(r) => handleChangeVisualDisposition(r)}
         handleChangeTerritoryNameFunc={(r) => handleChangeTerritoryName(r)}
@@ -319,7 +338,7 @@ export default function TerritorioResidencias({ route, navigation }) {
           ListEmptyComponent={EmptyListMessage}
           key={"#"}
           keyExtractor={(_, index) => "#" + index}
-          numColumns={numColumns}
+          numColumns={NUM_COLUMNS}
         />
       )}
     </Container>

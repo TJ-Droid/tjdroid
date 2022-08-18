@@ -4,14 +4,27 @@ import { useTranslation } from "react-i18next";
 
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import { buscarVisitaResidencia } from "../../controllers/territoriosController";
+import {
+  buscarVisitaResidencia,
+  VisitCustomSearchHomeVisitIterface,
+} from "../../controllers/territoriosController";
 
 import { VisitBox } from "../../components/VisitBox";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { VisitDataType } from "../../types/Visits";
 
-export default function TerritorioResidenciaEditarVisita({ route }) {
-  
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "TerritorioResidenciaEditarVisita"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function TerritorioResidenciaEditarVisita({ route }: Props) {
   const { t } = useTranslation();
-  const [visitaPessoa, setVisitaPessoa] = useState({});
+  const [homeVisit, setHomeVisit] =
+    useState<VisitCustomSearchHomeVisitIterface>();
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -19,38 +32,42 @@ export default function TerritorioResidenciaEditarVisita({ route }) {
 
     setCarregando(true);
 
-    let continuarBuscarDados = true;
+    // let continuarBuscarDados = true;
 
     const buscarDados = async () => {
-      if (continuarBuscarDados) {
-        // Busca os anos de Servico para setar no SectionList
-        await buscarVisitaResidencia(idVisita, residenciaId, territorioId)
-          .then((dados) => {
-            // Trata o retorno
-            if (dados) {
-              // Seta o estado com todos as visitas da pessoa para o SectionList
-              setVisitaPessoa(dados.visita);
+      // if (continuarBuscarDados) {
+      // Busca os anos de Servico para setar no SectionList
+      await buscarVisitaResidencia(idVisita, residenciaId, territorioId)
+        .then((dados) => {
+          // Trata o retorno
+          if (dados) {
+            // Seta o estado com todos as visitas da pessoa para o SectionList
+            setHomeVisit(dados.visita);
 
-              // Retira a mensagem de carregando
-              setCarregando(false);
-            } else {
-              ToastAndroid.show(
-                t("screens.territorioresidenciaeditarvisita.visits_load_message_error"),
-                ToastAndroid.LONG
-              );
-            }
-          })
-          .catch((error) => {
+            // Retira a mensagem de carregando
+            setCarregando(false);
+          } else {
             ToastAndroid.show(
-              t("screens.territorioresidenciaeditarvisita.visits_load_message_error"),
+              t(
+                "screens.territorioresidenciaeditarvisita.visits_load_message_error"
+              ),
               ToastAndroid.LONG
             );
-          });
-      }
+          }
+        })
+        .catch((error) => {
+          ToastAndroid.show(
+            t(
+              "screens.territorioresidenciaeditarvisita.visits_load_message_error"
+            ),
+            ToastAndroid.LONG
+          );
+        });
+      // }
     };
     buscarDados();
 
-    return () => (continuarBuscarDados = false);
+    // return () => (continuarBuscarDados = false);
   }, []);
 
   return (
@@ -58,15 +75,17 @@ export default function TerritorioResidenciaEditarVisita({ route }) {
       <Header
         title={t("screens.territorioresidenciaeditarvisita.screen_name")}
         showGoBack
-        showEditHomeVisit={visitaPessoa}
+        showEditHomeVisit={homeVisit}
       />
 
       {carregando ? (
         <LoadingSpinner />
       ) : (
         <VisitBox
-          visitData={visitaPessoa}
-          onVisitChangeValues={(v) => setVisitaPessoa(v)}
+          visitData={homeVisit as VisitDataType}
+          onVisitChangeValues={(v) =>
+            setHomeVisit(v as VisitCustomSearchHomeVisitIterface)
+          }
         />
       )}
     </>

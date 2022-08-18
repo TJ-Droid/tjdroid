@@ -52,7 +52,7 @@ export function VisitBox({
     onVisitChangeValues(visitDataState);
   }, [visitDataState]);
 
-  const onChangeDatePicker = (_: any, selectedDate: any) => {
+  const onChangeDatePicker = (_: any, selectedDate: Date) => {
     const currentDate = selectedDate || date;
     const currentDateFormatted = format(currentDate, "dd/MM/yyyy");
     setShowDatePicker(false);
@@ -73,7 +73,7 @@ export function VisitBox({
     setShowDatePicker(true);
   };
 
-  const onChangeTimePicker = (_: any, selectedTime: any) => {
+  const onChangeTimePicker = (_: any, selectedTime: Date) => {
     const currentTime = selectedTime || time;
     const currentTimeFormatted = format(
       parseISO(formatISO(currentTime)),
@@ -148,7 +148,7 @@ export function VisitBox({
             mode={"date"}
             is24Hour={true}
             display="default"
-            onChange={onChangeDatePicker}
+            onChange={(evt: any, date: any) => onChangeDatePicker(evt, date)}
           />
         )}
 
@@ -158,7 +158,7 @@ export function VisitBox({
             mode={"time"}
             is24Hour={true}
             display="default"
-            onChange={onChangeTimePicker}
+            onChange={(evt: any, date: any) => onChangeTimePicker(evt, date)}
           />
         )}
 

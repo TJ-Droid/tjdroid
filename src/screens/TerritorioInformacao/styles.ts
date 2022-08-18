@@ -22,6 +22,7 @@ export const TopSectionTextInput = styled.TextInput.attrs(({ theme }) => ({
   border: 1px solid ${({ theme }) => theme.color.primary};
   font-size: 17px;
   border-radius: 7px;
+  elevation: 3;
 `;
 
 export const BottomSectionContainer = styled.View`

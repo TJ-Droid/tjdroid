@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { Alert, ToastAndroid } from "react-native";
+import { Alert, ToastAndroid, TouchableOpacity } from "react-native";
 import {
-  BorderlessButton,
   FlatList,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
@@ -12,7 +11,7 @@ import {
   formatarLocale,
 } from "../../utils/utils";
 
-import moment from "moment/min/moment-with-locales";
+import moment from "moment";
 
 import Header from "../../components/Header";
 import DialogModal from "../../components/DialogModal";
@@ -21,6 +20,8 @@ import EmptyMessage from "../../components/EmptyMessage";
 
 import {
   buscarResidenciasVisitas,
+  CustomSearchHomeVisitsIterface,
+  CustomSearchVisitType,
   editarNomeCasa,
   excluirVisitaCasa,
 } from "../../controllers/territoriosController";
@@ -36,18 +37,36 @@ import {
   HeaderPersonName,
   HeaderPersonNameIcon,
 } from "./styles";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { AppLanguages } from "../../types/Languages";
 
-export default function TerritorioResidenciasVisitas({ route, navigation }) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "TerritorioResidenciasVisitas"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function TerritorioResidenciasVisitas({
+  route,
+  navigation,
+}: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
   // Estado local para setar o idioma nos locais
-  const [appLanguageLocal, setAppLanguageLocal] = useState("");
+  const [appLanguageLocal, setAppLanguageLocal] = useState<{
+    language: AppLanguages | undefined;
+  }>({ language: undefined });
 
   // Dialog states
   const [reload, setReload] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [allVisitasResidencia, setAllVisitasResidencia] = useState({});
+  const [allVisitasResidencia, setAllVisitasResidencia] =
+    useState<CustomSearchHomeVisitsIterface>(
+      {} as CustomSearchHomeVisitsIterface
+    );
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -112,12 +131,12 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
     // Quando sair da tela, para de buscar
     return () => {
       continuarBuscarDados = false;
-      setAppLanguageLocal("");
+      setAppLanguageLocal({ language: undefined });
     };
   }, [isFocused, reload]);
 
   // Abrir dialod do nome
-  function handleOpenDialog(showDialogBoolean) {
+  function handleOpenDialog(showDialogBoolean: boolean) {
     setDialogVisible(showDialogBoolean);
   }
 
@@ -127,12 +146,20 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
   }
 
   // Seta o novo nome da tela
-  function handleChangeHomeIdentifier(newIdentifier) {
+  function handleChangeHomeIdentifier(newIdentifier: string) {
     setAllVisitasResidencia({ ...allVisitasResidencia, nome: newIdentifier });
   }
 
   // ALERTA de DELETAR VISITA
-  const alertaDeletarVisitaCasa = ({ idVisita, residenciaId, territorioId }) =>
+  const alertaDeletarVisitaCasa = ({
+    idVisita,
+    residenciaId,
+    territorioId,
+  }: {
+    idVisita: string;
+    residenciaId: string;
+    territorioId: string;
+  }) =>
     Alert.alert(
       t("screens.territorioresidenciasvisitas.alert_visit_deleted_title"),
       t("screens.territorioresidenciasvisitas.alert_visit_deleted_message"),
@@ -152,7 +179,11 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
     );
 
   // EDITAR NOME CASA
-  function handleChangeHomeName(casaNome, residenciaId, territorioId) {
+  function handleChangeHomeName(
+    casaNome: string,
+    residenciaId: string,
+    territorioId: string
+  ) {
     editarNomeCasa(casaNome, residenciaId, territorioId)
       .then((dados) => {
         // Trata o retorno
@@ -195,7 +226,11 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
   }
 
   // DELETAR VISITA PESSOA
-  function handleDeletarVisita(idVisita, residenciaId, territorioId) {
+  function handleDeletarVisita(
+    idVisita: string,
+    residenciaId: string,
+    territorioId: string
+  ) {
     excluirVisitaCasa(idVisita, residenciaId, territorioId)
       .then((dados) => {
         // Trata o retorno
@@ -227,7 +262,7 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
       });
   }
 
-  const Item = ({ item }) => (
+  const Item = ({ item }: { item: CustomSearchVisitType }) => (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate("TerritorioResidenciaEditarVisita", {
@@ -247,7 +282,9 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
       <ItemList>
         <ItemListDay>
           <ItemListTextDay ellipsizeMode="tail" numberOfLines={1}>
-            {moment(item.data).format("L")}
+            {moment(item.data)
+              .locale(formatarLocale(appLanguageLocal?.language))
+              .format("DD/MM/yy")}
           </ItemListTextDay>
           <ItemListTextDayInfo ellipsizeMode="tail" numberOfLines={1}>
             {moment(item.data)
@@ -318,9 +355,9 @@ export default function TerritorioResidenciasVisitas({ route, navigation }) {
 
       <HeaderBoxPersonName>
         <HeaderPersonName>{allVisitasResidencia.nomeMorador}</HeaderPersonName>
-        <BorderlessButton onPress={() => handleOpenDialog(true)}>
+        <TouchableOpacity onPress={() => handleOpenDialog(true)}>
           <HeaderPersonNameIcon name="edit-2" size={22} />
-        </BorderlessButton>
+        </TouchableOpacity>
       </HeaderBoxPersonName>
 
       {carregando ? (

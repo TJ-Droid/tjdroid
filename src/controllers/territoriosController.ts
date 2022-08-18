@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { stringify, v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 import moment from "moment";
 import "moment/locale/pt-br";
@@ -8,19 +8,129 @@ import {
   buscarAsyncStorage,
   salvarAsyncStorage,
 } from "../services/AsyncStorageMethods";
-import { TerritoriesType } from "../types/Territories";
+import {
+  TerritoriesType,
+  TerritoryDispositionType,
+  TerritoryHomeType,
+  TerritoryOrderingType,
+} from "../types/Territories";
 import { VisitDataType } from "../types/Visits";
+
+export interface CustomTerritoriesType extends TerritoriesType {
+  dataSelecionado?: string;
+  dataTrabalhado?: string;
+  titulo?: string;
+  corVisita?: string;
+  descNome?: string;
+  descData?: string;
+  descAnotacoes?: string;
+  qtdVisitas?: number;
+}
+
+export interface CustomTerritoryHomeType extends TerritoryHomeType {}
+
+export interface TerritoryHomesInterface {
+  corVisita: string;
+  descAnotacoes: string;
+  descData: string;
+  descNome: string;
+  id: string;
+  titulo: string;
+  qtdVisitas: number;
+}
+
+export interface CustomSearchHomeVisitIterface {
+  visita: VisitCustomSearchHomeVisitIterface;
+  dataDate: Date;
+  dataTime: Date;
+}
+
+export interface VisitCustomSearchHomeVisitIterface {
+  idVisita: string;
+  residenciaId: string;
+  territorioId: string;
+  data: string;
+  dia: string;
+  hora: string;
+  colocacoes: number;
+  videosMostrados: number;
+  visita: number;
+  anotacoes: string;
+  idPessoa?: string;
+}
+
+export type SearchTerritoryInfoType = {
+  observacoes?: string;
+  dataSelecionado?: string;
+  dataTrabalhado?: string;
+  ultimaVisita?: string;
+  id?: string;
+  nome?: string;
+  dataSelecionadoFormatada?: string;
+  dataTrabalhadoFormatada?: string;
+  ultimaVisitaFormatada?: string;
+};
+
+export type CustomSearchVisitType = {
+  id: string;
+  data: string;
+  visita: string;
+  visitaBgColor: string;
+  visitaFontColor: string;
+};
+
+export interface CustomSearchHomeVisitsIterface {
+  territorioId: string;
+  id: string;
+  nome: string;
+  nomeMorador?: string;
+  visitas?: CustomSearchVisitType[];
+}
+
+const SELECT_PICKER_OPTIONS = [
+  {
+    value: 0,
+    bgColor: "#5e913430",
+    fontColor: "#5e9134",
+    label: i18next.t("selectpickeroptions.bible_studies"),
+  },
+  {
+    value: 1,
+    bgColor: "#7346ad30",
+    fontColor: "#7346ad",
+    label: i18next.t("selectpickeroptions.revisit"),
+  },
+  {
+    value: 2,
+    bgColor: "#25467c30",
+    fontColor: "#25467c",
+    label: i18next.t("selectpickeroptions.second_visit"),
+  },
+  {
+    value: 3,
+    bgColor: "#4a6da730",
+    fontColor: "#4a6da7",
+    label: i18next.t("selectpickeroptions.first_visit"),
+  },
+  {
+    value: 4,
+    bgColor: "#c33f5530",
+    fontColor: "#c33f55",
+    label: i18next.t("selectpickeroptions.absentee"),
+  },
+];
 
 // Busca pessoas para a pagina TERRITÓRIOS
 export default async function buscarTerritorios() {
   return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados) => {
-      const listaTerritorios = [];
+    .then((dados: CustomTerritoriesType[]) => {
+      const listaTerritorios: CustomTerritoriesType[] = [];
 
       // Passa a vez se for undefined, isso acontece na primeira vez aberto
       if (dados !== undefined) {
         dados.map((territorio) => {
           listaTerritorios.push({
+            ...territorio,
             id: territorio.id,
             nome: territorio.nome,
             ordenacao: territorio.ordenacao,
@@ -41,55 +151,22 @@ export default async function buscarTerritorios() {
       return listaTerritorios;
     })
     .catch(() => {
-      return false;
+      return undefined;
     });
 }
 
 // Busca pessoas para a pagina TERRITÓRIOS CASAS
 export async function buscarTerritoriosResidencias(
-  territorioId,
-  territorioOrdenacao
+  territorioId: string,
+  territorioOrdenacao: TerritoryOrderingType
 ) {
-  const SELECT_PICKER_OPTIONS = [
-    {
-      value: 0,
-      bgColor: "#5e913430",
-      fontColor: "#5e9134",
-      label: i18next.t("selectpickeroptions.bible_studies"),
-    },
-    {
-      value: 1,
-      bgColor: "#7346ad30",
-      fontColor: "#7346ad",
-      label: i18next.t("selectpickeroptions.revisit"),
-    },
-    {
-      value: 2,
-      bgColor: "#25467c30",
-      fontColor: "#25467c",
-      label: i18next.t("selectpickeroptions.second_visit"),
-    },
-    {
-      value: 3,
-      bgColor: "#4a6da730",
-      fontColor: "#4a6da7",
-      label: i18next.t("selectpickeroptions.first_visit"),
-    },
-    {
-      value: 4,
-      bgColor: "#c33f5530",
-      fontColor: "#c33f55",
-      label: i18next.t("selectpickeroptions.absentee"),
-    },
-  ];
-
   return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados) => {
-      const listaTerritorios = [];
+    .then((dados: TerritoriesType[]) => {
+      const listaTerritorios: TerritoryHomesInterface[] = [];
 
       const territorio = dados.find((territorio) => {
         return territorio.id === territorioId;
-      });
+      }) as TerritoriesType;
 
       territorio.casas.map((residencia) => {
         listaTerritorios.push({
@@ -97,7 +174,7 @@ export async function buscarTerritoriosResidencias(
           titulo:
             territorioOrdenacao === "nome" && residencia.nome !== ""
               ? residencia.nome
-              : residencia.posicao,
+              : residencia.posicao.toString(),
           descNome: residencia.nomeMorador,
           corVisita:
             residencia.interessado === 0
@@ -139,14 +216,14 @@ export async function buscarTerritoriosResidencias(
       return listaTerritorios;
     })
     .catch(() => {
-      return false;
+      return undefined;
     });
 }
 
 // Busca Informações de um território
-export async function buscarInformacoesTerritorio(territorioId) {
+export async function buscarInformacoesTerritorio(territorioId: string) {
   return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados) => {
+    .then((dados: TerritoriesType[]) => {
       let todosTerritorios = dados;
       let indexTerritorio = todosTerritorios.findIndex(
         (territorio) => territorio.id === territorioId
@@ -171,25 +248,29 @@ export async function buscarInformacoesTerritorio(territorioId) {
             ? moment(dadosTerritorio.ultimaVisita).format("L")
             : "",
         ...dadosTerritorio,
-      };
+      } as SearchTerritoryInfoType;
     })
     .catch(() => {
-      return false;
+      return undefined;
     });
 }
 
 // Salva Informações de um território
-export async function salvarInformacoesTerritorio(novosDados) {
-  let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+export async function salvarInformacoesTerritorio(
+  novosDados: SearchTerritoryInfoType
+) {
+  let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+    "@tjdroid:territorios"
+  );
   let indexTerritorio = todosTerritorios.findIndex(
     (territorio) => territorio.id === novosDados.id
   );
 
   todosTerritorios[indexTerritorio].informacoes = {
     ...todosTerritorios[indexTerritorio].informacoes,
-    dataSelecionado: novosDados.dataSelecionado,
-    dataTrabalhado: novosDados.dataTrabalhado,
-    observacoes: novosDados.observacoes,
+    dataSelecionado: novosDados.dataSelecionado ?? "",
+    dataTrabalhado: novosDados.dataTrabalhado ?? "",
+    observacoes: novosDados.observacoes ?? "",
   };
 
   return await salvarAsyncStorage(todosTerritorios, "@tjdroid:territorios")
@@ -203,12 +284,12 @@ export async function salvarInformacoesTerritorio(novosDados) {
 
 // Busca pessoas para a pagina EDITAR VISITA
 export async function buscarVisitaResidencia(
-  idVisita,
-  residenciaId,
-  territorioId
+  idVisita: string,
+  residenciaId: string,
+  territorioId: string
 ) {
   return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados) => {
+    .then((dados: TerritoriesType[]) => {
       let todosTerritorios = dados;
       let indexTerritorio = todosTerritorios.findIndex(
         (territorio) => territorio.id === territorioId
@@ -244,10 +325,10 @@ export async function buscarVisitaResidencia(
           moment(dadosResidencia.data).add(1, "days").format("YYYY-MM-DD")
         ),
         dataTime: new Date(moment(dadosResidencia.data).format()),
-      };
+      } as CustomSearchHomeVisitIterface;
     })
     .catch(() => {
-      return false;
+      return undefined;
     });
 }
 
@@ -286,10 +367,12 @@ export async function salvarNovoTerritorio(territoryNewName: string) {
 }
 
 // ADICIONAR UM TERRITORIO
-export async function adicionarUmaResidencia(territorioId) {
-  const adicionarResidencia = async (territorioId) => {
+export async function adicionarUmaResidencia(territorioId: string) {
+  const adicionarResidencia = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       // Busca o index do territorio que queremos
       let indexTerritorio = todosTerritorios.findIndex(
@@ -332,23 +415,28 @@ export async function adicionarUmaResidencia(territorioId) {
             nome: todosTerritorios[indexTerritorio].nome,
             ordenacao: todosTerritorios[indexTerritorio].ordenacao,
             disposicao: todosTerritorios[indexTerritorio].disposicao,
-          };
+          } as CustomTerritoriesType;
         })
         .catch(() => {
-          return false;
+          return undefined;
         });
     } catch (error) {
-      return false;
+      return undefined;
     }
   };
-  return adicionarResidencia(territorioId);
+  return adicionarResidencia();
 }
 
 // ADICIONAR UM TERRITORIO
-export async function adicionarVariasResidencias(territorioId, qtd) {
-  const adicionarVariasResidencias = async (territorioId) => {
+export async function adicionarVariasResidencias(
+  territorioId: string,
+  qtd: number
+) {
+  const adicionarVariasResidencias = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       // Busca o index do territorio que queremos
       let indexTerritorio = todosTerritorios.findIndex(
@@ -393,26 +481,31 @@ export async function adicionarVariasResidencias(territorioId, qtd) {
             nome: todosTerritorios[indexTerritorio].nome,
             ordenacao: todosTerritorios[indexTerritorio].ordenacao,
             disposicao: todosTerritorios[indexTerritorio].disposicao,
-          };
+          } as CustomTerritoriesType;
         })
         .catch(() => {
-          return false;
+          return undefined;
         });
     } catch (error) {
-      return false;
+      return undefined;
     }
   };
-  return adicionarVariasResidencias(territorioId);
+  return adicionarVariasResidencias();
 }
 
 // Funcao para trocar nome da pessoa
-export async function editarNomeTerritorio(nomeTerritorio, territorioId) {
-  const editarNome = async (nomeTerritorio) => {
+export async function editarNomeTerritorio(
+  nomeTerritorio: string,
+  territorioId: string
+) {
+  const editarNome = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       let indexEncontrado = todosTerritorios.findIndex(
-        (x) => x.id == territorioId
+        (item) => item.id == territorioId
       );
       todosTerritorios[indexEncontrado].nome = nomeTerritorio;
 
@@ -428,18 +521,20 @@ export async function editarNomeTerritorio(nomeTerritorio, territorioId) {
     }
   };
 
-  return editarNome(nomeTerritorio);
+  return editarNome();
 }
 
 // DELETAR TERRITÓRIO
-export async function deletarTerritorio(territorioId) {
+export async function deletarTerritorio(territorioId: string) {
   // Se a validacao ocorrer continua o script
   const deletar = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       let indexTerritorio = todosTerritorios.findIndex(
-        (x) => x.id === territorioId
+        (item) => item.id === territorioId
       );
       todosTerritorios.splice(indexTerritorio, 1);
 
@@ -454,14 +549,19 @@ export async function deletarTerritorio(territorioId) {
       return false;
     }
   };
-  return deletar(territorioId);
+  return deletar();
 }
 
 // EDITAR A DISPOSIÇÃO VISUAL DE UM TERRITÓRIO
-export async function alterarDisposicaoVisualTerritorio(novosDados) {
-  const salvarAlteracao = async (novosDados) => {
+export async function alterarDisposicaoVisualTerritorio(novosDados: {
+  visualDisposition: TerritoryDispositionType;
+  id: string;
+}) {
+  const salvarAlteracao = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       // Busca o index do territorio que queremos alterar os dados
       let indexTerritorio = todosTerritorios.findIndex(
@@ -483,14 +583,18 @@ export async function alterarDisposicaoVisualTerritorio(novosDados) {
       return false;
     }
   };
-  return salvarAlteracao(novosDados);
+  return salvarAlteracao();
 }
 
 // EDITAR VISITA FEITA
-export async function editarVisitaCasa(dadosVisita) {
-  const salvarEdicaoVisita = async (dadosVisita) => {
+export async function editarVisitaCasa(
+  dadosVisita: VisitCustomSearchHomeVisitIterface
+) {
+  const salvarEdicaoVisita = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
       let indexTerritorio = todosTerritorios.findIndex(
         (territorio) => territorio.id === dadosVisita.territorioId
       );
@@ -534,7 +638,7 @@ export async function editarVisitaCasa(dadosVisita) {
       return false;
     }
   };
-  return salvarEdicaoVisita(dadosVisita);
+  return salvarEdicaoVisita();
 }
 
 // ADICIONAR VISITA CASA
@@ -593,10 +697,16 @@ export async function salvarVisitaCasa(dadosNovaVisita: VisitDataType) {
 }
 
 // Editar nome da casa
-export async function editarNomeCasa(casaNome, residenciaId, territorioId) {
-  const editarNome = async (casaNome, residenciaId, territorioId) => {
+export async function editarNomeCasa(
+  casaNome: string,
+  residenciaId: string,
+  territorioId: string
+) {
+  const editarNome = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
       let indexTerritorio = todosTerritorios.findIndex(
         (territorio) => territorio.id === territorioId
       );
@@ -619,18 +729,20 @@ export async function editarNomeCasa(casaNome, residenciaId, territorioId) {
     }
   };
 
-  return editarNome(casaNome, residenciaId, territorioId);
+  return editarNome();
 }
 
 // Editar nome da do identificador da casa
 export async function editarNomeIdentificadorResidencia(
-  novoIdenficador,
-  residenciaId,
-  territorioId
+  novoIdenficador: string,
+  residenciaId: string,
+  territorioId: string
 ) {
-  const editarNome = async (novoIdenficador, residenciaId, territorioId) => {
+  const editarNome = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
       let indexTerritorio = todosTerritorios.findIndex(
         (territorio) => territorio.id === territorioId
       );
@@ -653,14 +765,20 @@ export async function editarNomeIdentificadorResidencia(
     }
   };
 
-  return editarNome(novoIdenficador, residenciaId, territorioId);
+  return editarNome();
 }
 
 // EXCLUIR Visita Casa
-export async function excluirVisitaCasa(idVisita, residenciaId, territorioId) {
-  const excluirVisita = async (idVisita, residenciaId, territorioId) => {
+export async function excluirVisitaCasa(
+  idVisita: string,
+  residenciaId: string,
+  territorioId: string
+) {
+  const excluirVisita = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
       let indexTerritorio = todosTerritorios.findIndex(
         (territorio) => territorio.id === territorioId
       );
@@ -697,47 +815,52 @@ export async function excluirVisitaCasa(idVisita, residenciaId, territorioId) {
       return false;
     }
   };
-  return excluirVisita(idVisita, residenciaId, territorioId);
+  return excluirVisita();
 }
 
 // BUSCAR Visitas Residência
-export async function buscarResidenciasVisitas(residenciaId, territoryId) {
-  const SELECT_PICKER_OPTIONS = [
-    {
-      value: 0,
-      bgColor: "#5e913430",
-      fontColor: "#5e9134",
-      label: i18next.t("selectpickeroptions.bible_studies"),
-    },
-    {
-      value: 1,
-      bgColor: "#7346ad30",
-      fontColor: "#7346ad",
-      label: i18next.t("selectpickeroptions.revisit"),
-    },
-    {
-      value: 2,
-      bgColor: "#25467c30",
-      fontColor: "#25467c",
-      label: i18next.t("selectpickeroptions.second_visit"),
-    },
-    {
-      value: 3,
-      bgColor: "#4a6da730",
-      fontColor: "#4a6da7",
-      label: i18next.t("selectpickeroptions.first_visit"),
-    },
-    {
-      value: 4,
-      bgColor: "#c33f5530",
-      fontColor: "#c33f55",
-      label: i18next.t("selectpickeroptions.absentee"),
-    },
-  ];
+export async function buscarResidenciasVisitas(
+  residenciaId: string,
+  territoryId: string
+) {
+  // const SELECT_PICKER_OPTIONS = [
+  //   {
+  //     value: 0,
+  //     bgColor: "#5e913430",
+  //     fontColor: "#5e9134",
+  //     label: i18next.t("selectpickeroptions.bible_studies"),
+  //   },
+  //   {
+  //     value: 1,
+  //     bgColor: "#7346ad30",
+  //     fontColor: "#7346ad",
+  //     label: i18next.t("selectpickeroptions.revisit"),
+  //   },
+  //   {
+  //     value: 2,
+  //     bgColor: "#25467c30",
+  //     fontColor: "#25467c",
+  //     label: i18next.t("selectpickeroptions.second_visit"),
+  //   },
+  //   {
+  //     value: 3,
+  //     bgColor: "#4a6da730",
+  //     fontColor: "#4a6da7",
+  //     label: i18next.t("selectpickeroptions.first_visit"),
+  //   },
+  //   {
+  //     value: 4,
+  //     bgColor: "#c33f5530",
+  //     fontColor: "#c33f55",
+  //     label: i18next.t("selectpickeroptions.absentee"),
+  //   },
+  // ];
 
-  const buscarVisitas = async (residenciaId, territoryId) => {
+  const buscarVisitas = async () => {
     try {
-      let territoriosTodos = await buscarAsyncStorage("@tjdroid:territorios");
+      let territoriosTodos: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       let indexTerritorio = territoriosTodos.findIndex(
         (territorio) => territorio.id === territoryId
@@ -747,13 +870,13 @@ export async function buscarResidenciasVisitas(residenciaId, territoryId) {
       );
       let casas = territoriosTodos[indexTerritorio].casas[indexResidencia];
 
-      const listaVisitas = [];
+      const listaVisitas: CustomSearchVisitType[] = [];
 
       // Ordena as visitas decrescente
       let visitasOrdenadas = casas.visitas.sort((a, b) => {
         return (
-          moment(b.data).format("YYYYMMDDHHmm") -
-          moment(a.data).format("YYYYMMDDHHmm")
+          parseInt(moment(b.data).format("YYYYMMDDHHmm")) -
+          parseInt(moment(a.data).format("YYYYMMDDHHmm"))
         );
       });
 
@@ -785,19 +908,24 @@ export async function buscarResidenciasVisitas(residenciaId, territoryId) {
             ? casas.nomeMorador
             : i18next.t("controllers.territorioscontroller_empty_name"),
         visitas: [...listaVisitas],
-      };
+      } as CustomSearchHomeVisitsIterface;
     } catch (error) {
-      return false;
+      return undefined;
     }
   };
-  return buscarVisitas(residenciaId, territoryId);
+  return buscarVisitas();
 }
 
 // EXCLUIR Residência
-export async function deletarResidenciaTerritorio(residenciaId, territoryId) {
-  const excluirResidencia = async (residenciaId, territoryId) => {
+export async function deletarResidenciaTerritorio(
+  residenciaId: string,
+  territoryId: string
+) {
+  const excluirResidencia = async () => {
     try {
-      let territoriosTodos = await buscarAsyncStorage("@tjdroid:territorios");
+      let territoriosTodos: TerritoriesType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       let indexTerritorio = territoriosTodos.findIndex(
         (territorio) => territorio.id === territoryId
@@ -818,11 +946,11 @@ export async function deletarResidenciaTerritorio(residenciaId, territoryId) {
           };
         })
         .catch(() => {
-          return false;
+          return undefined;
         });
     } catch (error) {
-      return false;
+      return undefined;
     }
   };
-  return excluirResidencia(residenciaId, territoryId);
+  return excluirResidencia();
 }

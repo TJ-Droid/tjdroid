@@ -31,6 +31,7 @@ import Backup from "../screens/Backup";
 
 import { ThemeColors } from "../types/Theme";
 import { ReportType } from "../types/Reports";
+import { CustomTerritoriesType } from "../controllers/territoriosController";
 
 type RoutesTypeProps = {
   deepLinkingProp: any;
@@ -47,11 +48,15 @@ export interface RootStackParamListType
   PessoaEditarVisita: { idVisita: string; idPessoa: string };
   PessoaNovaVisita: { personId: string };
   Territorios: undefined;
-  TerritorioResidencias: undefined;
-  TerritorioResidenciasVisitas: undefined;
+  TerritorioResidencias: CustomTerritoriesType;
+  TerritorioResidenciasVisitas: { residenciaId: string; territoryId: string };
   TerritorioResidenciaNovaVisita: { residenciaId: string; territoryId: string };
-  TerritorioResidenciaEditarVisita: undefined;
-  TerritorioInformacao: undefined;
+  TerritorioResidenciaEditarVisita: {
+    idVisita: string;
+    residenciaId: string;
+    territorioId: string;
+  };
+  TerritorioInformacao: { territorioId: string };
   Relatorios: undefined;
   RelatorioMes: { mesAno: string; mesAnoFormatado?: string };
   RelatorioDetalhes: ReportType;
