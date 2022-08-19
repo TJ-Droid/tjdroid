@@ -31,9 +31,8 @@ type ProfileScreenRouteProp = StackScreenProps<
   "Relatorios"
 >;
 
-interface Props extends ProfileScreenRouteProp {
-  // route: ProfileScreenRouteProp;
-}
+interface Props extends ProfileScreenRouteProp {}
+
 export default function Relatorios({ navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();

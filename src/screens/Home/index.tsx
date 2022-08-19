@@ -1,7 +1,9 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ToastAndroid, Dimensions, View } from "react-native";
+import { RootStackParamListType } from "../../routes";
 import {
   Container,
   MenuItem,
@@ -18,7 +20,11 @@ import {
   StyledIconCronometroSvgLand,
 } from "./styles";
 
-export default function Home({ navigation }: any) {
+type ProfileScreenRouteProp = StackScreenProps<RootStackParamListType, "Home">;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function Home({ navigation }: Props) {
   const { t } = useTranslation();
   const [isLandscape, setIsLandscape] = useState(false);
 
@@ -67,44 +73,68 @@ export default function Home({ navigation }: any) {
     <View>
       {isLandscape ? (
         <ContainerLand>
-          <MenuItemLand activeOpacity={0.6} onPress={() => navigation.navigate("Territorios")}>
+          <MenuItemLand
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Territorios")}
+          >
             <StyledIconTerritoriosSvgLand />
             <MenuName>{t("screens.home.territories")}</MenuName>
           </MenuItemLand>
 
-          <MenuItemLand activeOpacity={0.6} onPress={() => navigation.navigate("Relatorios")}>
+          <MenuItemLand
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Relatorios")}
+          >
             <StyledIconRelatoriosSvgLand />
             <MenuName>{t("screens.home.reports")}</MenuName>
           </MenuItemLand>
 
-          <MenuItemLand activeOpacity={0.6} onPress={() => navigation.navigate("Pessoas")}>
+          <MenuItemLand
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Pessoas")}
+          >
             <StyledIconPessoasSvgLand />
             <MenuName>{t("screens.home.people")}</MenuName>
           </MenuItemLand>
 
-          <MenuItemLand activeOpacity={0.6} onPress={() => navigation.navigate("Cronometro")}>
+          <MenuItemLand
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Cronometro")}
+          >
             <StyledIconCronometroSvgLand />
             <MenuName>{t("screens.home.chronometer")}</MenuName>
           </MenuItemLand>
         </ContainerLand>
       ) : (
         <Container>
-          <MenuItem activeOpacity={0.6} onPress={() => navigation.navigate("Territorios")}>
+          <MenuItem
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Territorios")}
+          >
             <StyledIconTerritoriosSvg />
             <MenuName>{t("screens.home.territories")}</MenuName>
           </MenuItem>
 
-          <MenuItem activeOpacity={0.6} onPress={() => navigation.navigate("Relatorios")}>
+          <MenuItem
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Relatorios")}
+          >
             <StyledIconRelatoriosSvg />
             <MenuName>{t("screens.home.reports")}</MenuName>
           </MenuItem>
 
-          <MenuItem activeOpacity={0.6} onPress={() => navigation.navigate("Pessoas")}>
+          <MenuItem
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Pessoas")}
+          >
             <StyledIconPessoasSvg />
             <MenuName>{t("screens.home.people")}</MenuName>
           </MenuItem>
 
-          <MenuItem activeOpacity={0.6} onPress={() => navigation.navigate("Cronometro")}>
+          <MenuItem
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Cronometro")}
+          >
             <StyledIconCronometroSvg />
             <MenuName>{t("screens.home.chronometer")}</MenuName>
           </MenuItem>

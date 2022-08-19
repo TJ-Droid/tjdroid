@@ -42,7 +42,14 @@ export interface RootStackParamListType
   extends Record<string, object | undefined> {
   Home: undefined;
   Cronometro: undefined;
-  CronometroParado: undefined;
+  CronometroParado: {
+    dia: string;
+    hora: string;
+    minutos: number;
+    colocacoes: number;
+    videosMostrados: number;
+    revisitas: number;
+  };
   Pessoas: undefined;
   PessoaVisitas: { idPessoa: string };
   PessoaEditarVisita: { idVisita: string; idPessoa: string };

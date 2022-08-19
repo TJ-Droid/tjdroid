@@ -1,7 +1,7 @@
-import * as Notifications from 'expo-notifications';
-import i18next from 'i18next';
+import * as Notifications from "expo-notifications";
+import i18next from "i18next";
 
-export async function dismissAllNotifications(){
+export async function dismissAllNotifications() {
   await Notifications.dismissAllNotificationsAsync();
 }
 
@@ -13,7 +13,7 @@ export async function schedulePushNotificationStart(horaInicio: string) {
       body: i18next.t("services.push_chronometer_started_body"),
       sticky: true,
       autoDismiss: false,
-      data: { deepLinkPage: 'cronometro' },
+      data: { deepLinkPage: "cronometro" },
     },
     trigger: null,
   });
@@ -27,7 +27,7 @@ export async function schedulePushNotificationPaused(horaInicio: string) {
       body: i18next.t("services.push_chronometer_paused_body"),
       sticky: true,
       autoDismiss: false,
-      data: { deepLinkPage: 'cronometro' },
+      data: { deepLinkPage: "cronometro" },
     },
     trigger: null,
   });

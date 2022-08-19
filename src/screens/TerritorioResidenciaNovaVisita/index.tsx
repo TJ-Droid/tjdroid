@@ -14,9 +14,7 @@ type ProfileScreenRouteProp = StackScreenProps<
   "TerritorioResidenciaNovaVisita"
 >;
 
-interface Props extends ProfileScreenRouteProp {
-  // route: ProfileScreenRouteProp;
-}
+interface Props extends ProfileScreenRouteProp {}
 
 export default function TerritorioResidenciaNovaVisita({ route }: Props) {
   const { t } = useTranslation();

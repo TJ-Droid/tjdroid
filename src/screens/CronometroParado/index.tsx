@@ -1,22 +1,16 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import Contador from "../../components/Contador";
+import { RootStackParamListType } from "../../routes";
 
-type ConometroParadoProps = {
-  route: RouteProps;
-};
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "CronometroParado"
+>;
 
-type RouteProps = {
-  params: {
-    dia: string;
-    hora: string;
-    minutos: number;
-    colocacoes: number;
-    videosMostrados: number;
-    revisitas: number;
-  };
-};
+interface Props extends ProfileScreenRouteProp {}
 
-export default function CronometroParado({ route }: ConometroParadoProps) {
+export default function CronometroParado({ route }: Props) {
   const { colocacoes, dia, hora, minutos, revisitas, videosMostrados } =
     route.params;
 

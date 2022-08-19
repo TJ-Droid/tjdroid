@@ -51,9 +51,7 @@ type ProfileScreenRouteProp = StackScreenProps<
   "RelatorioMes"
 >;
 
-interface Props extends ProfileScreenRouteProp {
-  // route: ProfileScreenRouteProp;
-}
+interface Props extends ProfileScreenRouteProp {}
 
 export default function RelatorioMes({ route, navigation }: Props) {
   const { t } = useTranslation();

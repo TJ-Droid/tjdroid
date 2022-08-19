@@ -1,16 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
+import { ToastAndroid, AppState, Alert, Linking, View } from "react-native";
 import {
-  ToastAndroid,
-  AppState,
-  Alert,
-  Linking,
-  Text,
-  View,
-} from "react-native";
-import {
-  BorderlessButton,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
@@ -18,17 +9,13 @@ import {
   salvarAsyncStorage,
   buscarAsyncStorage,
 } from "../../services/AsyncStorageMethods";
-import {
-  differenceInSeconds,
-  differenceInMinutes,
-  differenceInMilliseconds,
-  format,
-  parseISO,
-} from "date-fns";
+import { differenceInMinutes, format, parseISO } from "date-fns";
 
 import Header from "../Header";
 import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 import { useInterval } from "../../hooks/useInterval";
+import { analyticsCustomEvent } from "../../services/AnalyticsCustomEvents";
+import { StackActions, useNavigation } from "@react-navigation/native";
 
 import {
   dismissAllNotifications,
@@ -66,11 +53,18 @@ import {
   BottomSectionTextAreaVideoBulletButton,
   BottomSectionTextAreaVideoBulletText,
 } from "./styles";
-import { analyticsCustomEvent } from "../../services/AnalyticsCustomEvents";
+
+type ReportParamType = {
+  colocacoes: number;
+  dia: string;
+  hora: string;
+  observacoes: string;
+  revisitas: number;
+  videosMostrados: number;
+};
 
 export default function CronometroComp() {
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const appState = useRef(AppState.currentState);
   const navigation = useNavigation();
@@ -79,13 +73,13 @@ export default function CronometroComp() {
   const [statusUseTmIntPiscar, setStatusUseTmIntPiscar] = useState("idle");
 
   // Estados gerais
-  const [timerBotaoPrecionado, setTimerBotaoPrecionado] = useState(0);
+  const [timerBotaoPrecionado, setTimerBotaoPrecionado] = useState<
+    ReturnType<typeof setTimeout>
+  >(setTimeout(() => {}));
   const [textoHoraCronometroIniciado, setTextoHoraCronometroIniciado] =
-    useState(t("components.cronometrocomp.chronometer_stopped"));
+    useState<string>(t("components.cronometrocomp.chronometer_stopped"));
   const [piscar, setPiscar] = useState(false);
-  const [piscarInterval, setPiscarInterval] = useState("");
   const [contadorDesativado, setContadorDesativado] = useState(true);
-  const [contadorminutos, setContadorMinutos] = useState("");
   const [minutos, setMinutos] = useState(0);
   const [contadorEstado, setContadorEstado] = useState(0);
   const [relatorio, setRelatorio] = useState({
@@ -246,8 +240,8 @@ export default function CronometroComp() {
           videosMostrados: json.videosMostrados,
           revisitas: json.revisitas,
           observacoes: json.observacoes,
-          // dia: json.dia,
-          // hora: json.hora,
+          dia: json.dia,
+          hora: json.hora,
         });
       }
 
@@ -258,7 +252,8 @@ export default function CronometroComp() {
 
       if (
         typeof started_time_message === "object" ||
-        started_time_message === t("components.cronometrocomp.chronometer_stopped")
+        started_time_message ===
+          t("components.cronometrocomp.chronometer_stopped")
       ) {
       } else {
         if (typeof started_time_message !== "undefined") {
@@ -271,7 +266,7 @@ export default function CronometroComp() {
     verificaContadorIniciado();
 
     // Verifica o estado da aplicação para controlar o contador
-    const handleAppStateChange = async (nextAppState) => {
+    const handleAppStateChange = async (nextAppState: any) => {
       // console.log('entrouhandle');
       if (
         appState.current.match(/inactive|background/) &&
@@ -348,7 +343,10 @@ export default function CronometroComp() {
   }, [minutos]);
 
   // FUNCAO PARA OS BOTOES DO CONTADOR
-  async function contar(local, tipo) {
+  async function contar(
+    local: "minutos" | "colocacoes" | "videosMostrados" | "revisitas",
+    tipo: "soma" | ""
+  ) {
     if (local === "minutos") {
       if (tipo === "soma") {
         // Verifica os minutosextras do storage
@@ -594,7 +592,9 @@ export default function CronometroComp() {
       // setHoraCronometroIniciado(horaContadorIniciado);
 
       // Pega o momento atual do começo do cronômetro
-      const horaInicioCronometro = `${t("components.cronometrocomp.chronometer_started_at")} ${format(new Date(), "HH:mm")}`;
+      const horaInicioCronometro = `${t(
+        "components.cronometrocomp.chronometer_started_at"
+      )} ${format(new Date(), "HH:mm")}`;
 
       // Seta o texto sobre o estado iniciado com a hora do cronômetro
       const started_time_message = await buscarAsyncStorage(
@@ -604,7 +604,8 @@ export default function CronometroComp() {
       // Verifica se é a primeira vez que carrega esse objeto ou se está com a string informada
       if (
         typeof started_time_message === "object" ||
-        started_time_message === t("components.cronometrocomp.chronometer_stopped")
+        started_time_message ===
+          t("components.cronometrocomp.chronometer_stopped")
       ) {
         setTextoHoraCronometroIniciado(horaInicioCronometro);
         await salvarAsyncStorage(
@@ -670,14 +671,20 @@ export default function CronometroComp() {
         // AppState.addEventListener("change", handleAppStateChange);
 
         // Mensagem Toast
-        ToastAndroid.show(t("components.cronometrocomp.chronometer_started"), ToastAndroid.SHORT);
+        ToastAndroid.show(
+          t("components.cronometrocomp.chronometer_started"),
+          ToastAndroid.SHORT
+        );
       }
 
       // Adiciona o evento ao Analytics
       await analyticsCustomEvent("cronometro_iniciado");
     } catch (error) {
       // Mensagem Toast
-      ToastAndroid.show(t("components.cronometrocomp.chronometer_started_error"), ToastAndroid.SHORT);
+      ToastAndroid.show(
+        t("components.cronometrocomp.chronometer_started_error"),
+        ToastAndroid.SHORT
+      );
     }
   }
 
@@ -705,20 +712,29 @@ export default function CronometroComp() {
       await dismissAllNotifications();
 
       // Mostra o push do contador pausado
-      await schedulePushNotificationPaused();
+      await schedulePushNotificationPaused(format(new Date(), "HH:mm"));
 
       // Mensagem Toast
-      ToastAndroid.show(t("components.cronometrocomp.chronometer_paused"), ToastAndroid.SHORT);
+      ToastAndroid.show(
+        t("components.cronometrocomp.chronometer_paused"),
+        ToastAndroid.SHORT
+      );
     } catch (error) {
       // TODO: handle errors from setItem properly
       // console.warn(error);
       // Mensagem Toast
-      ToastAndroid.show(t("components.cronometrocomp.chronometer_paused_error"), ToastAndroid.SHORT);
+      ToastAndroid.show(
+        t("components.cronometrocomp.chronometer_paused_error"),
+        ToastAndroid.SHORT
+      );
     }
   }
 
   // Alert de confirmação ao clicar em para cronômetro
-  const alertaPararContador = (minutosParam, relatorioParam) =>
+  const alertaPararContador = (
+    minutosParam: number,
+    relatorioParam: ReportParamType
+  ) =>
     Alert.alert(
       t("components.cronometrocomp.alert_stop_chronometer_title"),
       t("components.cronometrocomp.alert_stop_chronometer_description"),
@@ -737,7 +753,10 @@ export default function CronometroComp() {
     );
 
   // PARA O CRONÔMETRO
-  async function pararContador(minutosParam, relatorioParam) {
+  async function pararContador(
+    minutosParam: number,
+    relatorioParam: ReportParamType
+  ) {
     try {
       // Seta para parar de piscar
       setStatusUseTmIntPiscar("idle");
@@ -787,15 +806,23 @@ export default function CronometroComp() {
       );
 
       // Direciona para a página com os resumo do relatório
-      navigation.replace("CronometroParado", relatorioAtual);
+      navigation.dispatch(
+        StackActions.replace("CronometroParado", relatorioAtual)
+      );
     } catch (error) {
-      ToastAndroid.show(t("components.cronometrocomp.chronometer_stopped_error"), ToastAndroid.SHORT);
+      ToastAndroid.show(
+        t("components.cronometrocomp.chronometer_stopped_error"),
+        ToastAndroid.SHORT
+      );
     }
   }
 
   return (
     <>
-      <Header title={t("components.cronometrocomp.component_header_name")} showGoBackHome />
+      <Header
+        title={t("components.cronometrocomp.component_header_name")}
+        showGoBackHome
+      />
 
       <StyledScrollView>
         <TopSectionContainer>
@@ -840,7 +867,7 @@ export default function CronometroComp() {
 
             <TopSectionContainerButtonsArea>
               {contadorEstado === 0 && (
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     setContadorEstado(1);
                     iniciarContador();
@@ -853,44 +880,48 @@ export default function CronometroComp() {
                       size={20}
                     />
                   </ActionsButtonsStyle>
-                </BorderlessButton>
+                </TouchableOpacity>
               )}
 
               {contadorEstado !== 0 && (
                 <ActionsButtonsArea>
                   {contadorEstado === 2 ? (
-                    <BorderlessButton
+                    <TouchableOpacity
                       onPress={() => {
                         setContadorEstado(1);
                         iniciarContador();
                       }}
                     >
                       <ActionsButtonsStyle lightColor>
-                        <ActionsButtonsText>{t("words.continue")}</ActionsButtonsText>
+                        <ActionsButtonsText>
+                          {t("words.continue")}
+                        </ActionsButtonsText>
                         <StyledFeatherIconContadorButtonAction
                           name="play"
                           size={20}
                         />
                       </ActionsButtonsStyle>
-                    </BorderlessButton>
+                    </TouchableOpacity>
                   ) : (
-                    <BorderlessButton
+                    <TouchableOpacity
                       onPress={() => {
                         setContadorEstado(2);
                         pausarContador();
                       }}
                     >
                       <ActionsButtonsStyle lightColor>
-                        <ActionsButtonsText>{t("words.pause")}</ActionsButtonsText>
+                        <ActionsButtonsText>
+                          {t("words.pause")}
+                        </ActionsButtonsText>
                         <StyledFeatherIconContadorButtonAction
                           name="pause"
                           size={20}
                         />
                       </ActionsButtonsStyle>
-                    </BorderlessButton>
+                    </TouchableOpacity>
                   )}
 
-                  <BorderlessButton
+                  <TouchableOpacity
                     onPress={() => {
                       alertaPararContador(minutos, relatorio);
                     }}
@@ -902,7 +933,7 @@ export default function CronometroComp() {
                         size={20}
                       />
                     </ActionsButtonsStyle>
-                  </BorderlessButton>
+                  </TouchableOpacity>
                 </ActionsButtonsArea>
               )}
             </TopSectionContainerButtonsArea>
@@ -913,15 +944,17 @@ export default function CronometroComp() {
           <BottomSectionActionButtonsContainer>
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
-                <BottomSectionLabelText>{t("words.placements")}:</BottomSectionLabelText>
+                <BottomSectionLabelText>
+                  {t("words.placements")}:
+                </BottomSectionLabelText>
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("colocacoes", "");
                   }}
-                  enabled={!contadorDesativado}
+                  disabled={contadorDesativado}
                 >
                   <BottomSectionButtonWrapper
                     style={
@@ -930,17 +963,17 @@ export default function CronometroComp() {
                   >
                     <StyledFeatherIconSectionButton name="minus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
                 <BottomSectionQuantityText>
                   {relatorio.colocacoes}
                 </BottomSectionQuantityText>
 
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("colocacoes", "soma");
                   }}
-                  enabled={!contadorDesativado}
+                  disabled={contadorDesativado}
                 >
                   <BottomSectionButtonWrapper
                     style={
@@ -949,7 +982,7 @@ export default function CronometroComp() {
                   >
                     <StyledFeatherIconSectionButton name="plus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
@@ -961,11 +994,11 @@ export default function CronometroComp() {
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("videosMostrados", "");
                   }}
-                  enabled={!contadorDesativado}
+                  disabled={contadorDesativado}
                 >
                   <BottomSectionButtonWrapper
                     style={
@@ -974,17 +1007,17 @@ export default function CronometroComp() {
                   >
                     <StyledFeatherIconSectionButton name="minus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
                 <BottomSectionQuantityText>
                   {relatorio.videosMostrados}
                 </BottomSectionQuantityText>
 
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("videosMostrados", "soma");
                   }}
-                  enabled={!contadorDesativado}
+                  disabled={contadorDesativado}
                 >
                   <BottomSectionButtonWrapper
                     style={
@@ -993,21 +1026,23 @@ export default function CronometroComp() {
                   >
                     <StyledFeatherIconSectionButton name="plus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
-                <BottomSectionLabelText>{t("words.revisits")}:</BottomSectionLabelText>
+                <BottomSectionLabelText>
+                  {t("words.revisits")}:
+                </BottomSectionLabelText>
               </BottomSectionTextArea>
 
               <BottomSectionButtonsArea>
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("revisitas", "");
                   }}
-                  enabled={!contadorDesativado}
+                  disabled={contadorDesativado}
                 >
                   <BottomSectionButtonWrapper
                     style={
@@ -1016,17 +1051,17 @@ export default function CronometroComp() {
                   >
                     <StyledFeatherIconSectionButton name="minus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
 
                 <BottomSectionQuantityText>
                   {relatorio.revisitas}
                 </BottomSectionQuantityText>
 
-                <BorderlessButton
+                <TouchableOpacity
                   onPress={() => {
                     contar("revisitas", "soma");
                   }}
-                  enabled={!contadorDesativado}
+                  disabled={contadorDesativado}
                 >
                   <BottomSectionButtonWrapper
                     style={
@@ -1035,7 +1070,7 @@ export default function CronometroComp() {
                   >
                     <StyledFeatherIconSectionButton name="plus" size={20} />
                   </BottomSectionButtonWrapper>
-                </BorderlessButton>
+                </TouchableOpacity>
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
           </BottomSectionActionButtonsContainer>
@@ -1051,7 +1086,7 @@ export default function CronometroComp() {
             >
               <BottomSectionTextAreaVideoBulletButton>
                 <BottomSectionTextAreaVideoBulletText>
-                {t("components.cronometrocomp.bottom_helper_button_text")}
+                  {t("components.cronometrocomp.bottom_helper_button_text")}
                 </BottomSectionTextAreaVideoBulletText>
                 <View>
                   <StyledFeatherIconVideoPlay name="youtube" size={20} />

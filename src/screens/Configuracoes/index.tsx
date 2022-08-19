@@ -29,8 +29,17 @@ import {
   SectionDividerText,
   ItemListTextDescriptionTranslationIcon,
 } from "./styles";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
 
-export default function Configuracoes({ navigation }: any) {
+type ProfileScreenRouteProp = StackScreenProps<
+  RootStackParamListType,
+  "Configuracoes"
+>;
+
+interface Props extends ProfileScreenRouteProp {}
+
+export default function Configuracoes({ navigation }: Props) {
   const { t, i18n } = useTranslation();
   const { setActualTheme, actualTheme } = useThemeContext();
 
