@@ -12,39 +12,6 @@ import {
 import { PeopleType } from "../types/People";
 import { VisitDataType } from "../types/Visits";
 
-const SELECT_PICKER_OPTIONS = [
-  {
-    value: 0,
-    bgColor: "#5e913430",
-    fontColor: "#5e9134",
-    label: i18next.t("selectpickeroptions.bible_studies"),
-  },
-  {
-    value: 1,
-    bgColor: "#7346ad30",
-    fontColor: "#7346ad",
-    label: i18next.t("selectpickeroptions.revisit"),
-  },
-  {
-    value: 2,
-    bgColor: "#25467c30",
-    fontColor: "#25467c",
-    label: i18next.t("selectpickeroptions.second_visit"),
-  },
-  {
-    value: 3,
-    bgColor: "#4a6da730",
-    fontColor: "#4a6da7",
-    label: i18next.t("selectpickeroptions.first_visit"),
-  },
-  {
-    value: 4,
-    bgColor: "#c33f5530",
-    fontColor: "#c33f55",
-    label: i18next.t("selectpickeroptions.absentee"),
-  },
-];
-
 export type BuscarPessoasType = {
   id: string;
   nome: string;
@@ -87,6 +54,39 @@ export type SalvarVisitaType = {
 
 // Busca pessoas para a pagina PESSOAS
 export default async function buscarPessoas() {
+  const SELECT_PICKER_OPTIONS = [
+    {
+      value: 0,
+      bgColor: "#5e913430",
+      fontColor: "#5e9134",
+      label: i18next.t("selectpickeroptions.bible_studies"),
+    },
+    {
+      value: 1,
+      bgColor: "#7346ad30",
+      fontColor: "#7346ad",
+      label: i18next.t("selectpickeroptions.revisit"),
+    },
+    {
+      value: 2,
+      bgColor: "#25467c30",
+      fontColor: "#25467c",
+      label: i18next.t("selectpickeroptions.second_visit"),
+    },
+    {
+      value: 3,
+      bgColor: "#4a6da730",
+      fontColor: "#4a6da7",
+      label: i18next.t("selectpickeroptions.first_visit"),
+    },
+    {
+      value: 4,
+      bgColor: "#c33f5530",
+      fontColor: "#c33f55",
+      label: i18next.t("selectpickeroptions.absentee"),
+    },
+  ];
+
   return await buscarAsyncStorage("@tjdroid:pessoas")
     .then((dados: PeopleType[]) => {
       // Faz a verificação para remover a mensagem de erro ao acessar a primeira vez
@@ -155,6 +155,39 @@ export default async function buscarPessoas() {
 
 // Busca pessoas para a pagina VISITAS PESSOAS
 export async function buscarVisitasPessoa(idPessoa: string) {
+  const SELECT_PICKER_OPTIONS = [
+    {
+      value: 0,
+      bgColor: "#5e913430",
+      fontColor: "#5e9134",
+      label: i18next.t("selectpickeroptions.bible_studies"),
+    },
+    {
+      value: 1,
+      bgColor: "#7346ad30",
+      fontColor: "#7346ad",
+      label: i18next.t("selectpickeroptions.revisit"),
+    },
+    {
+      value: 2,
+      bgColor: "#25467c30",
+      fontColor: "#25467c",
+      label: i18next.t("selectpickeroptions.second_visit"),
+    },
+    {
+      value: 3,
+      bgColor: "#4a6da730",
+      fontColor: "#4a6da7",
+      label: i18next.t("selectpickeroptions.first_visit"),
+    },
+    {
+      value: 4,
+      bgColor: "#c33f5530",
+      fontColor: "#c33f55",
+      label: i18next.t("selectpickeroptions.absentee"),
+    },
+  ];
+
   return await buscarAsyncStorage("@tjdroid:pessoas")
     .then((dados: BuscarVisitasPessoaType[]) => {
       const dadosPessoa: BuscarVisitasPessoaType | undefined = dados.find(

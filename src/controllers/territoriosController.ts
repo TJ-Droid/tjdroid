@@ -1,4 +1,4 @@
-import { stringify, v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 import moment from "moment";
 import "moment/locale/pt-br";
@@ -87,39 +87,6 @@ export interface CustomSearchHomeVisitsIterface {
   visitas?: CustomSearchVisitType[];
 }
 
-const SELECT_PICKER_OPTIONS = [
-  {
-    value: 0,
-    bgColor: "#5e913430",
-    fontColor: "#5e9134",
-    label: i18next.t("selectpickeroptions.bible_studies"),
-  },
-  {
-    value: 1,
-    bgColor: "#7346ad30",
-    fontColor: "#7346ad",
-    label: i18next.t("selectpickeroptions.revisit"),
-  },
-  {
-    value: 2,
-    bgColor: "#25467c30",
-    fontColor: "#25467c",
-    label: i18next.t("selectpickeroptions.second_visit"),
-  },
-  {
-    value: 3,
-    bgColor: "#4a6da730",
-    fontColor: "#4a6da7",
-    label: i18next.t("selectpickeroptions.first_visit"),
-  },
-  {
-    value: 4,
-    bgColor: "#c33f5530",
-    fontColor: "#c33f55",
-    label: i18next.t("selectpickeroptions.absentee"),
-  },
-];
-
 // Busca pessoas para a pagina TERRITÓRIOS
 export default async function buscarTerritorios() {
   return await buscarAsyncStorage("@tjdroid:territorios")
@@ -160,6 +127,39 @@ export async function buscarTerritoriosResidencias(
   territorioId: string,
   territorioOrdenacao: TerritoryOrderingType
 ) {
+  const SELECT_PICKER_OPTIONS = [
+    {
+      value: 0,
+      bgColor: "#5e913430",
+      fontColor: "#5e9134",
+      label: i18next.t("selectpickeroptions.bible_studies"),
+    },
+    {
+      value: 1,
+      bgColor: "#7346ad30",
+      fontColor: "#7346ad",
+      label: i18next.t("selectpickeroptions.revisit"),
+    },
+    {
+      value: 2,
+      bgColor: "#25467c30",
+      fontColor: "#25467c",
+      label: i18next.t("selectpickeroptions.second_visit"),
+    },
+    {
+      value: 3,
+      bgColor: "#4a6da730",
+      fontColor: "#4a6da7",
+      label: i18next.t("selectpickeroptions.first_visit"),
+    },
+    {
+      value: 4,
+      bgColor: "#c33f5530",
+      fontColor: "#c33f55",
+      label: i18next.t("selectpickeroptions.absentee"),
+    },
+  ];
+
   return await buscarAsyncStorage("@tjdroid:territorios")
     .then((dados: TerritoriesType[]) => {
       const listaTerritorios: TerritoryHomesInterface[] = [];
@@ -823,38 +823,38 @@ export async function buscarResidenciasVisitas(
   residenciaId: string,
   territoryId: string
 ) {
-  // const SELECT_PICKER_OPTIONS = [
-  //   {
-  //     value: 0,
-  //     bgColor: "#5e913430",
-  //     fontColor: "#5e9134",
-  //     label: i18next.t("selectpickeroptions.bible_studies"),
-  //   },
-  //   {
-  //     value: 1,
-  //     bgColor: "#7346ad30",
-  //     fontColor: "#7346ad",
-  //     label: i18next.t("selectpickeroptions.revisit"),
-  //   },
-  //   {
-  //     value: 2,
-  //     bgColor: "#25467c30",
-  //     fontColor: "#25467c",
-  //     label: i18next.t("selectpickeroptions.second_visit"),
-  //   },
-  //   {
-  //     value: 3,
-  //     bgColor: "#4a6da730",
-  //     fontColor: "#4a6da7",
-  //     label: i18next.t("selectpickeroptions.first_visit"),
-  //   },
-  //   {
-  //     value: 4,
-  //     bgColor: "#c33f5530",
-  //     fontColor: "#c33f55",
-  //     label: i18next.t("selectpickeroptions.absentee"),
-  //   },
-  // ];
+  const SELECT_PICKER_OPTIONS = [
+    {
+      value: 0,
+      bgColor: "#5e913430",
+      fontColor: "#5e9134",
+      label: i18next.t("selectpickeroptions.bible_studies"),
+    },
+    {
+      value: 1,
+      bgColor: "#7346ad30",
+      fontColor: "#7346ad",
+      label: i18next.t("selectpickeroptions.revisit"),
+    },
+    {
+      value: 2,
+      bgColor: "#25467c30",
+      fontColor: "#25467c",
+      label: i18next.t("selectpickeroptions.second_visit"),
+    },
+    {
+      value: 3,
+      bgColor: "#4a6da730",
+      fontColor: "#4a6da7",
+      label: i18next.t("selectpickeroptions.first_visit"),
+    },
+    {
+      value: 4,
+      bgColor: "#c33f5530",
+      fontColor: "#c33f55",
+      label: i18next.t("selectpickeroptions.absentee"),
+    },
+  ];
 
   const buscarVisitas = async () => {
     try {
