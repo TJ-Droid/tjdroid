@@ -8,8 +8,9 @@ import {
   buscarAsyncStorageTjDroidIdioma,
   formatarLocale,
 } from "../utils/utils";
+// Sem este importacao a tela de Relatorios para
+const moment = require("moment/min/moment-with-locales");
 
-import moment from "moment";
 import minutes_to_hhmm from "../utils/minutes_to_hhmm";
 import { ReportType } from "../types/Reports";
 import { PeopleType } from "../types/People";
