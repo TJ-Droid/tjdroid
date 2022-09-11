@@ -17,14 +17,16 @@ import { analyticsCustomEvent } from "../services/AnalyticsCustomEvents";
 const BACKUP_PATH = DocumentDirectoryPath;
 const BACKUP_PATH_DOWNLOAD = DownloadDirectoryPath;
 const BACKUP_FOLDER_NAME = "backuptjdroid";
-// Cria o nome do .zip com a data de hoje e nome do dispositivo (sem espaços)
-const BACKUP_ZIP_NAME = `tjdroid-backup-${format(
-  new Date(),
-  "dd-MM-yyyy-HH-mm-ss"
-)}_${(Device.modelName || "").replace(/\s/g, "")}`;
 
 // GUARDA TEMPORARIAMENTE O CAMINHO DO ARQUIVO ZIPADO
 let ARQUIVO_ZIPADO_PATH_TEMP = "";
+
+// Cria o nome do .zip com a data de hoje e nome do dispositivo (sem espaços)
+const generateActualDateTimeBackupZipName = () => {
+  return `tjdroid-backup-${format(new Date(), "dd-MM-yyyy-HH-mm-ss")}_${(
+    Device.modelName || ""
+  ).replace(/\s/g, "")}`;
+};
 
 // Função que dispara um alert de erro
 function simpleAlert(title = null, errorMessage = null) {
@@ -249,7 +251,7 @@ export const createJsonFileFromAsyncStorage = async (
 // Função para zippar a pasta com os json
 export const zipBackupFolder = async () => {
   const sourcePath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`;
-  const targetPath = `${BACKUP_PATH_DOWNLOAD}/${BACKUP_ZIP_NAME}.zip`;
+  const targetPath = `${BACKUP_PATH_DOWNLOAD}/${generateActualDateTimeBackupZipName()}.zip`;
 
   return await zip(sourcePath, targetPath)
     .then((path) => {
@@ -290,7 +292,7 @@ export const unzipBackupFolderURI = async (uri: string) => {
 
 // Função para deszippar o backup
 export const unzipBackupFolder = async () => {
-  const sourcePath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${BACKUP_ZIP_NAME}.zip`;
+  const sourcePath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${generateActualDateTimeBackupZipName()}.zip`;
   const targetPath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`;
   const charset = "UTF-8";
   // charset possible values: UTF-8, GBK, US-ASCII and so on. If none was passed, default value is UTF-8
