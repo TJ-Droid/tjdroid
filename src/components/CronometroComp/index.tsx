@@ -874,7 +874,9 @@ export default function CronometroComp() {
                   }}
                 >
                   <ActionsButtonsStyle darkBlueColor>
-                    <ActionsButtonsText>{t("words.start")}</ActionsButtonsText>
+                    <ActionsButtonsText adjustsFontSizeToFit>
+                      {t("words.start")}
+                    </ActionsButtonsText>
                     <StyledFeatherIconContadorButtonAction
                       name="play"
                       size={20}
@@ -893,7 +895,7 @@ export default function CronometroComp() {
                       }}
                     >
                       <ActionsButtonsStyle lightColor>
-                        <ActionsButtonsText>
+                        <ActionsButtonsText adjustsFontSizeToFit>
                           {t("words.continue")}
                         </ActionsButtonsText>
                         <StyledFeatherIconContadorButtonAction
@@ -910,7 +912,7 @@ export default function CronometroComp() {
                       }}
                     >
                       <ActionsButtonsStyle lightColor>
-                        <ActionsButtonsText>
+                        <ActionsButtonsText adjustsFontSizeToFit>
                           {t("words.pause")}
                         </ActionsButtonsText>
                         <StyledFeatherIconContadorButtonAction
@@ -927,7 +929,9 @@ export default function CronometroComp() {
                     }}
                   >
                     <ActionsButtonsStyle>
-                      <ActionsButtonsText>{t("words.stop")}</ActionsButtonsText>
+                      <ActionsButtonsText adjustsFontSizeToFit>
+                        {t("words.stop")}
+                      </ActionsButtonsText>
                       <StyledFeatherIconContadorButtonAction
                         name="square"
                         size={20}

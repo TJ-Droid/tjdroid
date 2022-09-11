@@ -7,7 +7,7 @@ import {
 import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-import moment from "moment";
+import moment from "moment/min/moment-with-locales";
 import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 
 import Header from "../../components/Header";

@@ -12,13 +12,10 @@ export const buscarConfiguracoesStorage = async () => {
     // Se não existir nada, adiciona um array com as configuracoes padrao
     // Salva o modelo das configuracoes padrao
     if (json === undefined) {
-      const newConfig = [
-        {
-          darkMode: false,
-          actualTheme: "azulEscuroDefault",
-        },
-      ];
-
+      const newConfig: SettingsType = {
+        darkMode: false,
+        actualTheme: "azulEscuroDefault",
+      };
       // Salva
       await salvarAsyncStorage(newConfig, "@tjdroid:config");
 

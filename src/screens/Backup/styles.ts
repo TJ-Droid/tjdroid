@@ -124,4 +124,5 @@ export const StyledFeatherButtonLeftIcon = styled(Feather)`
 export const StyledFeatherButtonText = styled.Text`
   color: #ffffff;
   font-size: 16px;
+  flex: 1;
 `;

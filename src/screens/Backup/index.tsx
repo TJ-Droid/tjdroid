@@ -124,7 +124,7 @@ export default function Backup() {
             <StyledFeatherButtonLeftOverlay>
               <StyledFeatherButtonLeftIcon name="package" />
             </StyledFeatherButtonLeftOverlay>
-            <StyledFeatherButtonText>
+            <StyledFeatherButtonText adjustsFontSizeToFit>
               {t("screens.backup.generate_backup")} .zip
             </StyledFeatherButtonText>
           </StyledFeatherButtonWrapper>
@@ -139,7 +139,7 @@ export default function Backup() {
             <StyledFeatherButtonLeftOverlay>
               <StyledFeatherButtonLeftIcon name="arrow-down-circle" />
             </StyledFeatherButtonLeftOverlay>
-            <StyledFeatherButtonText>
+            <StyledFeatherButtonText adjustsFontSizeToFit>
               {t("screens.backup.restore_backup")} .zip
             </StyledFeatherButtonText>
           </StyledFeatherButtonWrapper>

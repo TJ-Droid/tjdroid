@@ -11,7 +11,7 @@ import {
   formatarLocale,
 } from "../../utils/utils";
 
-import moment from "moment";
+import moment from "moment/min/moment-with-locales";
 
 import Header from "../../components/Header";
 import DialogModal from "../../components/DialogModal";

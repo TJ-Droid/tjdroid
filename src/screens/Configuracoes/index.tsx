@@ -31,6 +31,7 @@ import {
 } from "./styles";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamListType } from "../../routes";
+import { AppLanguages } from "../../types/Languages";
 
 type ProfileScreenRouteProp = StackScreenProps<
   RootStackParamListType,
@@ -159,7 +160,6 @@ export default function Configuracoes({ navigation }: Props) {
   const salvarTema = async (tema: ThemeColors) => {
     // Salva no Storage
     await salvarConfiguracoes({
-      ...configuracoes,
       actualTheme: tema,
       darkMode: false,
     })
@@ -482,7 +482,9 @@ export default function Configuracoes({ navigation }: Props) {
             <ItemListSpaceBetween>
               <ItemListTitleSpace100>
                 <SelectPickerLanguages
-                  onChangeLanguageValue={(l: string) => languageSelected(l)}
+                  onChangeLanguageValue={(l: AppLanguages) =>
+                    languageSelected(l)
+                  }
                 />
                 <ItemListTextDescriptionTranslation
                   onPress={() => {

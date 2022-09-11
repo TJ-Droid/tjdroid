@@ -8,7 +8,7 @@ import {
 } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
-import moment from "moment";
+import moment from "moment/min/moment-with-locales";
 import { format } from "date-fns";
 import {
   buscarAsyncStorageTjDroidIdioma,
