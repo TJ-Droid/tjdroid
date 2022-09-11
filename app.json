@@ -23,7 +23,7 @@
     "android": {
       "package": "dev.pedropaulo.tjdroid",
       "useNextNotificationsApi": true,
-      "versionCode": 24,
+      "versionCode": 25,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0277bd"
