@@ -291,7 +291,7 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
             width: "100%",
           }}
         >
-          <TerritoryBoxText>
+          <TerritoryBoxText adjustsFontSizeToFit numberOfLines={1}>
             {item.titulo.toString().substring(0, 3)}
           </TerritoryBoxText>
         </Pressable>

@@ -229,7 +229,7 @@ export default function TerritorioInformacao({ route }: Props) {
                         {territorioInfos?.dataTrabalhadoFormatada &&
                         territorioInfos.dataTrabalhadoFormatada === ""
                           ? "-"
-                          : territorioInfos?.dataTrabalhadoFormatada}
+                          : territorioInfos?.dataTrabalhadoFormatada || "-"}
                       </BottomSectionDateText>
                     </BottomSectionButtonWrapper>
                   </TouchableOpacity>
@@ -249,7 +249,7 @@ export default function TerritorioInformacao({ route }: Props) {
                       {territorioInfos?.ultimaVisitaFormatada &&
                       territorioInfos.ultimaVisitaFormatada === ""
                         ? "-"
-                        : territorioInfos?.ultimaVisitaFormatada}
+                        : territorioInfos?.ultimaVisitaFormatada || "-"}
                     </BottomSectionDateText>
                   </BottomSectionButtonWrapperDisabled>
                 </BottomSectionButtonsArea>

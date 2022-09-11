@@ -84,7 +84,7 @@ export default function DialogModal({
     if (
       keyboardTypeNumber === true &&
       dialogTextInputValue &&
-      parseInt(dialogTextInputValue) >= 100
+      parseInt(dialogTextInputValue) > 100
     ) {
       setDialogTextInputErrorMessage(
         t("components.dialogmodal.more_than_100_error_message")

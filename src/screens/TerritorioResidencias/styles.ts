@@ -79,5 +79,6 @@ export const TerritoryBoxText = styled.Text`
   color: #ffffff;
   font-weight: bold;
   text-align: center;
-  text-shadow: 2px 2px 6px #00000040;
+  text-shadow: 1px 1px 6px #00000040;
+  align-self: center;
 `;
