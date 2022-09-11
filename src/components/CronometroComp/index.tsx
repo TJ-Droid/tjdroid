@@ -194,10 +194,10 @@ export default function CronometroComp() {
             tempoCalculado + json.minutosextras + json.minutospausados
           );
           setRelatorio({
-            colocacoes: json.colocacoes,
-            videosMostrados: json.videosMostrados,
-            revisitas: json.revisitas,
-            observacoes: json.observacoes,
+            colocacoes: json.colocacoes ?? 0,
+            videosMostrados: json.videosMostrados ?? 0,
+            revisitas: json.revisitas ?? 0,
+            observacoes: json.observacoes ?? "",
             dia: json.dia,
             hora: json.hora,
           });
@@ -207,12 +207,12 @@ export default function CronometroComp() {
           // Verifica os minutosextras do storage e soma aos minutos calculados
           // Também verifica seta os outros dados do relatório do storage ao stado atual
           const json = await buscarAsyncStorage("@tjdroid:contador_completo");
-          setMinutos(tempoCalculado + json.minutosextras);
+          setMinutos(tempoCalculado + (json.minutosextras ?? 0));
           setRelatorio({
-            colocacoes: json.colocacoes,
-            videosMostrados: json.videosMostrados,
-            revisitas: json.revisitas,
-            observacoes: json.observacoes,
+            colocacoes: json.colocacoes ?? 0,
+            videosMostrados: json.videosMostrados ?? 0,
+            revisitas: json.revisitas ?? 0,
+            observacoes: json.observacoes ?? "",
             dia: json.dia,
             hora: json.hora,
           });
@@ -233,13 +233,13 @@ export default function CronometroComp() {
         // Verifica os minutosextras do storage e soma aos minutos calculados
         // Também verifica seta os outros dados do relatório do storage ao stado atual
         const json = await buscarAsyncStorage("@tjdroid:contador_completo");
-        setMinutos(json.minutospausados);
+        setMinutos(json.minutospausados ?? 0);
         // setMinutos(json.minutospausados + json.minutosextras);
         setRelatorio({
-          colocacoes: json.colocacoes,
-          videosMostrados: json.videosMostrados,
-          revisitas: json.revisitas,
-          observacoes: json.observacoes,
+          colocacoes: json.colocacoes ?? 0,
+          videosMostrados: json.videosMostrados ?? 0,
+          revisitas: json.revisitas ?? 0,
+          observacoes: json.observacoes ?? "",
           dia: json.dia,
           hora: json.hora,
         });
@@ -299,10 +299,10 @@ export default function CronometroComp() {
               tempoCalculado + json.minutospausados + json.minutosextras
             );
             setRelatorio({
-              colocacoes: json.colocacoes,
-              videosMostrados: json.videosMostrados,
-              revisitas: json.revisitas,
-              observacoes: json.observacoes,
+              colocacoes: json.colocacoes ?? 0,
+              videosMostrados: json.videosMostrados ?? 0,
+              revisitas: json.revisitas ?? 0,
+              observacoes: json.observacoes ?? "",
               dia: json.dia,
               hora: json.hora,
             });
@@ -312,12 +312,12 @@ export default function CronometroComp() {
             // Verifica os minutosextras do storage e soma aos minutos calculados
             // Também verifica seta os outros dados do relatório do storage ao stado atual
             // const json = await buscarAsyncStorage('@tjdroid:contador_completo');
-            setMinutos(tempoCalculado + json.minutosextras);
+            setMinutos(tempoCalculado + (json.minutosextras ?? 0));
             setRelatorio({
-              colocacoes: json.colocacoes,
-              videosMostrados: json.videosMostrados,
-              revisitas: json.revisitas,
-              observacoes: json.observacoes,
+              colocacoes: json.colocacoes ?? 0,
+              videosMostrados: json.videosMostrados ?? 0,
+              revisitas: json.revisitas ?? 0,
+              observacoes: json.observacoes ?? "",
               dia: json.dia,
               hora: json.hora,
             });
@@ -352,7 +352,7 @@ export default function CronometroComp() {
         // Verifica os minutosextras do storage
         const json = await buscarAsyncStorage("@tjdroid:contador_completo");
         await salvarAsyncStorage(
-          { ...json, minutosextras: json.minutosextras + 1 },
+          { ...json, minutosextras: (json.minutosextras ?? 0) + 1 },
           "@tjdroid:contador_completo"
         );
 
@@ -363,7 +363,7 @@ export default function CronometroComp() {
           // Verifica os minutosextras do storage
           const json = await buscarAsyncStorage("@tjdroid:contador_completo");
           await salvarAsyncStorage(
-            { ...json, minutospausados: json.minutospausados + 1 },
+            { ...json, minutospausados: (json.minutospausados ?? 0) + 1 },
             "@tjdroid:contador_completo"
           );
         }
@@ -374,7 +374,7 @@ export default function CronometroComp() {
           // Verifica os minutos do storage
           const json = await buscarAsyncStorage("@tjdroid:contador_completo");
           await salvarAsyncStorage(
-            { ...json, minutosextras: json.minutosextras - 1 },
+            { ...json, minutosextras: (json.minutosextras ?? 0) - 1 },
             "@tjdroid:contador_completo"
           );
 
@@ -385,7 +385,7 @@ export default function CronometroComp() {
             // Verifica os minutosextras do storage
             const json = await buscarAsyncStorage("@tjdroid:contador_completo");
             await salvarAsyncStorage(
-              { ...json, minutospausados: json.minutospausados - 1 },
+              { ...json, minutospausados: (json.minutospausados ?? 0) - 1 },
               "@tjdroid:contador_completo"
             );
           }
@@ -400,28 +400,28 @@ export default function CronometroComp() {
         // Verifica os colocações do storage
         const json = await buscarAsyncStorage("@tjdroid:contador_completo");
         await salvarAsyncStorage(
-          { ...json, colocacoes: json.colocacoes + 1 },
+          { ...json, colocacoes: (json.colocacoes ?? 0) + 1 },
           "@tjdroid:contador_completo"
         );
 
         return setRelatorio({
           ...relatorio,
-          colocacoes: relatorio.colocacoes + 1,
+          colocacoes: (relatorio.colocacoes ?? 0) + 1,
         });
       } else {
-        if (relatorio.colocacoes > 0) {
+        if ((relatorio.colocacoes ?? 0) > 0) {
           // Verifica os colocações do storage
           const json = await buscarAsyncStorage("@tjdroid:contador_completo");
-          if (json.colocacoes > 0) {
+          if ((json.colocacoes ?? 0) > 0) {
             await salvarAsyncStorage(
-              { ...json, colocacoes: json.colocacoes - 1 },
+              { ...json, colocacoes: (json.colocacoes ?? 0) - 1 },
               "@tjdroid:contador_completo"
             );
           }
 
           return setRelatorio({
             ...relatorio,
-            colocacoes: relatorio.colocacoes - 1,
+            colocacoes: (relatorio.colocacoes ?? 0) - 1,
           });
         }
       }
@@ -432,28 +432,28 @@ export default function CronometroComp() {
         // Verifica os vídeos mostrados do storage
         const json = await buscarAsyncStorage("@tjdroid:contador_completo");
         await salvarAsyncStorage(
-          { ...json, videosMostrados: json.videosMostrados + 1 },
+          { ...json, videosMostrados: (json.videosMostrados ?? 0) + 1 },
           "@tjdroid:contador_completo"
         );
 
         return setRelatorio({
           ...relatorio,
-          videosMostrados: relatorio.videosMostrados + 1,
+          videosMostrados: (relatorio.videosMostrados ?? 0) + 1,
         });
       } else {
-        if (relatorio.videosMostrados > 0) {
+        if ((relatorio.videosMostrados ?? 0) > 0) {
           // Verifica os vídeos mostrados do storage
           const json = await buscarAsyncStorage("@tjdroid:contador_completo");
-          if (json.videosMostrados > 0) {
+          if ((json.videosMostrados ?? 0) > 0) {
             await salvarAsyncStorage(
-              { ...json, videosMostrados: json.videosMostrados - 1 },
+              { ...json, videosMostrados: (json.videosMostrados ?? 0) - 1 },
               "@tjdroid:contador_completo"
             );
           }
 
           return setRelatorio({
             ...relatorio,
-            videosMostrados: relatorio.videosMostrados - 1,
+            videosMostrados: (relatorio.videosMostrados ?? 0) - 1,
           });
         }
       }
@@ -464,28 +464,28 @@ export default function CronometroComp() {
         // Verifica os revisitas do storage
         const json = await buscarAsyncStorage("@tjdroid:contador_completo");
         await salvarAsyncStorage(
-          { ...json, revisitas: json.revisitas + 1 },
+          { ...json, revisitas: (json.revisitas ?? 0) + 1 },
           "@tjdroid:contador_completo"
         );
 
         return setRelatorio({
           ...relatorio,
-          revisitas: relatorio.revisitas + 1,
+          revisitas: (relatorio.revisitas ?? 0) + 1,
         });
       } else {
-        if (relatorio.revisitas > 0) {
+        if ((relatorio.revisitas ?? 0) > 0) {
           // Verifica os revisitas do storage
           const json = await buscarAsyncStorage("@tjdroid:contador_completo");
-          if (json.revisitas > 0) {
+          if ((json.revisitas ?? 0) > 0) {
             await salvarAsyncStorage(
-              { ...json, revisitas: json.revisitas - 1 },
+              { ...json, revisitas: (json.revisitas ?? 0) - 1 },
               "@tjdroid:contador_completo"
             );
           }
 
           return setRelatorio({
             ...relatorio,
-            revisitas: relatorio.revisitas - 1,
+            revisitas: (relatorio.revisitas ?? 0) - 1,
           });
         }
       }
@@ -499,7 +499,7 @@ export default function CronometroComp() {
     // Verifica os minutosextras do storage
     const json = await buscarAsyncStorage("@tjdroid:contador_completo");
     await salvarAsyncStorage(
-      { ...json, minutosextras: json.minutosextras + 10 },
+      { ...json, minutosextras: (json.minutosextras ?? 0) + 10 },
       "@tjdroid:contador_completo"
     );
 
@@ -510,7 +510,7 @@ export default function CronometroComp() {
       // Verifica os minutosextras do storage
       const json = await buscarAsyncStorage("@tjdroid:contador_completo");
       await salvarAsyncStorage(
-        { ...json, minutospausados: json.minutospausados + 10 },
+        { ...json, minutospausados: (json.minutospausados ?? 0) + 10 },
         "@tjdroid:contador_completo"
       );
       return;
@@ -528,7 +528,7 @@ export default function CronometroComp() {
     // Verifica os minutosextras do storage
     const json = await buscarAsyncStorage("@tjdroid:contador_completo");
     await salvarAsyncStorage(
-      { ...json, minutosextras: json.minutosextras - 10 },
+      { ...json, minutosextras: (json.minutosextras ?? 0) - 10 },
       "@tjdroid:contador_completo"
     );
 
@@ -539,7 +539,7 @@ export default function CronometroComp() {
       // Verifica os minutosextras do storage
       const json = await buscarAsyncStorage("@tjdroid:contador_completo");
       await salvarAsyncStorage(
-        { ...json, minutospausados: json.minutospausados - 10 },
+        { ...json, minutospausados: (json.minutospausados ?? 0) - 10 },
         "@tjdroid:contador_completo"
       );
       return;
@@ -637,10 +637,10 @@ export default function CronometroComp() {
         // Salva o estado inicial do cronometro
         await salvarAsyncStorage(
           {
-            colocacoes: json.colocacoes <= 0 ? 0 : json.colocacoes,
+            colocacoes: json.colocacoes <= 0 ? 0 : json.colocacoes ?? 0,
             videosMostrados:
-              json.videosMostrados <= 0 ? 0 : json.videosMostrados,
-            revisitas: json.revisitas <= 0 ? 0 : json.revisitas,
+              json.videosMostrados <= 0 ? 0 : json.videosMostrados ?? 0,
+            revisitas: json.revisitas <= 0 ? 0 : json.revisitas ?? 0,
             observacoes: "",
             minutosextras: 0,
             minutospausados: json.minutospausados,
@@ -655,10 +655,10 @@ export default function CronometroComp() {
         // Salva o estado inicial do cronometro
         await salvarAsyncStorage(
           {
-            colocacoes: json.colocacoes <= 0 ? 0 : json.colocacoes,
+            colocacoes: json.colocacoes <= 0 ? 0 : json.colocacoes ?? 0,
             videosMostrados:
-              json.videosMostrados <= 0 ? 0 : json.videosMostrados,
-            revisitas: json.revisitas <= 0 ? 0 : json.revisitas,
+              json.videosMostrados <= 0 ? 0 : json.videosMostrados ?? 0,
+            revisitas: json.revisitas <= 0 ? 0 : json.revisitas ?? 0,
             observacoes: "",
             minutosextras: 0,
             minutospausados: 0,
