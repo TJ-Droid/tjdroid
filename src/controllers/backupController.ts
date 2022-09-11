@@ -290,24 +290,24 @@ export const unzipBackupFolderURI = async (uri: string) => {
     });
 };
 
-// Função para deszippar o backup
-export const unzipBackupFolder = async () => {
-  const sourcePath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${generateActualDateTimeBackupZipName()}.zip`;
-  const targetPath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`;
-  const charset = "UTF-8";
-  // charset possible values: UTF-8, GBK, US-ASCII and so on. If none was passed, default value is UTF-8
+// // Função para deszippar o backup
+// export const unzipBackupFolder = async () => {
+//   const sourcePath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${generateActualDateTimeBackupZipName()}.zip`;
+//   const targetPath = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`;
+//   const charset = "UTF-8";
+//   // charset possible values: UTF-8, GBK, US-ASCII and so on. If none was passed, default value is UTF-8
 
-  return await unzip(sourcePath, targetPath, charset)
-    .then((path) => {
-      // console.log(`Unzip completed at ${path}`);
-    })
-    .catch((err) => {
-      errorAlert(
-        i18next.t("controllers.backupcontroller_alert_backup_unzip_error")
-      );
-      return false;
-    });
-};
+//   return await unzip(sourcePath, targetPath, charset)
+//     .then((path) => {
+//       // console.log(`Unzip completed at ${path}`);
+//     })
+//     .catch((err) => {
+//       errorAlert(
+//         i18next.t("controllers.backupcontroller_alert_backup_unzip_error")
+//       );
+//       return false;
+//     });
+// };
 
 // Função para deletar arquivos, zips e pastas
 export const deleteFile = async (nomeArquivoStorage = "", extensao = "") => {
