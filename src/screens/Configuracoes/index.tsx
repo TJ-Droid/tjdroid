@@ -125,15 +125,15 @@ export default function Configuracoes({ navigation }: Props) {
             darkMode: !isEnabledDarkMode,
           }));
 
-          // Muda o switch
-          setIsEnabledDarkMode(!isEnabledDarkMode);
-
           // Salva no context
-          if (isEnabledDarkMode === false) {
+          if (!isEnabledDarkMode === true) {
             setActualTheme && setActualTheme(themes["darkMode"]);
           } else {
             setActualTheme && setActualTheme(themes[configuracoes.actualTheme]);
           }
+
+          // Muda o switch
+          setIsEnabledDarkMode(!isEnabledDarkMode);
         } else {
           // Se erro, dispara o toast
           ToastAndroid.show(
