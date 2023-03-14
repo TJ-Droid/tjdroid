@@ -23,6 +23,6 @@ export const formatarLocale = (locale = "en") => {
     locale.indexOf("-") === -1
       ? (locale as AppLanguages)
       : (locale.substr(0, locale.indexOf("-")) as AppLanguages);
-  const actualAppLanguages: AppLanguages[] = ["pt", "es", "ru", "en"];
+  const actualAppLanguages: AppLanguages[] = ["pt", "es", "ru", "pl", "en"];
   return !actualAppLanguages.includes(language) ? "en" : language;
 };

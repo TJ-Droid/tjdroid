@@ -9,6 +9,7 @@ import en from "./locales/en/en.json";
 import pt from "./locales/pt/pt.json";
 import es from "./locales/es/es.json";
 import ru from "./locales/ru/ru.json";
+import pl from "./locales/pl/pl.json";
 
 const smartphoneLanguageCode = RNLocalize.getLocales()[0].languageCode;
 
@@ -21,6 +22,7 @@ const resources = {
   pt: pt,
   es: es,
   ru: ru,
+  pl: pl,
 };
 
 // Busca o idioma salvo no AsyncStorage
