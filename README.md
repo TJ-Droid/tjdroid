@@ -46,6 +46,8 @@ If you want to help with translation to your language, please use [the link belo
 ### ⭐ Acknowledgment for helping in translations:
 * #### Russian
   * Евгений Пудовкин
+* #### Polish
+  * Piotr Stefański
 
 ### ➡️ How to use Crowdin to translate to your language:
 <p align="center">
@@ -81,5 +83,7 @@ If you want to help with translation to your language, please use [the link belo
 -   [x] react-native-svg
 -   [x] react-native-svg-transformer
 -   [x] react-native-zip-archive
+-   [x] fast-xml-parser
+-   [x] react-native-mmkv
 
 *TJ Droid app its based on the old JW Droid app, developed by Artem Chivchalov.*
