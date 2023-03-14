@@ -4,7 +4,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "gc": "cd android && ./gradlew clean && cd .. && yarn android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
