@@ -759,7 +759,6 @@ export default function Header({
   function handleEditarInformacoesTerritorio(
     dadosTerritorio: SearchTerritoryInfoType
   ) {
-    console.log("dadosTerritorio:", dadosTerritorio);
     salvarInformacoesTerritorio(dadosTerritorio)
       .then((dados) => {
         // Trata o retorno
