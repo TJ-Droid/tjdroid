@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,6 +8,7 @@ import {
   Text,
   Dimensions,
   Pressable,
+  ScrollView,
 } from "react-native";
 import {
   FlatList,
@@ -19,9 +20,10 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
 
 import {
-  buscarTerritoriosResidencias,
+  buscarTerritoriosGrupos,
   deletarResidenciaTerritorio,
-  TerritoryHomesInterface,
+  TerritoryCasaInterface,
+  TerritoryGrupoInterface,
 } from "../../controllers/territoriosController";
 
 import {
@@ -45,39 +47,62 @@ const NUM_COLUMNS = 6;
 
 type ProfileScreenRouteProp = StackScreenProps<
   RootStackParamListType,
-  "TerritorioResidencias"
+  "TerritorioGrupos"
 >;
 
 interface Props extends ProfileScreenRouteProp {}
 
-export default function TerritorioResidencias({ route, navigation }: Props) {
+export default function TerritorioGrupos({ route, navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
-  // Pega os dados do territorio
-  const { id, nome, ordenacao, disposicao } = route.params;
+  const { width } = Dimensions.get("window");
 
-  const [territoryName, setTerritoryName] = useState("");
-  const [territoryId, setTerritoryId] = useState("");
+  const refScrollViewGrupos = useRef<ScrollView>(null);
+
+  // Pega os dados do territorio
+  const { idTerritorio, nome, ordenacao, disposicao, swipeCurrentID } =
+    route.params;
+
+  const [territorioNome, setTerritorioNome] = useState("");
+  const [idTerritorioState, setIdTerritorioState] = useState("");
+  const [swipeCurrentIdState, setSwipeCurrentIdState] = useState(0);
 
   const [visualDisposition, setVisualDisposition] = useState(disposicao);
   const [reload, setReload] = useState(false);
-  const [allTerritoriosResidencias, setAllTerritoriosResidencias] = useState<
-    TerritoryHomesInterface[]
+  const [allTerritorioGrupos, setAllTerritorioGrupos] = useState<
+    TerritoryGrupoInterface[]
   >([]);
   const [carregando, setCarregando] = useState(true);
 
+  const goToScrollSwipeIndex = useCallback(() => {
+    if (swipeCurrentIdState > 0) {
+      refScrollViewGrupos.current?.scrollTo({
+        x: width * swipeCurrentIdState,
+        // animated: true,
+      });
+    } else if (swipeCurrentID) {
+      refScrollViewGrupos.current?.scrollTo({
+        x: width * swipeCurrentID,
+        // animated: true,
+      });
+    }
+  }, [swipeCurrentID, swipeCurrentIdState]);
+
   async function buscarDados() {
     // Busca os anos de Servico para setar no SectionList
-    await buscarTerritoriosResidencias(id, ordenacao)
+    await buscarTerritoriosGrupos(idTerritorio, ordenacao)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
           // Seta o estado com todos as casas do território para o SectionList
-          setAllTerritoriosResidencias(dados);
+          setAllTerritorioGrupos(dados);
 
           // Retira a mensagem de carregando
           setCarregando(false);
+
+          // Navega até a tela da ação
+          goToScrollSwipeIndex();
         } else {
           // Retira a mensagem de carregando
           setCarregando(false);
@@ -107,8 +132,12 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
       setVisualDisposition(visualDisposition);
 
       // Seta o nome do territorio
-      setTerritoryName(nome);
-      setTerritoryId(id);
+      setTerritorioNome(nome);
+      setIdTerritorioState(idTerritorio);
+
+      // Seta o index para 0
+      // setSwipeCurrentIdState(0);
+      // goToScrollSwipeIndex();
 
       // Busca os territórios
       buscarDados();
@@ -117,10 +146,10 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
 
   // ALERTA de DELETAR TERRITÓRIO
   const alertaExclusaoResidencia = ({
-    residenciaId,
+    idCasa,
     residenciaNome,
   }: {
-    residenciaId: string;
+    idCasa: string;
     residenciaNome: string;
   }) => {
     Alert.alert(
@@ -136,7 +165,11 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
         },
         {
           text: t("words.yes"),
-          onPress: () => handleDeletarResidencia(residenciaId),
+          onPress: () =>
+            handleDeletarResidencia(
+              idCasa,
+              allTerritorioGrupos[swipeCurrentIdState]?.idPredio
+            ),
         },
       ],
       { cancelable: true }
@@ -144,8 +177,8 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
   };
 
   // DELETAR TERRITÓRIO
-  function handleDeletarResidencia(residenciaId: string) {
-    deletarResidenciaTerritorio(residenciaId, territoryId)
+  function handleDeletarResidencia(idCasa: string, idPredio: string) {
+    deletarResidenciaTerritorio(idCasa, idTerritorioState, idPredio)
       .then((dados) => {
         //Trata o retorno
         if (dados) {
@@ -181,21 +214,22 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
   }
   // Função que altera o nome do territorio na tela
   function handleChangeTerritoryName(newTerritoryName: string) {
-    setTerritoryName(newTerritoryName);
+    setTerritorioNome(newTerritoryName);
   }
 
   // ITEM PARA A DISPOSIÇÃO VISUAL DE LINHAS
-  const Item = ({ item }: { item: TerritoryHomesInterface }) => (
+  const Item = ({ item }: { item: TerritoryCasaInterface }) => (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate("TerritorioResidenciasVisitas", {
-          residenciaId: item.id,
-          territoryId: territoryId,
+          idCasa: item.idCasa,
+          idTerritorio: idTerritorioState,
+          idPredio: allTerritorioGrupos[swipeCurrentIdState]?.idPredio,
         })
       }
       onLongPress={() =>
         alertaExclusaoResidencia({
-          residenciaId: item.id,
+          idCasa: item.idCasa,
           residenciaNome: item.titulo,
         })
       }
@@ -260,27 +294,28 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
   );
 
   // ITEM PARA A DISPOSIÇÃO VISUAL DE CAIXAS
-  const ItemBox = ({ item }: { item: TerritoryHomesInterface }) => {
+  const ItemBox = ({ item }: { item: TerritoryCasaInterface }) => {
     return (
       <View
         style={{
           backgroundColor: item.corVisita,
           flex: 1,
           margin: 3,
-          height: Dimensions.get("window").width / NUM_COLUMNS - 8,
+          height: width / NUM_COLUMNS - 8,
           borderRadius: 7,
         }}
       >
         <Pressable
           onPress={() =>
             navigation.navigate("TerritorioResidenciasVisitas", {
-              residenciaId: item.id,
-              territoryId: territoryId,
+              idCasa: item.idCasa,
+              idTerritorio: idTerritorioState,
+              idPredio: allTerritorioGrupos[swipeCurrentIdState]?.idPredio,
             })
           }
           onLongPress={() =>
             alertaExclusaoResidencia({
-              residenciaId: item.id,
+              idCasa: item.idCasa,
               residenciaNome: item.titulo.toString().substring(0, 3),
             })
           }
@@ -289,10 +324,11 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
             justifyContent: "center",
             flex: 1,
             width: "100%",
+            padding: 2,
           }}
         >
           <TerritoryBoxText adjustsFontSizeToFit numberOfLines={1}>
-            {item.titulo.toString().substring(0, 3)}
+            {item.titulo.toString()}
           </TerritoryBoxText>
         </Pressable>
       </View>
@@ -306,40 +342,123 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
     />
   );
 
+  const handleGetSwipeCurrentID = (event: any) => {
+    setSwipeCurrentIdState(
+      parseInt(`${event.nativeEvent.contentOffset.x / (width - 10)}`)
+    );
+  };
+
   return (
     <Container>
       <Header
-        title={territoryName}
+        title={territorioNome}
         showGoBack
-        showOptionAddNewResidences
+        showOptionAddNovaCasa
         showTerritoryMenu
-        territoryData={{ nome: territoryName, territoryId: id }}
-        showChangeDisposition={{ visualDisposition, id }}
+        territoryData={{
+          nome: territorioNome,
+          idTerritorio: idTerritorio,
+          idPredio:
+            allTerritorioGrupos.length === swipeCurrentIdState
+              ? "novo"
+              : allTerritorioGrupos[swipeCurrentIdState]?.idPredio,
+          swipeCurrentID: swipeCurrentIdState,
+        }}
+        showChangeDisposition={{
+          visualDisposition,
+          idTerritorio: idTerritorio,
+        }}
         showChangeDispositionFunc={(r) => handleChangeVisualDisposition(r)}
         handleChangeTerritoryNameFunc={(r) => handleChangeTerritoryName(r)}
       />
       {carregando ? (
         <LoadingSpinner />
-      ) : visualDisposition !== "caixas" ? (
-        <FlatList
-          style={{ width: "100%" }}
-          data={allTerritoriosResidencias}
-          renderItem={Item}
-          ListEmptyComponent={EmptyListMessage}
-          key={"_"}
-          keyExtractor={(_, index) => "_" + index}
-        />
       ) : (
-        <FlatList
-          style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12 }}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          data={allTerritoriosResidencias}
-          renderItem={ItemBox}
-          ListEmptyComponent={EmptyListMessage}
-          key={"#"}
-          keyExtractor={(_, index) => "#" + index}
-          numColumns={NUM_COLUMNS}
-        />
+        <ScrollView
+          ref={refScrollViewGrupos}
+          horizontal
+          decelerationRate={0}
+          snapToInterval={width} //your element width
+          snapToAlignment="center"
+          style={{
+            height: "100%",
+          }}
+          onMomentumScrollEnd={handleGetSwipeCurrentID}
+          scrollEventThrottle={16}
+        >
+          {allTerritorioGrupos.map((predio, index) => (
+            <View
+              key={predio.idPredio}
+              style={{
+                width:
+                  allTerritorioGrupos.length - 1 === index ? width - 10 : width,
+                zIndex: 0,
+                backgroundColor: "#ffffff",
+              }}
+            >
+              {visualDisposition !== "caixas" ? (
+                <FlatList
+                  style={{
+                    width: "100%",
+                  }}
+                  contentContainerStyle={
+                    predio.casas.length === 0
+                      ? {
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }
+                      : {}
+                  }
+                  data={predio.casas}
+                  renderItem={Item}
+                  ListEmptyComponent={EmptyListMessage}
+                  key={"_"}
+                  keyExtractor={(_, index) => "_" + index}
+                />
+              ) : (
+                <FlatList
+                  style={{
+                    flex: 1,
+                    paddingVertical: 10,
+                    paddingHorizontal: 12,
+                  }}
+                  contentContainerStyle={
+                    predio.casas.length === 0
+                      ? {
+                          paddingBottom: 20,
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }
+                      : {
+                          paddingBottom: 20,
+                        }
+                  }
+                  data={predio.casas}
+                  renderItem={ItemBox}
+                  ListEmptyComponent={EmptyListMessage}
+                  key={"#"}
+                  keyExtractor={(_, index) => "#" + index}
+                  numColumns={NUM_COLUMNS}
+                />
+              )}
+            </View>
+          ))}
+          <View
+            style={{
+              width: width,
+              elevation: 10,
+              shadowColor: "#000000",
+              backgroundColor: "#ffffff",
+              zIndex: 1,
+              borderLeftWidth: 1,
+              borderLeftColor: "#b3b3b3",
+            }}
+          >
+            <EmptyListMessage />
+          </View>
+        </ScrollView>
       )}
     </Container>
   );

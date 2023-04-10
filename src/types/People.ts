@@ -1,7 +1,7 @@
 import { VisitsType } from "./Visits";
 
 export type PeopleType = {
-  id: string;
+  idPessoa: string;
   nome: string;
   visitas: VisitsType[];
 };

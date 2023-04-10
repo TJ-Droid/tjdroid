@@ -18,7 +18,7 @@ export default function RelatorioDetalhes({ route }: Props) {
     anotacoes,
     colocacoes,
     data,
-    id,
+    idRelatorio,
     minutos,
     revisitas,
     videosMostrados,
@@ -27,7 +27,7 @@ export default function RelatorioDetalhes({ route }: Props) {
   return (
     <>
       <Contador
-        relatorioId={id}
+        relatorioId={idRelatorio}
         minutosProp={minutos}
         colocacoesProp={colocacoes}
         videosMostradosProp={videosMostrados}

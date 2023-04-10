@@ -1,5 +1,5 @@
 export type VisitsType = {
-  id: string;
+  idVisita: string;
   data: string;
   colocacoes: number;
   visita: number;
@@ -8,6 +8,8 @@ export type VisitsType = {
 };
 
 export type VisitDataType = {
+  idPessoa: string;
+  idVisita: string;
   anotacoes: string;
   colocacoes: number;
   data: string;
@@ -15,8 +17,7 @@ export type VisitDataType = {
   hora: string;
   videosMostrados: number;
   visita: number;
-  idPessoa: string;
-  idVisita: string;
-  territoryId?: string;
-  residenciaId?: string;
+  idTerritorio?: string;
+  idCasa?: string;
+  idPredio?: string;
 };

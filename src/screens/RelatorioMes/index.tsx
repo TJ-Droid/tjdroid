@@ -202,7 +202,9 @@ export default function RelatorioMes({ route, navigation }: Props) {
   const Item = ({ item }: { item: ReportType }) => (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate("RelatorioDetalhes", { ...item })}
-      onLongPress={() => alertaExclusaoRelatorioAtual(item.id, item.data)}
+      onLongPress={() =>
+        alertaExclusaoRelatorioAtual(item.idRelatorio, item.data)
+      }
     >
       <ItemList>
         <ItemListTopContent>
@@ -349,7 +351,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
             data={todosRelatoriosDoMes}
             renderItem={Item}
             ListEmptyComponent={EmptyListMessage}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.idRelatorio.toString()}
           />
         </Container>
       ) : (

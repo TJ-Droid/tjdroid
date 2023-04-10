@@ -199,7 +199,8 @@
         "input_placeholder": "Digite aqui:",
         "empty_error_message": "O campo não pode ficar vazio!",
         "less_than_1_error_message": "O campo não pode ser menor que 1",
-        "more_than_100_error_message": "O campo não pode ser maior que 100"
+        "more_than_100_error_message": "Adicione 100 casas por vez",
+        "first_value_must_be_greater_than_second_message": "O segundo valor deve ser maior que o primeiro"
       },
       "visitbox": {
         "input_placeholder": "Digite sua observação:"
@@ -293,7 +294,7 @@
       "backupcontroller_alert_backup_save_permission": "Para salvar o arquivo de backup na pasta Downloads é preciso sua permissão.\n\nO app usa essa permissão apenas nesse momento para salvar o arquivo de backup.",
       "backupcontroller_alert_title": "AVISO!",
       "backupcontroller_alert_message": "Confira tudo e tente novamente.",
-      "backupcontroller_alert_error_title": "ERRO AO FAZER BACKUP!",
+      "backupcontroller_alert_error_title": "ERRO AO FAZER BACKUP/RESTAURAÇÃO!",
       "backupcontroller_alert_error_message_1": "Motivo: {{errorMessage}}",
       "backupcontroller_alert_error_message_2": "Confira tudo e tente novamente.",
       "backupcontroller_toast_backup_generate_success": "Backup gerado com sucesso!",

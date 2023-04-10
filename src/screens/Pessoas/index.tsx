@@ -135,9 +135,9 @@ export default function Pessoas({ navigation }: Props) {
   const Item = ({ item }: { item: BuscarPessoasType }) => (
     <TouchableWithoutFeedback
       onPress={() =>
-        navigation.navigate("PessoaVisitas", { idPessoa: item.id })
+        navigation.navigate("PessoaVisitas", { idPessoa: item.idPessoa })
       }
-      onLongPress={() => alertaExclusaoPessoa(item.id)}
+      onLongPress={() => alertaExclusaoPessoa(item.idPessoa)}
     >
       <ItemList>
         <ItemListPerson>
@@ -189,7 +189,7 @@ export default function Pessoas({ navigation }: Props) {
           data={allPessoasOrdenadas}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.idPessoa.toString()}
         />
       )}
     </Container>

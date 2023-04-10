@@ -9,14 +9,14 @@ import {
   salvarAsyncStorage,
 } from "../services/AsyncStorageMethods";
 import {
-  TerritoriesType,
+  TerritorioType,
   TerritoryDispositionType,
-  TerritoryHomeType,
+  TerritorioCasaType,
   TerritoryOrderingType,
 } from "../types/Territories";
 import { VisitDataType } from "../types/Visits";
 
-export interface CustomTerritoriesType extends TerritoriesType {
+export interface CustomTerritoriesType extends TerritorioType {
   dataSelecionado?: string;
   dataTrabalhado?: string;
   titulo?: string;
@@ -25,16 +25,20 @@ export interface CustomTerritoriesType extends TerritoriesType {
   descData?: string;
   descAnotacoes?: string;
   qtdVisitas?: number;
+  swipeCurrentID?: number;
 }
 
-export interface CustomTerritoryHomeType extends TerritoryHomeType {}
+export interface CustomTerritoryHomeType extends TerritorioCasaType {}
 
-export interface TerritoryHomesInterface {
+export interface TerritoryGrupoInterface {
+  idPredio: string;
+  casas: TerritoryCasaInterface[];
+}
+export interface TerritoryCasaInterface extends TerritorioCasaType {
   corVisita: string;
   descAnotacoes: string;
   descData: string;
   descNome: string;
-  id: string;
   titulo: string;
   qtdVisitas: number;
 }
@@ -47,8 +51,10 @@ export interface CustomSearchHomeVisitIterface {
 
 export interface VisitCustomSearchHomeVisitIterface {
   idVisita: string;
-  residenciaId: string;
-  territorioId: string;
+  idCasa: string;
+  idTerritorio: string;
+  idPredio: string;
+  idPessoa?: string;
   data: string;
   dia: string;
   hora: string;
@@ -56,7 +62,6 @@ export interface VisitCustomSearchHomeVisitIterface {
   videosMostrados: number;
   visita: number;
   anotacoes: string;
-  idPessoa?: string;
 }
 
 export type SearchTerritoryInfoType = {
@@ -64,7 +69,7 @@ export type SearchTerritoryInfoType = {
   dataSelecionado?: string;
   dataTrabalhado?: string;
   ultimaVisita?: string;
-  id?: string;
+  idTerritorio?: string;
   nome?: string;
   dataSelecionadoFormatada?: string;
   dataTrabalhadoFormatada?: string;
@@ -72,7 +77,7 @@ export type SearchTerritoryInfoType = {
 };
 
 export type CustomSearchVisitType = {
-  id: string;
+  idVisita: string;
   data: string;
   visita: string;
   visitaBgColor: string;
@@ -80,8 +85,9 @@ export type CustomSearchVisitType = {
 };
 
 export interface CustomSearchHomeVisitsIterface {
-  territorioId: string;
-  id: string;
+  idTerritorio: string;
+  idPredio: string;
+  idCasa: string;
   nome: string;
   nomeMorador?: string;
   visitas?: CustomSearchVisitType[];
@@ -98,7 +104,7 @@ export default async function buscarTerritorios() {
         dados.map((territorio) => {
           listaTerritorios.push({
             ...territorio,
-            id: territorio.id,
+            idTerritorio: territorio.idTerritorio,
             nome: territorio.nome,
             ordenacao: territorio.ordenacao,
             disposicao: territorio.disposicao,
@@ -123,8 +129,8 @@ export default async function buscarTerritorios() {
 }
 
 // Busca pessoas para a pagina TERRITÓRIOS CASAS
-export async function buscarTerritoriosResidencias(
-  territorioId: string,
+export async function buscarTerritoriosGrupos(
+  idTerritorio: string,
   territorioOrdenacao: TerritoryOrderingType
 ) {
   const SELECT_PICKER_OPTIONS = [
@@ -161,59 +167,71 @@ export async function buscarTerritoriosResidencias(
   ];
 
   return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados: TerritoriesType[]) => {
-      const listaTerritorios: TerritoryHomesInterface[] = [];
+    .then((dados: TerritorioType[]) => {
+      const listaTerritoriosGrupos: TerritoryGrupoInterface[] = [];
 
-      const territorio = dados.find((territorio) => {
-        return territorio.id === territorioId;
-      }) as TerritoriesType;
-
-      territorio.casas.map((residencia) => {
-        listaTerritorios.push({
-          id: residencia.id,
-          titulo:
-            territorioOrdenacao === "nome" && residencia.nome !== ""
-              ? residencia.nome
-              : residencia.posicao.toString(),
-          descNome: residencia.nomeMorador,
-          corVisita:
-            residencia.interessado === 0
-              ? "#95959560"
-              : residencia.visitas.length !== 0
-              ? SELECT_PICKER_OPTIONS[
-                  residencia.visitas.sort((a, b) => {
-                    return moment(b.data)
-                      .format("YYYYMMDDHHmm")
-                      .localeCompare(moment(a.data).format("YYYYMMDDHHmm"));
-                  })[0].visita
-                ].fontColor
-              : "#f1f1f1",
-
-          descData:
-            residencia.visitas.length !== 0
-              ? moment(
-                  residencia.visitas.sort((a, b) => {
-                    return moment(b.data)
-                      .format("YYYYMMDDHHmm")
-                      .localeCompare(moment(a.data).format("YYYYMMDDHHmm"));
-                  })[0].data
-                ).format("DD/MM/YYYY")
-              : "",
-
-          descAnotacoes:
-            residencia.visitas.length !== 0
-              ? residencia.visitas.sort((a, b) => {
-                  return moment(b.data)
-                    .format("YYYYMMDDHHmm")
-                    .localeCompare(moment(a.data).format("YYYYMMDDHHmm"));
-                })[0].anotacoes
-              : "",
-
-          qtdVisitas: residencia.visitas.length,
-        });
+      const territorioSelecionado = dados.find((territorio) => {
+        return territorio.idTerritorio === idTerritorio;
       });
 
-      return listaTerritorios;
+      territorioSelecionado &&
+        territorioSelecionado.predio.map((predio) =>
+          listaTerritoriosGrupos.push({
+            ...predio,
+            casas: [
+              ...predio.casas.map((casa) => ({
+                // listaTerritoriosGrupos.push({
+                ...casa,
+                titulo:
+                  territorioOrdenacao === "nome" && casa.nome !== ""
+                    ? casa.nome
+                    : casa.posicao.toString(),
+                descNome: casa.nomeMorador,
+                corVisita:
+                  casa.interessado === 0
+                    ? "#95959570"
+                    : casa.visitas.length !== 0
+                    ? SELECT_PICKER_OPTIONS[
+                        casa.visitas.sort((a, b) => {
+                          return moment(b.data)
+                            .format("YYYYMMDDHHmm")
+                            .localeCompare(
+                              moment(a.data).format("YYYYMMDDHHmm")
+                            );
+                        })[0].visita
+                      ].fontColor
+                    : "#f1f1f1",
+
+                descData:
+                  casa.visitas.length !== 0
+                    ? moment(
+                        casa.visitas.sort((a, b) => {
+                          return moment(b.data)
+                            .format("YYYYMMDDHHmm")
+                            .localeCompare(
+                              moment(a.data).format("YYYYMMDDHHmm")
+                            );
+                        })[0].data
+                      ).format("DD/MM/YYYY")
+                    : "",
+
+                descAnotacoes:
+                  casa.visitas.length !== 0
+                    ? casa.visitas.sort((a, b) => {
+                        return moment(b.data)
+                          .format("YYYYMMDDHHmm")
+                          .localeCompare(moment(a.data).format("YYYYMMDDHHmm"));
+                      })[0].anotacoes
+                    : "",
+
+                qtdVisitas: casa.visitas.length,
+                // });
+              })),
+            ],
+          })
+        );
+
+      return listaTerritoriosGrupos;
     })
     .catch(() => {
       return undefined;
@@ -221,12 +239,12 @@ export async function buscarTerritoriosResidencias(
 }
 
 // Busca Informações de um território
-export async function buscarInformacoesTerritorio(territorioId: string) {
+export async function buscarInformacoesTerritorio(idTerritorio: string) {
   return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados: TerritoriesType[]) => {
+    .then((dados: TerritorioType[]) => {
       let todosTerritorios = dados;
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
 
       let dadosTerritorio = todosTerritorios[indexTerritorio].informacoes;
@@ -234,7 +252,7 @@ export async function buscarInformacoesTerritorio(territorioId: string) {
       // Retorna a lista de visitas da pessoa ordenadas pela data
       // As datas mais recentes aparecem em primeiro
       return {
-        id: todosTerritorios[indexTerritorio].id,
+        idTerritorio: todosTerritorios[indexTerritorio].idTerritorio,
         nome: todosTerritorios[indexTerritorio].nome,
         dataSelecionadoFormatada: moment(
           dadosTerritorio.dataSelecionado
@@ -259,11 +277,11 @@ export async function buscarInformacoesTerritorio(territorioId: string) {
 export async function salvarInformacoesTerritorio(
   novosDados: SearchTerritoryInfoType
 ) {
-  let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+  let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
     "@tjdroid:territorios"
   );
   let indexTerritorio = todosTerritorios.findIndex(
-    (territorio) => territorio.id === novosDados.id
+    (territorio) => territorio.idTerritorio === novosDados.idTerritorio
   );
 
   todosTerritorios[indexTerritorio].informacoes = {
@@ -282,64 +300,16 @@ export async function salvarInformacoesTerritorio(
     });
 }
 
-// Busca pessoas para a pagina EDITAR VISITA
-export async function buscarVisitaResidencia(
-  idVisita: string,
-  residenciaId: string,
-  territorioId: string
-) {
-  return await buscarAsyncStorage("@tjdroid:territorios")
-    .then((dados: TerritoriesType[]) => {
-      let todosTerritorios = dados;
-      let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
-      );
-      let indexResidencia = todosTerritorios[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === residenciaId
-      );
-      let indexVisita = todosTerritorios[indexTerritorio].casas[
-        indexResidencia
-      ].visitas.findIndex((visita) => visita.id == idVisita);
-
-      let dadosResidencia =
-        todosTerritorios[indexTerritorio].casas[indexResidencia].visitas[
-          indexVisita
-        ];
-
-      // Retorna a lista de visitas da pessoa ordenadas pela data
-      // As datas mais recentes aparecem em primeiro
-      return {
-        visita: {
-          idVisita: idVisita,
-          residenciaId: residenciaId,
-          territorioId: territorioId,
-          data: dadosResidencia.data,
-          dia: moment(dadosResidencia.data).format("L"),
-          hora: moment(dadosResidencia.data).format("LT"),
-          colocacoes: dadosResidencia.colocacoes,
-          videosMostrados: dadosResidencia.videosMostrados,
-          visita: dadosResidencia.visita,
-          anotacoes: dadosResidencia.anotacoes,
-        },
-        dataDate: new Date(
-          moment(dadosResidencia.data).add(1, "days").format("YYYY-MM-DD")
-        ),
-        dataTime: new Date(moment(dadosResidencia.data).format()),
-      } as CustomSearchHomeVisitIterface;
-    })
-    .catch(() => {
-      return undefined;
-    });
-}
-
 // SALVAR NOVO TERRITORIO
 export async function salvarNovoTerritorio(territoryNewName: string) {
   const salvarTerritorio = async () => {
     try {
-      let todosTerritorios = await buscarAsyncStorage("@tjdroid:territorios");
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
+        "@tjdroid:territorios"
+      );
 
       todosTerritorios.push({
-        id: uuidv4(),
+        idTerritorio: uuidv4(),
         nome: territoryNewName,
         ordenacao: "nome", // No momento, usado apenas como identificador interno
         disposicao: "linhas",
@@ -349,7 +319,13 @@ export async function salvarNovoTerritorio(territoryNewName: string) {
           dataTrabalhado: "",
           ultimaVisita: "",
         },
-        casas: [],
+        predio: [
+          {
+            idPredio: uuidv4(),
+            posicao: 1,
+            casas: [],
+          },
+        ],
       });
 
       return await salvarAsyncStorage(todosTerritorios, "@tjdroid:territorios")
@@ -367,23 +343,55 @@ export async function salvarNovoTerritorio(territoryNewName: string) {
 }
 
 // ADICIONAR UM TERRITORIO
-export async function adicionarUmaResidencia(territorioId: string) {
+export async function adicionarUmaResidencia(
+  idTerritorio: string,
+  idPredio: "novo" | string
+) {
   const adicionarResidencia = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       // Busca o index do territorio que queremos
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
 
+      let indexPredio = 0;
+
+      // Se for novo, adiciona um novo predio
+      if (idPredio === "novo") {
+        const tempID = uuidv4();
+
+        const posicaoUltimoGrupo =
+          todosTerritorios[indexTerritorio].predio[
+            todosTerritorios[indexTerritorio].predio.length - 1
+          ].posicao;
+
+        todosTerritorios[indexTerritorio].predio = [
+          ...todosTerritorios[indexTerritorio].predio,
+          { idPredio: tempID, casas: [], posicao: posicaoUltimoGrupo + 1 },
+        ];
+
+        // Busca o index do predio que queremos
+        indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+          (predio) => predio.idPredio === tempID
+        );
+      } else {
+        // Busca o index do predio que queremos
+        indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+          (predio) => predio.idPredio === idPredio
+        );
+      }
+
       // Se não tiver nenhuma residência, adiciona o primeiro, se não, busca pelo último e adiciona mais um
-      if (todosTerritorios[indexTerritorio].casas.length === 0) {
+      if (
+        todosTerritorios[indexTerritorio].predio[indexPredio].casas.length === 0
+      ) {
         // Adiciona Uma Residencia
-        todosTerritorios[indexTerritorio].casas.push({
-          id: uuidv4(),
+        todosTerritorios[indexTerritorio].predio[indexPredio].casas.push({
+          idCasa: uuidv4(),
           nome: `${1}`,
           nomeMorador: "",
           posicao: 1,
@@ -392,13 +400,15 @@ export async function adicionarUmaResidencia(territorioId: string) {
         });
       } else {
         // Pega a última residencia para poder pegar sua posição
-        let ultimaResidencia = todosTerritorios[indexTerritorio].casas
+        let ultimaResidencia = todosTerritorios[indexTerritorio].predio[
+          indexPredio
+        ].casas
           .sort((a, b) => a.posicao - b.posicao)
           .slice(-1);
 
         // Adiciona Uma Residencia
-        todosTerritorios[indexTerritorio].casas.push({
-          id: uuidv4(),
+        todosTerritorios[indexTerritorio].predio[indexPredio].casas.push({
+          idCasa: uuidv4(),
           nome: `${ultimaResidencia[0].posicao + 1}`,
           nomeMorador: "",
           posicao: ultimaResidencia[0].posicao + 1,
@@ -411,7 +421,7 @@ export async function adicionarUmaResidencia(territorioId: string) {
         .then(() => {
           // Retorna estes dados para poder voltar e atualizar a tela de casas
           return {
-            id: todosTerritorios[indexTerritorio].id,
+            idTerritorio: todosTerritorios[indexTerritorio].idTerritorio,
             nome: todosTerritorios[indexTerritorio].nome,
             ordenacao: todosTerritorios[indexTerritorio].ordenacao,
             disposicao: todosTerritorios[indexTerritorio].disposicao,
@@ -429,27 +439,68 @@ export async function adicionarUmaResidencia(territorioId: string) {
 
 // ADICIONAR UM TERRITORIO
 export async function adicionarVariasResidencias(
-  territorioId: string,
-  qtd: number
+  idTerritorio: string,
+  idPredio: "novo" | string,
+  numeroInicial: number,
+  numeroFinal: number
 ) {
+  // Validacoes adicionais
+  if (numeroFinal - numeroInicial < 0) {
+    return undefined;
+  }
+
+  if (numeroFinal - numeroInicial > 100) {
+    return undefined;
+  }
+
   const adicionarVariasResidencias = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       // Busca o index do territorio que queremos
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
 
-      for (let i = 1; i <= qtd; i++) {
+      let indexPredio = 0;
+
+      // Se for novo, adiciona um novo predio
+      if (idPredio === "novo") {
+        const tempID = uuidv4();
+
+        const posicaoUltimoGrupo =
+          todosTerritorios[indexTerritorio].predio[
+            todosTerritorios[indexTerritorio].predio.length - 1
+          ].posicao;
+
+        todosTerritorios[indexTerritorio].predio = [
+          ...todosTerritorios[indexTerritorio].predio,
+          { idPredio: tempID, casas: [], posicao: posicaoUltimoGrupo + 1 },
+        ];
+
+        // Busca o index do predio que queremos
+        indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+          (predio) => predio.idPredio === tempID
+        );
+      } else {
+        // Busca o index do predio que queremos
+        indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+          (predio) => predio.idPredio === idPredio
+        );
+      }
+
+      for (let i = numeroInicial; i <= numeroFinal; i++) {
         // Se não tiver nenhuma residência, adiciona o primeiro, se não, busca pelo último e adiciona mais um
-        if (todosTerritorios[indexTerritorio].casas.length === 0) {
+        if (
+          todosTerritorios[indexTerritorio].predio[indexPredio].casas.length ===
+          0
+        ) {
           // Adiciona Uma Residencia
-          todosTerritorios[indexTerritorio].casas.push({
-            id: uuidv4(),
-            nome: `${1}`,
+          todosTerritorios[indexTerritorio].predio[indexPredio].casas.push({
+            idCasa: uuidv4(),
+            nome: `${i}`,
             nomeMorador: "",
             posicao: 1,
             interessado: 0,
@@ -457,14 +508,16 @@ export async function adicionarVariasResidencias(
           });
         } else {
           // Pega a última residencia para poder pegar sua posição
-          let ultimaResidencia = todosTerritorios[indexTerritorio].casas
+          let ultimaResidencia = todosTerritorios[indexTerritorio].predio[
+            indexPredio
+          ].casas
             .sort((a, b) => a.posicao - b.posicao)
             .slice(-1);
 
           // Adiciona Uma Residencia
-          todosTerritorios[indexTerritorio].casas.push({
-            id: uuidv4(),
-            nome: `${ultimaResidencia[0].posicao + 1}`,
+          todosTerritorios[indexTerritorio].predio[indexPredio].casas.push({
+            idCasa: uuidv4(),
+            nome: `${i}`,
             nomeMorador: "",
             posicao: ultimaResidencia[0].posicao + 1,
             interessado: 0,
@@ -477,7 +530,7 @@ export async function adicionarVariasResidencias(
         .then(() => {
           // Retorna estes dados para poder voltar e atualizar a tela de casas
           return {
-            id: todosTerritorios[indexTerritorio].id,
+            idTerritorio: todosTerritorios[indexTerritorio].idTerritorio,
             nome: todosTerritorios[indexTerritorio].nome,
             ordenacao: todosTerritorios[indexTerritorio].ordenacao,
             disposicao: todosTerritorios[indexTerritorio].disposicao,
@@ -496,16 +549,16 @@ export async function adicionarVariasResidencias(
 // Funcao para trocar nome da pessoa
 export async function editarNomeTerritorio(
   nomeTerritorio: string,
-  territorioId: string
+  idTerritorio: string
 ) {
   const editarNome = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       let indexEncontrado = todosTerritorios.findIndex(
-        (item) => item.id == territorioId
+        (item) => item.idTerritorio == idTerritorio
       );
       todosTerritorios[indexEncontrado].nome = nomeTerritorio;
 
@@ -525,16 +578,16 @@ export async function editarNomeTerritorio(
 }
 
 // DELETAR TERRITÓRIO
-export async function deletarTerritorio(territorioId: string) {
+export async function deletarTerritorio(idTerritorio: string) {
   // Se a validacao ocorrer continua o script
   const deletar = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       let indexTerritorio = todosTerritorios.findIndex(
-        (item) => item.id === territorioId
+        (item) => item.idTerritorio === idTerritorio
       );
       todosTerritorios.splice(indexTerritorio, 1);
 
@@ -555,17 +608,17 @@ export async function deletarTerritorio(territorioId: string) {
 // EDITAR A DISPOSIÇÃO VISUAL DE UM TERRITÓRIO
 export async function alterarDisposicaoVisualTerritorio(novosDados: {
   visualDisposition: TerritoryDispositionType;
-  id: string;
+  idTerritorio: string;
 }) {
   const salvarAlteracao = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       // Busca o index do territorio que queremos alterar os dados
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === novosDados.id
+        (territorio) => territorio.idTerritorio === novosDados.idTerritorio
       );
 
       // Altera a disposição
@@ -586,29 +639,100 @@ export async function alterarDisposicaoVisualTerritorio(novosDados: {
   return salvarAlteracao();
 }
 
+// Busca pessoas para a pagina EDITAR VISITA
+export async function buscarVisitaResidencia(
+  idVisita: string,
+  idCasa: string,
+  idTerritorio: string,
+  idPredio: string
+) {
+  return await buscarAsyncStorage("@tjdroid:territorios")
+    .then((dados: TerritorioType[]) => {
+      let todosTerritorios = dados;
+      let indexTerritorio = todosTerritorios.findIndex(
+        (territorio) => territorio.idTerritorio === idTerritorio
+      );
+
+      // Busca o index do predio que queremos
+      let indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === idPredio
+      );
+
+      let indexResidencia = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex((residencia) => residencia.idCasa === idCasa);
+
+      let indexVisita = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas[indexResidencia].visitas.findIndex(
+        (visita) => visita.idVisita == idVisita
+      );
+
+      let dadosResidencia =
+        todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+          indexResidencia
+        ].visitas[indexVisita];
+
+      // Retorna a lista de visitas da pessoa ordenadas pela data
+      // As datas mais recentes aparecem em primeiro
+      return {
+        visita: {
+          idVisita: idVisita,
+          idCasa: idCasa,
+          idTerritorio: idTerritorio,
+          idPredio: idPredio,
+          data: dadosResidencia.data,
+          dia: moment(dadosResidencia.data).format("L"),
+          hora: moment(dadosResidencia.data).format("LT"),
+          colocacoes: dadosResidencia.colocacoes,
+          videosMostrados: dadosResidencia.videosMostrados,
+          visita: dadosResidencia.visita,
+          anotacoes: dadosResidencia.anotacoes,
+        },
+        dataDate: new Date(
+          moment(dadosResidencia.data).add(1, "days").format("YYYY-MM-DD")
+        ),
+        dataTime: new Date(moment(dadosResidencia.data).format()),
+      } as CustomSearchHomeVisitIterface;
+    })
+    .catch(() => {
+      return undefined;
+    });
+}
+
 // EDITAR VISITA FEITA
 export async function editarVisitaCasa(
   dadosVisita: VisitCustomSearchHomeVisitIterface
 ) {
   const salvarEdicaoVisita = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === dadosVisita.territorioId
+        (territorio) => territorio.idTerritorio === dadosVisita.idTerritorio
       );
-      let indexResidencia = todosTerritorios[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === dadosVisita.residenciaId
-      );
-      let indexVisita = todosTerritorios[indexTerritorio].casas[
-        indexResidencia
-      ].visitas.findIndex((visita) => visita.id == dadosVisita.idVisita);
 
-      todosTerritorios[indexTerritorio].casas[indexResidencia].visitas[
-        indexVisita
-      ] = {
-        id: dadosVisita.idVisita,
+      // Busca o index do predio que queremos
+      let indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === dadosVisita.idPredio
+      );
+
+      let indexResidencia = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex(
+        (residencia) => residencia.idCasa === dadosVisita.idCasa
+      );
+      let indexVisita = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas[indexResidencia].visitas.findIndex(
+        (visita) => visita.idVisita == dadosVisita.idVisita
+      );
+
+      todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+        indexResidencia
+      ].visitas[indexVisita] = {
+        idVisita: dadosVisita.idVisita,
         colocacoes: dadosVisita.colocacoes,
         data: dadosVisita.data,
         visita: dadosVisita.visita,
@@ -645,19 +769,29 @@ export async function editarVisitaCasa(
 export async function salvarVisitaCasa(dadosNovaVisita: VisitDataType) {
   const salvarNovaVisita = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === dadosNovaVisita.territoryId
-      );
-      let indexResidencia = todosTerritorios[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === dadosNovaVisita.residenciaId
+        (territorio) => territorio.idTerritorio === dadosNovaVisita.idTerritorio
       );
 
-      todosTerritorios[indexTerritorio].casas[indexResidencia].visitas.push({
-        id: uuidv4(),
+      // Busca o index do predio que queremos
+      let indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === dadosNovaVisita.idPredio
+      );
+
+      let indexResidencia = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex(
+        (residencia) => residencia.idCasa === dadosNovaVisita.idCasa
+      );
+
+      todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+        indexResidencia
+      ].visitas.push({
+        idVisita: uuidv4(),
         data: dadosNovaVisita.data,
         colocacoes: dadosNovaVisita.colocacoes,
         visita: dadosNovaVisita.visita,
@@ -666,7 +800,9 @@ export async function salvarVisitaCasa(dadosNovaVisita: VisitDataType) {
       });
 
       // Seto 1, por que se teve uma visita adicionada, a pessoa é interessada
-      todosTerritorios[indexTerritorio].casas[indexResidencia].interessado = 1;
+      todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+        indexResidencia
+      ].interessado = 1;
 
       // Verifica a ultima visita informada é mais recente que a já existente
       let ultimaVisitaTerritorio =
@@ -682,8 +818,8 @@ export async function salvarVisitaCasa(dadosNovaVisita: VisitDataType) {
       return await salvarAsyncStorage(todosTerritorios, "@tjdroid:territorios")
         .then(() => {
           return {
-            territoryId: dadosNovaVisita.territoryId,
-            residenciaId: dadosNovaVisita.residenciaId,
+            idTerritorio: dadosNovaVisita.idTerritorio,
+            idCasa: dadosNovaVisita.idCasa,
           };
         })
         .catch(() => {
@@ -699,23 +835,31 @@ export async function salvarVisitaCasa(dadosNovaVisita: VisitDataType) {
 // Editar nome da casa
 export async function editarNomeCasa(
   casaNome: string,
-  residenciaId: string,
-  territorioId: string
+  idCasa: string,
+  idTerritorio: string,
+  idPredio: string
 ) {
   const editarNome = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
-      );
-      let indexResidencia = todosTerritorios[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === residenciaId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
 
-      todosTerritorios[indexTerritorio].casas[indexResidencia].nomeMorador =
-        casaNome;
+      // Busca o index do predio que queremos
+      let indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === idPredio
+      );
+
+      let indexResidencia = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex((residencia) => residencia.idCasa === idCasa);
+
+      todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+        indexResidencia
+      ].nomeMorador = casaNome;
 
       return await salvarAsyncStorage(todosTerritorios, "@tjdroid:territorios")
         .then(() => {
@@ -735,23 +879,31 @@ export async function editarNomeCasa(
 // Editar nome da do identificador da casa
 export async function editarNomeIdentificadorResidencia(
   novoIdenficador: string,
-  residenciaId: string,
-  territorioId: string
+  idCasa: string,
+  idTerritorio: string,
+  idPredio: string
 ) {
   const editarNome = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
-      );
-      let indexResidencia = todosTerritorios[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === residenciaId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
 
-      todosTerritorios[indexTerritorio].casas[indexResidencia].nome =
-        novoIdenficador;
+      // Busca o index do predio que queremos
+      let indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === idPredio
+      );
+
+      let indexResidencia = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex((residencia) => residencia.idCasa === idCasa);
+
+      todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+        indexResidencia
+      ].nome = novoIdenficador;
 
       return await salvarAsyncStorage(todosTerritorios, "@tjdroid:territorios")
         .then(() => {
@@ -771,35 +923,44 @@ export async function editarNomeIdentificadorResidencia(
 // EXCLUIR Visita Casa
 export async function excluirVisitaCasa(
   idVisita: string,
-  residenciaId: string,
-  territorioId: string
+  idCasa: string,
+  idTerritorio: string,
+  idPredio: string
 ) {
   const excluirVisita = async () => {
     try {
-      let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
+      let todosTerritorios: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
       let indexTerritorio = todosTerritorios.findIndex(
-        (territorio) => territorio.id === territorioId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
-      let indexResidencia = todosTerritorios[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === residenciaId
-      );
-      let indexVisita = todosTerritorios[indexTerritorio].casas[
-        indexResidencia
-      ].visitas.findIndex((visita) => visita.id == idVisita);
 
-      todosTerritorios[indexTerritorio].casas[indexResidencia].visitas.splice(
-        indexVisita,
-        1
+      // Busca o index do predio que queremos
+      let indexPredio = todosTerritorios[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === idPredio
       );
+
+      let indexResidencia = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex((residencia) => residencia.idCasa === idCasa);
+      let indexVisita = todosTerritorios[indexTerritorio].predio[
+        indexPredio
+      ].casas[indexResidencia].visitas.findIndex(
+        (visita) => visita.idVisita == idVisita
+      );
+
+      todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+        indexResidencia
+      ].visitas.splice(indexVisita, 1);
 
       // Se a Casa ficar sem nenhuma visita, seta o interesse para 0
       if (
-        todosTerritorios[indexTerritorio].casas[indexResidencia].visitas
-          .length === 0
+        todosTerritorios[indexTerritorio].predio[indexPredio].casas[
+          indexResidencia
+        ].visitas.length === 0
       ) {
-        todosTerritorios[indexTerritorio].casas[
+        todosTerritorios[indexTerritorio].predio[indexPredio].casas[
           indexResidencia
         ].interessado = 0;
       }
@@ -820,8 +981,9 @@ export async function excluirVisitaCasa(
 
 // BUSCAR Visitas Residência
 export async function buscarResidenciasVisitas(
-  residenciaId: string,
-  territoryId: string
+  idCasa: string,
+  idTerritorio: string,
+  idPredio: string
 ) {
   const SELECT_PICKER_OPTIONS = [
     {
@@ -858,17 +1020,26 @@ export async function buscarResidenciasVisitas(
 
   const buscarVisitas = async () => {
     try {
-      let territoriosTodos: TerritoriesType[] = await buscarAsyncStorage(
+      let territoriosTodos: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       let indexTerritorio = territoriosTodos.findIndex(
-        (territorio) => territorio.id === territoryId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
-      let indexResidencia = territoriosTodos[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id === residenciaId
+
+      // Busca o index do predio que queremos
+      let indexPredio = territoriosTodos[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === idPredio
       );
-      let casas = territoriosTodos[indexTerritorio].casas[indexResidencia];
+
+      let indexResidencia = territoriosTodos[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex((residencia) => residencia.idCasa === idCasa);
+      let casas =
+        territoriosTodos[indexTerritorio].predio[indexPredio].casas[
+          indexResidencia
+        ];
 
       const listaVisitas: CustomSearchVisitType[] = [];
 
@@ -891,7 +1062,7 @@ export async function buscarResidenciasVisitas(
         visitaLabel = SELECT_PICKER_OPTIONS[visita.visita].label;
 
         listaVisitas.push({
-          id: visita.id,
+          idVisita: visita.idVisita,
           data: visita.data,
           visita: visitaLabel,
           visitaBgColor,
@@ -900,8 +1071,9 @@ export async function buscarResidenciasVisitas(
       });
 
       return {
-        territorioId: territoryId,
-        id: casas.id,
+        idTerritorio: idTerritorio,
+        idPredio: idPredio,
+        idCasa: casas.idCasa,
         nome: casas.nome !== "" ? casas.nome : casas.posicao,
         nomeMorador:
           casas.nomeMorador !== ""
@@ -918,28 +1090,38 @@ export async function buscarResidenciasVisitas(
 
 // EXCLUIR Residência
 export async function deletarResidenciaTerritorio(
-  residenciaId: string,
-  territoryId: string
+  idCasa: string,
+  idTerritorio: string,
+  idPredio: string
 ) {
   const excluirResidencia = async () => {
     try {
-      let territoriosTodos: TerritoriesType[] = await buscarAsyncStorage(
+      let territoriosTodos: TerritorioType[] = await buscarAsyncStorage(
         "@tjdroid:territorios"
       );
 
       let indexTerritorio = territoriosTodos.findIndex(
-        (territorio) => territorio.id === territoryId
-      );
-      let indexVisita = territoriosTodos[indexTerritorio].casas.findIndex(
-        (residencia) => residencia.id == residenciaId
+        (territorio) => territorio.idTerritorio === idTerritorio
       );
 
-      territoriosTodos[indexTerritorio].casas.splice(indexVisita, 1);
+      // Busca o index do predio que queremos
+      let indexPredio = territoriosTodos[indexTerritorio].predio.findIndex(
+        (predio) => predio.idPredio === idPredio
+      );
+
+      let indexVisita = territoriosTodos[indexTerritorio].predio[
+        indexPredio
+      ].casas.findIndex((residencia) => residencia.idCasa == idCasa);
+
+      territoriosTodos[indexTerritorio].predio[indexPredio].casas.splice(
+        indexVisita,
+        1
+      );
 
       return await salvarAsyncStorage(territoriosTodos, "@tjdroid:territorios")
         .then(() => {
           return {
-            id: territoriosTodos[indexTerritorio].id,
+            idTerritorio: territoriosTodos[indexTerritorio].idTerritorio,
             nome: territoriosTodos[indexTerritorio].nome,
             ordenacao: territoriosTodos[indexTerritorio].ordenacao,
             disposicao: territoriosTodos[indexTerritorio].disposicao,

@@ -199,7 +199,8 @@
         "input_placeholder": "Введите текст:",
         "empty_error_message": "Поле не может быть пустым!",
         "less_than_1_error_message": "Значение не может быть меньше 1",
-        "more_than_100_error_message": "Значение не может быть больше 100"
+        "more_than_100_error_message": "Добавить 100 домов за раз",
+        "first_value_must_be_greater_than_second_message": "Второе значение должно быть больше первого"
       },
       "visitbox": {
         "input_placeholder": "Введите вашу заметку:"

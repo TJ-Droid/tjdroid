@@ -18,11 +18,12 @@ interface Props extends ProfileScreenRouteProp {}
 
 export default function TerritorioResidenciaNovaVisita({ route }: Props) {
   const { t } = useTranslation();
-  const { residenciaId, territoryId } = route.params;
+  const { idCasa, idTerritorio, idPredio } = route.params;
 
   const [novaVisita, setNovaVisita] = useState<VisitDataType>({
-    territoryId: territoryId,
-    residenciaId: residenciaId,
+    idTerritorio: idTerritorio,
+    idCasa: idCasa,
+    idPredio: idPredio,
     dia: moment(new Date()).format("DD/MM/YYYY"),
     hora: moment(new Date()).format("HH:mm"),
     visita: 0,

@@ -1,5 +1,5 @@
 export type ReportCounterType = {
-  id: string;
+  idRelatorioContador: string;
   dia: string;
   hora: string;
   revisitas: number;

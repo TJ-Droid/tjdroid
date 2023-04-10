@@ -88,7 +88,7 @@ export default function Territorios({ navigation }: Props) {
   }, [isFocused, reload]);
 
   // ALERTA de DELETAR TERRITÓRIO
-  const alertaExclusaoTerritorio = (territorioId: string) => {
+  const alertaExclusaoTerritorio = (idTerritorio: string) => {
     Alert.alert(
       t("screens.territorios.alert_territory_deleted_title"),
       t("screens.territorios.alert_territory_deleted_message"),
@@ -100,7 +100,7 @@ export default function Territorios({ navigation }: Props) {
         },
         {
           text: t("words.yes"),
-          onPress: () => handleDeletarTerritorio(territorioId),
+          onPress: () => handleDeletarTerritorio(idTerritorio),
         },
       ],
       { cancelable: true }
@@ -108,8 +108,8 @@ export default function Territorios({ navigation }: Props) {
   };
 
   // DELETAR TERRITÓRIO
-  function handleDeletarTerritorio(territorioId: string) {
-    deletarTerritorio(territorioId)
+  function handleDeletarTerritorio(idTerritorio: string) {
+    deletarTerritorio(idTerritorio)
       .then((dados) => {
         //Trata o retorno
         if (dados) {
@@ -139,8 +139,8 @@ export default function Territorios({ navigation }: Props) {
 
   const Item = ({ item }: { item: CustomTerritoriesType }) => (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("TerritorioResidencias", item)}
-      onLongPress={() => alertaExclusaoTerritorio(item.id)}
+      onPress={() => navigation.navigate("TerritorioGrupos", item)}
+      onLongPress={() => alertaExclusaoTerritorio(item.idTerritorio)}
       delayLongPress={800}
     >
       <ItemList>
@@ -188,7 +188,7 @@ export default function Territorios({ navigation }: Props) {
           data={allTerritorios}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.idTerritorio.toString()}
         />
       )}
     </Container>

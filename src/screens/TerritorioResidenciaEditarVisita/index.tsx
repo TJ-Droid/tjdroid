@@ -28,7 +28,7 @@ export default function TerritorioResidenciaEditarVisita({ route }: Props) {
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    const { idVisita, residenciaId, territorioId } = route.params;
+    const { idVisita, idCasa, idTerritorio, idPredio } = route.params;
 
     setCarregando(true);
 
@@ -37,7 +37,7 @@ export default function TerritorioResidenciaEditarVisita({ route }: Props) {
     const buscarDados = async () => {
       // if (continuarBuscarDados) {
       // Busca os anos de Servico para setar no SectionList
-      await buscarVisitaResidencia(idVisita, residenciaId, territorioId)
+      await buscarVisitaResidencia(idVisita, idCasa, idTerritorio, idPredio)
         .then((dados) => {
           // Trata o retorno
           if (dados) {

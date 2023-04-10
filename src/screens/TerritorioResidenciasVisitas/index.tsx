@@ -71,7 +71,7 @@ export default function TerritorioResidenciasVisitas({
 
   useEffect(() => {
     // Pega o ID via props da rota
-    const { residenciaId, territoryId } = route.params;
+    const { idCasa, idTerritorio, idPredio } = route.params;
 
     // Mostra a mensagem de carregando
     setCarregando(true);
@@ -84,7 +84,7 @@ export default function TerritorioResidenciasVisitas({
       const buscarDados = async () => {
         if (continuarBuscarDados) {
           // Busca os anos de Servico no Controller para setar no SectionList
-          await buscarResidenciasVisitas(residenciaId, territoryId)
+          await buscarResidenciasVisitas(idCasa, idTerritorio, idPredio)
             .then((dados) => {
               // Trata o retorno
               if (dados) {
@@ -153,12 +153,14 @@ export default function TerritorioResidenciasVisitas({
   // ALERTA de DELETAR VISITA
   const alertaDeletarVisitaCasa = ({
     idVisita,
-    residenciaId,
-    territorioId,
+    idCasa,
+    idTerritorio,
+    idPredio,
   }: {
     idVisita: string;
-    residenciaId: string;
-    territorioId: string;
+    idCasa: string;
+    idTerritorio: string;
+    idPredio: string;
   }) =>
     Alert.alert(
       t("screens.territorioresidenciasvisitas.alert_visit_deleted_title"),
@@ -172,7 +174,7 @@ export default function TerritorioResidenciasVisitas({
         {
           text: t("words.yes"),
           onPress: () =>
-            handleDeletarVisita(idVisita, residenciaId, territorioId),
+            handleDeletarVisita(idVisita, idCasa, idTerritorio, idPredio),
         },
       ],
       { cancelable: true }
@@ -181,10 +183,11 @@ export default function TerritorioResidenciasVisitas({
   // EDITAR NOME CASA
   function handleChangeHomeName(
     casaNome: string,
-    residenciaId: string,
-    territorioId: string
+    idCasa: string,
+    idTerritorio: string,
+    idPredio: string
   ) {
-    editarNomeCasa(casaNome, residenciaId, territorioId)
+    editarNomeCasa(casaNome, idCasa, idTerritorio, idPredio)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -228,10 +231,11 @@ export default function TerritorioResidenciasVisitas({
   // DELETAR VISITA PESSOA
   function handleDeletarVisita(
     idVisita: string,
-    residenciaId: string,
-    territorioId: string
+    idCasa: string,
+    idTerritorio: string,
+    idPredio: string
   ) {
-    excluirVisitaCasa(idVisita, residenciaId, territorioId)
+    excluirVisitaCasa(idVisita, idCasa, idTerritorio, idPredio)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -266,16 +270,18 @@ export default function TerritorioResidenciasVisitas({
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate("TerritorioResidenciaEditarVisita", {
-          idVisita: item.id,
-          residenciaId: allVisitasResidencia.id,
-          territorioId: allVisitasResidencia.territorioId,
+          idVisita: item.idVisita,
+          idCasa: allVisitasResidencia.idCasa,
+          idTerritorio: allVisitasResidencia.idTerritorio,
+          idPredio: allVisitasResidencia.idPredio,
         })
       }
       onLongPress={() =>
         alertaDeletarVisitaCasa({
-          idVisita: item.id,
-          residenciaId: allVisitasResidencia.id,
-          territorioId: allVisitasResidencia.territorioId,
+          idVisita: item.idVisita,
+          idCasa: allVisitasResidencia.idCasa,
+          idTerritorio: allVisitasResidencia.idTerritorio,
+          idPredio: allVisitasResidencia.idPredio,
         })
       }
     >
@@ -315,21 +321,25 @@ export default function TerritorioResidenciasVisitas({
         title={allVisitasResidencia.nome}
         showGoBack
         showDeleteTerritoryHome={{
-          residenciaId: allVisitasResidencia.id,
-          territoryId: allVisitasResidencia.territorioId,
+          idCasa: allVisitasResidencia.idCasa,
+          idTerritorio: allVisitasResidencia.idTerritorio,
+          idPredio: allVisitasResidencia.idPredio,
         }}
         showAddHomeVisit={{
-          residenciaId: allVisitasResidencia.id,
-          territoryId: allVisitasResidencia.territorioId,
+          idCasa: allVisitasResidencia.idCasa,
+          idTerritorio: allVisitasResidencia.idTerritorio,
+          idPredio: allVisitasResidencia.idPredio,
         }}
         showEditHomeIdentifier={{
-          residenciaId: allVisitasResidencia.id,
-          territoryId: allVisitasResidencia.territorioId,
+          idCasa: allVisitasResidencia.idCasa,
+          idTerritorio: allVisitasResidencia.idTerritorio,
+          idPredio: allVisitasResidencia.idPredio,
         }}
         territoryData={{
           nome: allVisitasResidencia.nome,
-          residenciaId: allVisitasResidencia.id,
-          territoryId: allVisitasResidencia.territorioId,
+          idCasa: allVisitasResidencia.idCasa,
+          idTerritorio: allVisitasResidencia.idTerritorio,
+          idPredio: allVisitasResidencia.idPredio,
         }}
         handleChangeHomeIdentifierFunc={(r) => handleChangeHomeIdentifier(r)}
       />
@@ -346,8 +356,9 @@ export default function TerritorioResidenciasVisitas({
         dialogFunction={(residenciaNome) =>
           handleChangeHomeName(
             residenciaNome,
-            allVisitasResidencia.id,
-            allVisitasResidencia.territorioId
+            allVisitasResidencia.idCasa,
+            allVisitasResidencia.idTerritorio,
+            allVisitasResidencia.idPredio
           )
         }
         dialogCloseFunction={() => handleCancelDialog()}
@@ -368,7 +379,7 @@ export default function TerritorioResidenciasVisitas({
           data={allVisitasResidencia.visitas}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.idVisita.toString()}
         />
       )}
     </Container>
