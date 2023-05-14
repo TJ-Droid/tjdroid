@@ -1,10 +1,14 @@
 import React from "react";
 import { Container, StyledActivityIndicator } from "./styles";
 
-export default function LoadingSpinner() {
+export type LoadingSpinnerPropsType = {
+  size?: number;
+};
+
+export default function LoadingSpinner({ size = 80 }: LoadingSpinnerPropsType) {
   return (
     <Container>
-      <StyledActivityIndicator size={80} />
+      <StyledActivityIndicator size={size} />
     </Container>
   );
 }
