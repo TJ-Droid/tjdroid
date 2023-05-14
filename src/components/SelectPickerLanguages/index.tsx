@@ -8,6 +8,7 @@ import {
 
 import { AppLanguages } from "../../types/Languages";
 import { Container, StyledPicker } from "./styles";
+import LoadingSpinner from "../LoadingSpinner";
 
 const LANGUAGES_OPTIONS = [
   { language: "en", label: "English (100%)" },
@@ -24,6 +25,7 @@ type SelectPickerLanguagesPropsType = {
 export default function SelectPickerLanguages({
   onChangeLanguageValue,
 }: SelectPickerLanguagesPropsType) {
+  const [isLoading, setIsLoading] = useState(false);
   const [pickerOptions, setPickerOptions] = useState<{
     language: AppLanguages;
   }>({ language: "en" });
@@ -42,39 +44,46 @@ export default function SelectPickerLanguages({
 
   // Seta o idioma escolhido no SelectPicker
   useEffect(() => {
+    setIsLoading(true);
     const getLanguages = async () => {
       return await buscarAsyncStorage("@tjdroid:idioma");
     };
     getLanguages()
       .then((response) => {
         setPickerOptions({ language: response.language });
+        setIsLoading(false);
       })
       .catch((err) => {
         setPickerOptions({ language: "en" });
+        setIsLoading(false);
       });
   }, []);
 
   return (
     <Container>
-      <StyledPicker
-        selectedValue={
-          // pickerOptions.length === 0 ? language : pickerOptions.language
-          pickerOptions.language
-        }
-        onValueChange={(itemValue) => {
-          handlePickerValueChange(itemValue as AppLanguages);
-        }}
-      >
-        {LANGUAGES_OPTIONS.map((item) => {
-          return (
-            <Picker.Item
-              key={item.language}
-              label={`${item.label}`}
-              value={item.language}
-            />
-          );
-        })}
-      </StyledPicker>
+      {isLoading ? (
+        <LoadingSpinner size={40} />
+      ) : (
+        <StyledPicker
+          selectedValue={
+            // pickerOptions.length === 0 ? language : pickerOptions.language
+            pickerOptions.language
+          }
+          onValueChange={(itemValue) => {
+            handlePickerValueChange(itemValue as AppLanguages);
+          }}
+        >
+          {LANGUAGES_OPTIONS.map((item) => {
+            return (
+              <Picker.Item
+                key={item.language}
+                label={`${item.label}`}
+                value={item.language}
+              />
+            );
+          })}
+        </StyledPicker>
+      )}
     </Container>
   );
 }
