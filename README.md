@@ -46,6 +46,8 @@ If you want to help with translation to your language, please use [the link belo
 ### ⭐ Acknowledgment for helping in translations:
 * #### Russian
   * Евгений Пудовкин
+  * Igor Toporov
+  * Maksimon
 * #### Polish
   * Piotr Stefański
 
