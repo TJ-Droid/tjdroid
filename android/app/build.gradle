@@ -134,8 +134,8 @@ android {
         applicationId "dev.pedropaulo.tjdroid"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 28
-        versionName "1.1.6"
+        versionCode 29
+        versionName "1.1.7"
     }
     splits {
         abi {
