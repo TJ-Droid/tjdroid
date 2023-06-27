@@ -50,6 +50,7 @@ If you want to help with translation to your language, please use [the link belo
   * Maksimon
 * #### Polish
   * Piotr Stefański
+  * Robert Skorupa
 
 ### ➡️ How to use Crowdin to translate to your language:
 <p align="center">
