@@ -1,5 +1,5 @@
 export type ReportType = {
-  idRelatorio: string;
+  id: string;
   data: string;
   minutos: number;
   colocacoes: number;

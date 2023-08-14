@@ -13,7 +13,7 @@ import { PeopleType } from "../types/People";
 import { VisitDataType } from "../types/Visits";
 
 export type BuscarPessoasType = {
-  idPessoa: string;
+  id: string;
   nome: string;
   qtdVisitas: number;
   ultimaVisita: string;
@@ -23,13 +23,13 @@ export type BuscarPessoasType = {
 };
 
 export type BuscarVisitasPessoaType = {
-  idPessoa: string;
+  id: string;
   nome: string;
   visitas: CustomVisitsType[];
 };
 
 export type CustomVisitsType = {
-  idVisita: string;
+  id: string;
   data: string;
   colocacoes: number;
   visita: number;
@@ -128,7 +128,7 @@ export default async function buscarPessoas() {
         }
 
         listaPessoas.push({
-          idPessoa: pessoa.idPessoa,
+          id: pessoa.id,
           nome: pessoa.nome,
           qtdVisitas: pessoa.visitas.length,
           ultimaVisitaData: ultimaVisitaFeitaData,
@@ -192,7 +192,7 @@ export async function buscarVisitasPessoa(idPessoa: string) {
     .then((dados: BuscarVisitasPessoaType[]) => {
       const dadosPessoa: BuscarVisitasPessoaType | undefined = dados.find(
         (pessoa) => {
-          return pessoa.idPessoa === idPessoa;
+          return pessoa.id === idPessoa;
         }
       );
 
@@ -213,7 +213,7 @@ export async function buscarVisitasPessoa(idPessoa: string) {
       });
 
       return {
-        idPessoa: dadosPessoa?.idPessoa,
+        id: dadosPessoa?.id,
         nome: dadosPessoa?.nome,
         visitas,
       } as BuscarVisitasPessoaType;
@@ -228,11 +228,11 @@ export async function buscarVisitaPessoa(idPessoa: string, visitaId: string) {
   return await buscarAsyncStorage("@tjdroid:pessoas")
     .then((dados: PeopleType[]) => {
       let dadosPessoa = dados.find((pessoa) => {
-        return pessoa.idPessoa === idPessoa;
+        return pessoa.id === idPessoa;
       });
 
       const dadosPessoaFinded = dadosPessoa?.visitas.find((visita) => {
-        return visita.idVisita === visitaId;
+        return visita.id === visitaId;
       });
 
       // Retorna a lista de visitas da pessoa ordenadas pela data
@@ -240,7 +240,7 @@ export async function buscarVisitaPessoa(idPessoa: string, visitaId: string) {
       return {
         // visita: {
         idPessoa: idPessoa,
-        idVisita: dadosPessoaFinded?.idVisita,
+        idVisita: dadosPessoaFinded?.id,
         data: dadosPessoaFinded?.data,
         dia: moment(dadosPessoaFinded?.data).format("L"),
         hora: moment(dadosPessoaFinded?.data).format("LT"),
@@ -267,7 +267,7 @@ export async function salvarPessoa(personNewName: string) {
       );
 
       todasPessoas.push({
-        idPessoa: uuidv4(),
+        id: uuidv4(),
         nome: personNewName,
         visitas: [],
       });
@@ -295,7 +295,7 @@ export async function editarNomePessoa(pessoaNome: string, idPessoa: string) {
       );
 
       let indexEncontrado = todasPessoas.findIndex(
-        (item) => item.idPessoa == idPessoa
+        (item) => item.id == idPessoa
       );
       todasPessoas[indexEncontrado].nome = pessoaNome;
 
@@ -323,9 +323,7 @@ export async function deletarPessoa(personId: string) {
         "@tjdroid:pessoas"
       );
 
-      let indexPessoa = todasPessoas.findIndex(
-        (item) => item.idPessoa === personId
-      );
+      let indexPessoa = todasPessoas.findIndex((item) => item.id === personId);
       todasPessoas.splice(indexPessoa, 1);
 
       return await salvarAsyncStorage(todasPessoas, "@tjdroid:pessoas")
@@ -351,14 +349,14 @@ export async function editarVisita(dadosVisita: VisitDataType) {
       );
 
       let indexPessoa = todasPessoas.findIndex(
-        (pessoa) => pessoa.idPessoa === dadosVisita.idPessoa
+        (pessoa) => pessoa.id === dadosVisita.idPessoa
       );
       let indexVisita = todasPessoas[indexPessoa].visitas.findIndex(
-        (visita) => visita.idVisita === dadosVisita.idVisita
+        (visita) => visita.id === dadosVisita.idVisita
       );
 
       todasPessoas[indexPessoa].visitas[indexVisita] = {
-        idVisita: dadosVisita.idVisita,
+        id: dadosVisita.idVisita,
         colocacoes: dadosVisita.colocacoes,
         data: dadosVisita.data,
         visita: dadosVisita.visita,
@@ -389,11 +387,11 @@ export async function salvarVisita(dadosNovaVisita: SalvarVisitaType) {
       );
 
       let indexPessoa = todasPessoas.findIndex(
-        (pessoa) => pessoa.idPessoa === dadosNovaVisita.idPessoa
+        (pessoa) => pessoa.id === dadosNovaVisita.idPessoa
       );
 
       todasPessoas[indexPessoa].visitas.push({
-        idVisita: uuidv4(),
+        id: uuidv4(),
         data: dadosNovaVisita.data,
         colocacoes: dadosNovaVisita.colocacoes,
         visita: dadosNovaVisita.visita,
@@ -424,10 +422,10 @@ export async function excluirVisita(idPessoa: string, idVisita: string) {
       );
 
       let indexPessoa = pessoasTodos.findIndex(
-        (pessoa) => pessoa.idPessoa == idPessoa
+        (pessoa) => pessoa.id == idPessoa
       );
       let indexVisita = pessoasTodos[indexPessoa].visitas.findIndex(
-        (visita) => visita.idVisita == idVisita
+        (visita) => visita.id == idVisita
       );
       pessoasTodos[indexPessoa].visitas.splice(indexVisita, 1);
 

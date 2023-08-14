@@ -69,12 +69,10 @@ type ShowReportSendType = {
   mesAnoFormatado?: string;
 };
 
-type TerritoryTypeLocal = {
+type TerritoryType = {
   nome: string;
-  idTerritorio: string;
-  idPredio: string;
-  idCasa?: string;
-  swipeCurrentID?: number;
+  territoryId: string;
+  residenciaId?: string;
 };
 
 type HeaderPropsType = {
@@ -97,30 +95,18 @@ type HeaderPropsType = {
   showEditPersonVisit?: VisitDataType;
   showNewPersonVisit?: SalvarVisitaType;
   showAddNewTerritory?: boolean;
-  showOptionAddNovaCasa?: boolean;
+  showOptionAddNewResidences?: boolean;
   showChangeDisposition?: {
     visualDisposition: TerritoryDispositionType;
-    idTerritorio: string;
+    id: string;
   };
   showChangeDispositionFunc?: (disposition: TerritoryDispositionType) => void;
   showTerritoryMenu?: boolean;
   handleChangeTerritoryNameFunc?: (name: string) => void;
-  territoryData?: TerritoryTypeLocal;
-  showDeleteTerritoryHome?: {
-    idCasa: string;
-    idTerritorio: string;
-    idPredio: string;
-  };
-  showAddHomeVisit?: {
-    idCasa: string;
-    idTerritorio: string;
-    idPredio: string;
-  };
-  showEditHomeIdentifier?: {
-    idCasa: string;
-    idTerritorio: string;
-    idPredio: string;
-  };
+  territoryData?: TerritoryType;
+  showDeleteTerritoryHome?: { residenciaId: string; territoryId: string };
+  showAddHomeVisit?: { residenciaId: string; territoryId: string };
+  showEditHomeIdentifier?: { residenciaId: string; territoryId: string };
   showNewHomeVisit?: VisitDataType;
   handleChangeHomeIdentifierFunc?: (newIdentifier: string) => void;
   showEditHomeVisit?: VisitCustomSearchHomeVisitIterface;
@@ -147,12 +133,12 @@ export default function Header({
   showEditPersonVisit = undefined,
   showNewPersonVisit = undefined,
   showAddNewTerritory = false,
-  showOptionAddNovaCasa = false,
+  showOptionAddNewResidences = false,
   showChangeDisposition = undefined,
   showChangeDispositionFunc = () => {},
   showTerritoryMenu = false,
   handleChangeTerritoryNameFunc = () => {},
-  territoryData = {} as TerritoryTypeLocal,
+  territoryData = {} as TerritoryType,
   showDeleteTerritoryHome = undefined,
   showAddHomeVisit = undefined,
   showEditHomeIdentifier = undefined,
@@ -291,11 +277,7 @@ export default function Header({
       { cancelable: true }
     );
 
-  const alertaExclusaoCasa = (
-    idCasa: string,
-    idTerritorio: string,
-    idPredio: string
-  ) =>
+  const alertaExclusaoCasa = (residenciaId: string, territoryId: string) =>
     Alert.alert(
       t("components.header.alert_delete_household_title"),
       t("components.header.alert_delete_household_description"),
@@ -307,7 +289,7 @@ export default function Header({
         },
         {
           text: t("words.yes"),
-          onPress: () => handleDeletarCasa(idCasa, idTerritorio, idPredio),
+          onPress: () => handleDeletarCasa(residenciaId, territoryId),
         },
       ],
       { cancelable: true }
@@ -375,9 +357,8 @@ export default function Header({
 
   const alertaDeletarVisitaCasa = (
     idVisita: string,
-    idCasa: string,
-    idTerritorio: string,
-    idPredio: string
+    residenciaId: string,
+    territorioId: string
   ) =>
     Alert.alert(
       t("components.header.alert_delete_visit_house_title"),
@@ -391,7 +372,7 @@ export default function Header({
         {
           text: t("words.yes"),
           onPress: () =>
-            handleDeletarVisitaCasa(idVisita, idCasa, idTerritorio, idPredio),
+            handleDeletarVisitaCasa(idVisita, residenciaId, territorioId),
         },
       ],
       { cancelable: true }
@@ -616,12 +597,8 @@ export default function Header({
   }
 
   // DELETAR CASA
-  function handleDeletarCasa(
-    idCasa: string,
-    idTerritorio: string,
-    idPredio: string
-  ) {
-    deletarResidenciaTerritorio(idCasa, idTerritorio, idPredio)
+  function handleDeletarCasa(residenciaId: string, territoryId: string) {
+    deletarResidenciaTerritorio(residenciaId, territoryId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -631,7 +608,7 @@ export default function Header({
             ToastAndroid.LONG
           );
           // Navega até a página abaixo
-          // navigation.goBack("TerritorioGrupos", dados);
+          // navigation.goBack("TerritorioResidencias", dados);
           navigation.goBack();
         } else {
           ToastAndroid.show(
@@ -651,11 +628,10 @@ export default function Header({
   // DELETAR VISITA CASA
   function handleDeletarVisitaCasa(
     idVisita: string,
-    idCasa: string,
-    idTerritorio: string,
-    idPredio: string
+    residenciaId: string,
+    territorioId: string
   ) {
-    excluirVisitaCasa(idVisita, idCasa, idTerritorio, idPredio)
+    excluirVisitaCasa(idVisita, residenciaId, territorioId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -868,7 +844,7 @@ export default function Header({
   // ALTERAR DISPOSIÇÃO VISUAL DE UM TERRITÓRIO
   function handleChangeDisposition(novosDados: {
     visualDisposition: TerritoryDispositionType;
-    idTerritorio: string;
+    id: string;
   }) {
     // Trata os dados alterando entre caixas e linhas
     novosDados.visualDisposition =
@@ -905,9 +881,9 @@ export default function Header({
   // ADICIONAR NOVO TERRITÓRIO
   function handleEditarNomeTerritorio(
     territorioNome: string,
-    idTerritorio: string
+    territorioId: string
   ) {
-    editarNomeTerritorio(territorioNome, idTerritorio)
+    editarNomeTerritorio(territorioNome, territorioId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -940,16 +916,10 @@ export default function Header({
   // ADICIONAR NOVO TERRITÓRIO
   function handleEditarIdentificadorResidencia(
     newIdentifier: string,
-    idCasa = "",
-    idTerritorio: string,
-    idPredio: string
+    residenciaId = "",
+    territoryId: string
   ) {
-    editarNomeIdentificadorResidencia(
-      newIdentifier,
-      idCasa,
-      idTerritorio,
-      idPredio
-    )
+    editarNomeIdentificadorResidencia(newIdentifier, residenciaId, territoryId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -980,8 +950,8 @@ export default function Header({
   }
 
   // ADICIONAR NOVA RESIDÊNCIA
-  function handleAdicionarUmaResidencia(territorioData: TerritoryTypeLocal) {
-    adicionarUmaResidencia(territorioData.idTerritorio, territorioData.idPredio)
+  function handleAdicionarUmaResidencia(territorioId: string) {
+    adicionarUmaResidencia(territorioId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -991,10 +961,7 @@ export default function Header({
             ToastAndroid.LONG
           );
           // Navega até a página abaixo
-          navigation.replace("TerritorioGrupos", {
-            ...dados,
-            swipeCurrentID: territorioData.swipeCurrentID,
-          });
+          navigation.replace("TerritorioResidencias", dados);
           // Apos salvar a pessoa, fecha o modal
           // setDialogNewPersonVisible(false);
         } else {
@@ -1013,17 +980,8 @@ export default function Header({
   }
 
   // ADICIONAR VÁRIAS RESIDÊNCIAS
-  function handleAdicionarVariasResidencias(
-    territorioData: TerritoryTypeLocal,
-    qtdInicial: number,
-    qtdFinal: number
-  ) {
-    adicionarVariasResidencias(
-      territorioData.idTerritorio,
-      territorioData.idPredio,
-      qtdInicial,
-      qtdFinal
-    )
+  function handleAdicionarVariasResidencias(territorioId: string, qtd: number) {
+    adicionarVariasResidencias(territorioId, qtd)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -1033,7 +991,7 @@ export default function Header({
             ToastAndroid.LONG
           );
           // Navega até a página abaixo
-          navigation.replace("TerritorioGrupos", dados);
+          navigation.replace("TerritorioResidencias", dados);
           // Apos salvar a pessoa, fecha o modal
           // setDialogNewPersonVisible(false);
         } else {
@@ -1085,23 +1043,22 @@ export default function Header({
           "components.header.dialogmodal_edit_territory_name_description"
         )}
         dialogFunction={(newName) =>
-          handleEditarNomeTerritorio(newName, territoryData.idTerritorio)
+          handleEditarNomeTerritorio(newName, territoryData.territoryId)
         }
         dialogCloseFunction={() => handleCancelDialogChangeNameTerritory()}
       />
 
       <DialogModal
         dialogVisibleProp={dialogAddTerritoryHomeVisible}
-        keyboardTypeNumberAddManyHouses
+        keyboardTypeNumber
         dialogTitle={t("components.header.dialogmodal_add_many_houses_title")}
         dialogMessage={t(
           "components.header.dialogmodal_add_many_houses_description"
         )}
-        dialogFunction={(qttInicial, qttFinal) =>
+        dialogFunction={(qttToAdd) =>
           handleAdicionarVariasResidencias(
-            territoryData,
-            parseInt(qttInicial.replace(/[^0-9]/g, "")),
-            parseInt((qttFinal ?? "0").replace(/[^0-9]/g, ""))
+            territoryData.territoryId,
+            parseInt(qttToAdd.replace(/[^0-9]/g, ""))
           )
         }
         dialogCloseFunction={() => handleCancelDialogTerritoryHome()}
@@ -1119,9 +1076,8 @@ export default function Header({
         dialogFunction={(newName) =>
           handleEditarIdentificadorResidencia(
             newName,
-            territoryData.idCasa,
-            territoryData.idTerritorio,
-            territoryData.idPredio
+            territoryData.residenciaId,
+            territoryData.territoryId
           )
         }
         dialogCloseFunction={() => handleCancelDialogChangeHomeIdentifier()}
@@ -1249,7 +1205,7 @@ export default function Header({
                 <StyledButtonDelete
                   onPress={() =>
                     alertaExclusaoRelatorioAtual(
-                      showReportSave.idRelatorioContador,
+                      showReportSave.id,
                       showReportSave.dia
                     )
                   }
@@ -1360,9 +1316,8 @@ export default function Header({
               <StyledButton
                 onPress={() =>
                   navigation.navigate("TerritorioResidenciaNovaVisita", {
-                    idCasa: showAddHomeVisit.idCasa,
-                    idTerritorio: showAddHomeVisit.idTerritorio,
-                    idPredio: showAddHomeVisit.idPredio,
+                    residenciaId: showAddHomeVisit.residenciaId,
+                    territoryId: showAddHomeVisit.territoryId,
                   })
                 }
               >
@@ -1402,9 +1357,8 @@ export default function Header({
               <StyledButtonDelete
                 onPress={() =>
                   alertaExclusaoCasa(
-                    showDeleteTerritoryHome.idCasa,
-                    showDeleteTerritoryHome.idTerritorio,
-                    showDeleteTerritoryHome.idPredio
+                    showDeleteTerritoryHome.residenciaId,
+                    showDeleteTerritoryHome.territoryId
                   )
                 }
               >
@@ -1470,9 +1424,8 @@ export default function Header({
                   onPress={() =>
                     alertaDeletarVisitaCasa(
                       showEditHomeVisit.idVisita,
-                      showEditHomeVisit.idCasa,
-                      showEditHomeVisit.idTerritorio,
-                      showEditHomeVisit.idPredio
+                      showEditHomeVisit.residenciaId,
+                      showEditHomeVisit.territorioId
                     )
                   }
                 >
@@ -1577,7 +1530,7 @@ export default function Header({
             <View></View>
           )}
 
-          {showOptionAddNovaCasa ? (
+          {showOptionAddNewResidences ? (
             <WrapperButton>
               <View
                 style={{
@@ -1599,7 +1552,9 @@ export default function Header({
                   }
                 >
                   <Menu.Item
-                    onPress={() => handleAdicionarUmaResidencia(territoryData)}
+                    onPress={() =>
+                      handleAdicionarUmaResidencia(territoryData.territoryId)
+                    }
                     title={t("components.header.menu_item_add_one_house")}
                     icon="home"
                   />
@@ -1655,7 +1610,7 @@ export default function Header({
                   <Menu.Item
                     onPress={() =>
                       navigation.navigate("TerritorioInformacao", {
-                        idTerritorio: territoryData.idTerritorio,
+                        territorioId: territoryData.territoryId,
                       })
                     }
                     title={t("components.header.menu_item_infos")}
@@ -1671,7 +1626,7 @@ export default function Header({
                   <Menu.Item
                     onPress={() =>
                       alertaExclusaoTerritorio(
-                        territoryData.idTerritorio,
+                        territoryData.territoryId,
                         territoryData.nome
                       )
                     }

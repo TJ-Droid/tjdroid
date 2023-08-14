@@ -88,7 +88,7 @@ export default function TerritorioInformacao({ route }: Props) {
   };
 
   useEffect(() => {
-    const { idTerritorio } = route.params;
+    const { territorioId } = route.params;
 
     setCarregando(true);
 
@@ -97,7 +97,7 @@ export default function TerritorioInformacao({ route }: Props) {
     const buscarDados = async () => {
       // if (continuarBuscarDados) {
       // Busca os anos de Servico para setar no SectionList
-      await buscarInformacoesTerritorio(idTerritorio)
+      await buscarInformacoesTerritorio(territorioId)
         .then((dados) => {
           // Trata o retorno
           if (dados) {

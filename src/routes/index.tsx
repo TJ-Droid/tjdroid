@@ -21,7 +21,7 @@ import PessoaVisitas from "../screens/PessoaVisitas";
 import PessoaEditarVisita from "../screens/PessoaEditarVisita";
 import PessoaNovaVisita from "../screens/PessoaNovaVisita";
 import Territorios from "../screens/Territorios";
-import TerritorioGrupos from "../screens/TerritorioGrupos";
+import TerritorioResidencias from "../screens/TerritorioResidencias";
 import TerritorioResidenciasVisitas from "../screens/TerritorioResidenciasVisitas";
 import TerritorioResidenciaNovaVisita from "../screens/TerritorioResidenciaNovaVisita";
 import TerritorioResidenciaEditarVisita from "../screens/TerritorioResidenciaEditarVisita";
@@ -55,24 +55,15 @@ export interface RootStackParamListType
   PessoaEditarVisita: { idVisita: string; idPessoa: string };
   PessoaNovaVisita: { personId: string };
   Territorios: undefined;
-  TerritorioGrupos: CustomTerritoriesType;
-  TerritorioResidenciasVisitas: {
-    idCasa: string;
-    idTerritorio: string;
-    idPredio: string;
-  };
-  TerritorioResidenciaNovaVisita: {
-    idCasa: string;
-    idTerritorio: string;
-    idPredio: string;
-  };
+  TerritorioResidencias: CustomTerritoriesType;
+  TerritorioResidenciasVisitas: { residenciaId: string; territoryId: string };
+  TerritorioResidenciaNovaVisita: { residenciaId: string; territoryId: string };
   TerritorioResidenciaEditarVisita: {
     idVisita: string;
-    idCasa: string;
-    idTerritorio: string;
-    idPredio: string;
+    residenciaId: string;
+    territorioId: string;
   };
-  TerritorioInformacao: { idTerritorio: string };
+  TerritorioInformacao: { territorioId: string };
   Relatorios: undefined;
   RelatorioMes: { mesAno: string; mesAnoFormatado?: string };
   RelatorioDetalhes: ReportType;
@@ -170,8 +161,8 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
         />
 
         <Screen
-          name="TerritorioGrupos"
-          component={TerritorioGrupos}
+          name="TerritorioResidencias"
+          component={TerritorioResidencias}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 

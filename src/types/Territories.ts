@@ -1,12 +1,12 @@
 import { VisitsType } from "./Visits";
 
-export type TerritorioType = {
-  idTerritorio: string;
+export type TerritoriesType = {
+  id: string;
   nome: string;
   ordenacao?: TerritoryOrderingType;
   disposicao?: TerritoryDispositionType;
   informacoes: TerritoryInfoType;
-  predio: TerritorioPredioType[];
+  casas: TerritoryHomeType[];
 };
 
 export type TerritoryInfoType = {
@@ -16,14 +16,8 @@ export type TerritoryInfoType = {
   ultimaVisita: string;
 };
 
-export type TerritorioPredioType = {
-  idPredio: string;
-  posicao: number;
-  casas: TerritorioCasaType[];
-};
-
-export type TerritorioCasaType = {
-  idCasa: string;
+export type TerritoryHomeType = {
+  id: string;
   nome: string;
   nomeMorador: string;
   posicao: number;

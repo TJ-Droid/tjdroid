@@ -199,8 +199,7 @@
         "input_placeholder": "Digite aquí:",
         "empty_error_message": "¡El campo no puede estar vacío!",
         "less_than_1_error_message": "El campo no puede ser menor que 1",
-        "more_than_100_error_message": "Añadir 100 casas a la vez",
-        "first_value_must_be_greater_than_second_message": "El segundo valor debe ser mayor que el primero."
+        "more_than_100_error_message": "El campo no puede ser mayor que 100"
       },
       "visitbox": {
         "input_placeholder": "Ingrese su comentario:"

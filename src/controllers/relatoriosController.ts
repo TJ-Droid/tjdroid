@@ -78,7 +78,7 @@ export default async function buscarAnosServico() {
           // data_MMMMyy: moment(new Date()).format("MMMM yy"),
           data_YYYYMMDD: parseInt(moment(new Date()).format("YYYYMMDD")),
           data_YYYYMM: parseInt(moment(new Date()).format("YYYYMM")),
-          idRelatorio: uuidv4(),
+          id: uuidv4(),
           data: moment(moment(new Date()).format("YYYY-MM-DD HH:mm")).format(),
           colocacoes: 0,
           videosMostrados: 0,
@@ -484,7 +484,7 @@ export async function editarRelatorio(relatorio: ReportCounterType) {
         "@tjdroid:relatorios"
       );
       let indexEncontrado = todosRelatorios.findIndex(
-        (item) => item.idRelatorio == relatorio.idRelatorioContador
+        (item) => item.id == relatorio.id
       );
       todosRelatorios[indexEncontrado] = atualRelatorio;
 
@@ -513,7 +513,7 @@ export async function editarRelatorio(relatorio: ReportCounterType) {
   ).format();
 
   const atualRelatorio = {
-    idRelatorio: relatorio.idRelatorioContador,
+    id: relatorio.id,
     data: dataRelatorio,
     minutos: relatorio.minutos,
     colocacoes: relatorio.colocacoes,
@@ -577,7 +577,7 @@ export async function salvarNovoRelatorio(relatorio: ReportCounterType) {
   ).format();
 
   const novoRelatorio = {
-    idRelatorio: uuidv4(),
+    id: uuidv4(),
     data: dataRelatorio,
     minutos: relatorio.minutos,
     colocacoes: relatorio.colocacoes,
@@ -601,7 +601,7 @@ export async function deletarRelatorio(
       );
 
       let indexEncontrado = todosRelatorios.findIndex(
-        (item) => item.idRelatorio == idRelatorio
+        (item) => item.id == idRelatorio
       );
       todosRelatorios.splice(indexEncontrado, 1);
 

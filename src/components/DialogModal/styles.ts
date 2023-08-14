@@ -1,15 +1,13 @@
 import styled from "styled-components/native";
 import Dialog from "react-native-dialog";
 
-export const StyledDialogContainer = styled(Dialog.Container).attrs(
-  ({ theme }) => ({
-    contentStyle: {
-      backgroundColor: `${theme.color.dialog_modal_bg}`,
-      borderWidth: 1,
-      borderColor: `${theme.color.primary}40`,
-    },
-  })
-)``;
+export const StyledDialogContainer = styled(Dialog.Container).attrs(({ theme }) => ({
+  contentStyle: {
+    backgroundColor: `${theme.color.dialog_modal_bg}`,
+    borderWidth: 1,
+    borderColor: `${theme.color.primary}40`,
+  },
+}))``;
 
 export const StyledDialogTitle = styled(Dialog.Title)`
   font-size: 22px;
@@ -17,7 +15,7 @@ export const StyledDialogTitle = styled(Dialog.Title)`
   font-weight: bold;
 `;
 
-export const StyledDialogInput1 = styled(Dialog.Input).attrs(({ theme }) => ({
+export const StyledDialogInput = styled(Dialog.Input).attrs(({ theme }) => ({
   wrapperStyle: {
     borderWidth: 1,
     borderRadius: 4,
@@ -25,36 +23,6 @@ export const StyledDialogInput1 = styled(Dialog.Input).attrs(({ theme }) => ({
     paddingTop: 3,
     lineHeight: 30,
     borderColor: `${theme.color.text_secondary}40`,
-  },
-}))`
-  color: ${({ theme }) => theme.color.text_primary};
-  font-size: 18px;
-`;
-
-export const StyledDialogInput2 = styled(Dialog.Input).attrs(({ theme }) => ({
-  wrapperStyle: {
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 10,
-    paddingTop: 3,
-    lineHeight: 30,
-    borderColor: `${theme.color.text_secondary}40`,
-    flex: 1,
-  },
-}))`
-  color: ${({ theme }) => theme.color.text_primary};
-  font-size: 18px;
-`;
-
-export const StyledDialogInput3 = styled(Dialog.Input).attrs(({ theme }) => ({
-  wrapperStyle: {
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 10,
-    paddingTop: 3,
-    lineHeight: 30,
-    borderColor: `${theme.color.text_secondary}40`,
-    flex: 1,
   },
 }))`
   color: ${({ theme }) => theme.color.text_primary};

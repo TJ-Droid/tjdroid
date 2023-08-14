@@ -22,14 +22,14 @@ export default function PessoaNovaVisita({ route }: Props) {
 
   const [novaVisitaPessoa, setNovaVisitaPessoa] = useState<VisitDataType>({
     idPessoa: personId,
-    idVisita: "",
-    data: formatISO(new Date()),
     dia: format(new Date(), "dd/MM/yyyy"),
     hora: format(new Date(), "HH:mm"),
     visita: 0,
     colocacoes: 0,
     videosMostrados: 0,
     anotacoes: "",
+    data: formatISO(new Date()),
+    idVisita: "",
   });
 
   return (

@@ -231,14 +231,14 @@ export default function PessoaVisitas({ route, navigation }: Props) {
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate("PessoaEditarVisita", {
-          idVisita: item.idVisita,
-          idPessoa: allVisitasPessoas?.idPessoa,
+          idVisita: item.id,
+          idPessoa: allVisitasPessoas?.id,
         })
       }
       onLongPress={() =>
         alertaDeletarVisitaPessoa({
-          idVisita: item.idVisita,
-          idPessoa: allVisitasPessoas?.idPessoa,
+          idVisita: item.id,
+          idPessoa: allVisitasPessoas?.id,
         })
       }
     >
@@ -275,8 +275,8 @@ export default function PessoaVisitas({ route, navigation }: Props) {
       <Header
         title={t("screens.pessoasvisitas.screen_name")}
         showGoBackPersons
-        showDeletePerson={{ personId: allVisitasPessoas.idPessoa }}
-        showAddPersonVisit={{ personId: allVisitasPessoas.idPessoa }}
+        showDeletePerson={{ personId: allVisitasPessoas.id }}
+        showAddPersonVisit={{ personId: allVisitasPessoas.id }}
       />
 
       <DialogModal
@@ -287,7 +287,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           "screens.pessoasvisitas.alert_change_person_name_message"
         )}
         dialogFunction={(personName) =>
-          handleChangePersonName(personName, allVisitasPessoas.idPessoa)
+          handleChangePersonName(personName, allVisitasPessoas.id)
         }
         dialogCloseFunction={() => handleCancelDialog()}
       />
@@ -307,7 +307,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           data={allVisitasPessoas.visitas}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}
-          keyExtractor={(item) => item.idVisita.toString()}
+          keyExtractor={(item) => item.id.toString()}
         />
       )}
     </Container>
