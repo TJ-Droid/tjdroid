@@ -33,7 +33,7 @@ When you're finish a change, create a pull request, also known as a PR.
 
 You will want to prefix the name of your PR with the category it falls under:
 
-- [FEAT] Feature or enhancment
+- [FEAT] Feature or enhancement
 - [CHORE] Admin type work (scripts, documentation etc)
 - [FIX] A bug fix
 
