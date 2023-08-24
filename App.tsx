@@ -13,8 +13,10 @@ const prefix = Linking.createURL("/");
 
 // import Constants from 'expo-constants';
 import * as Notifications from "expo-notifications";
-import { EventType, ParsedURL } from "expo-linking";
+import { ParsedURL } from "expo-linking";
 import { ThemeColors, ThemeType } from "./src/types/Theme";
+import { Platform } from "react-native";
+import * as Device from "expo-device";
 
 // Configurações do Push Notification
 Notifications.setNotificationHandler({
@@ -34,15 +36,12 @@ export default function App() {
 }
 
 const AppWrapper: React.FC = () => {
-  // const notificationListener = useRef();
-  // const responseListener = useRef();
-
   // THEME STATE CONTEXT
   const { setActualTheme, actualTheme } = useThemeContext();
 
   // // Estado relacionados ao push
-  // const [expoPushToken, setExpoPushToken] = useState('');
-  // const [notification, setNotification] = useState(false);
+  const notificationListener = useRef<any>(null);
+  const responseListener = useRef<any>(null);
 
   const [isReady, setIsReady] = useState(false);
   // const [actualTheme, setActualTheme] = useState<ThemeType>(
@@ -88,32 +87,33 @@ const AppWrapper: React.FC = () => {
     }
 
     // Lida com o Deep link do app
-    Linking.addEventListener("url", handleDeepLink);
+    // Linking.addEventListener("url", handleDeepLink);
 
     if (!linkData) {
       getInitialURL();
     }
 
-    // // CONFIGURAÇÕES DO PUSH NOTIFICATION
-    // // Pega o token do push
-    // registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    // CONFIGURAÇÕES DO PUSH NOTIFICATION
+    // Pega o token do push
+    registerForPushNotificationsAsync().then((token) => {});
+    // setExpoPushToken(token)
 
-    // notificationListener.current =
-    //   Notifications.addNotificationReceivedListener((notification) => {
-    //     // setNotification(notification);
-    //   });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        // setNotification(notification);
+      });
 
-    // // Pega o retorno do clique no push
-    // responseListener.current =
-    //   Notifications.addNotificationResponseReceivedListener((response) => {
-    //     // console.log('Push clicado-aberto');
-    //     // navigation.navigate('Cronometro');
-    //     Linking.openURL(
-    //       `${[prefix]}${
-    //         response.notification.request.content.data.deepLinkPage
-    //       }`
-    //     );
-    //   });
+    // Pega o retorno do clique no push
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        // console.log('Push clicado-aberto');
+        // navigation.navigate('Cronometro');
+        // Linking.openURL(
+        //   `${[prefix]}${
+        //     response.notification.request.content.data.deepLinkPage
+        //   }`
+        // );
+      });
 
     return () => {
       // Linking.removeEventListener("url", linkData);
@@ -125,10 +125,10 @@ const AppWrapper: React.FC = () => {
     };
   }, []);
 
-  function handleDeepLink(event: EventType) {
-    let data = Linking.parse(event.url);
-    setLinkData(data);
-  }
+  // function handleDeepLink(event: EventType) {
+  //   let data = Linking.parse(event.url);
+  //   setLinkData(data);
+  // }
 
   // Controls theme selection
   const handleSwicthTheme = (valor: ThemeType) => {
@@ -150,34 +150,39 @@ const AppWrapper: React.FC = () => {
     </ThemeProvider>
   );
 };
+async function registerForPushNotificationsAsync() {
+  let token;
 
-// async function registerForPushNotificationsAsync() {
-//   let token;
-//   if (Constants.isDevice) {
-//     const { status: existingStatus } = await Notifications.getPermissionsAsync();
-//     let finalStatus = existingStatus;
-//     if (existingStatus !== 'granted') {
-//       const { status } = await Notifications.requestPermissionsAsync();
-//       finalStatus = status;
-//     }
-//     if (finalStatus !== 'granted') {
-//       // console.log('Failed to get push token for push notification!');
-//       return;
-//     }
-//     token = (await Notifications.getExpoPushTokenAsync()).data;
-//   } else {
-//     // console.log('Must use physical device for Push Notifications');
-//   }
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
 
-//   if (Platform.OS === 'android') {
-//     Notifications.setNotificationChannelAsync('default', {
-//       name: 'default',
-//       importance: Notifications.AndroidImportance.MAX,
-//       lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
-//       vibrationPattern: [0, 250, 250, 250],
-//       lightColor: '#00ff00',
-//     });
-//   }
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      console.log("Failed to get push token for push notification!");
+      return;
+    }
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "c3a50ca6-47e0-48f7-83a6-d0425212d430",
+      })
+    ).data;
+    // console.log(token);
+  } else {
+    console.log("Must use physical device for Push Notifications");
+  }
 
-//   return token;
-// }
+  return token;
+}

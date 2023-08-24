@@ -5,7 +5,12 @@ import RNFS, {
 import i18next from "i18next";
 import { zip, unzip } from "react-native-zip-archive";
 
-import { PermissionsAndroid, ToastAndroid, Alert } from "react-native";
+import {
+  PermissionsAndroid,
+  ToastAndroid,
+  Alert,
+  Platform,
+} from "react-native";
 import * as Device from "expo-device";
 import * as DocumentPicker from "expo-document-picker";
 import * as Sharing from "expo-sharing";
@@ -74,6 +79,7 @@ function errorAlert(errorMessage = null) {
 export async function generateManualBackup() {
   getPermissionWhiteExternalStorage().then((permissionResponse) => {
     // Confere se o usuario permitiu salvar nos Downloads
+    console.log("permissionResponse: ", permissionResponse);
     if (permissionResponse)
       createBackupFolder()
         .then(() => {
@@ -142,18 +148,21 @@ export async function generateManualBackup() {
 
 // Função restaurar o .zip do backup manual
 export async function restoreManualBackup() {
-  await DocumentPicker.getDocumentAsync({ type: "application/zip" }).then(
-    (result) => {
-      if (result.type === "cancel") {
-        // console.log("Nenhum documento selecionado!");
-        return;
-      }
+  await DocumentPicker.getDocumentAsync({
+    type: "application/zip",
+    multiple: false,
+  }).then((result) => {
+    if (result.canceled) {
+      // console.log("Nenhum documento selecionado!");
+      return;
+    }
 
+    if (result.assets.length === 1) {
       // Passos para restaurar o backup
       createBackupFolder()
         .then((cbfResponse) => {
           if (cbfResponse)
-            unzipBackupFolderURI(result.uri).then((unzipResponse) => {
+            unzipBackupFolderURI(result.assets[0].uri).then((unzipResponse) => {
               if (unzipResponse)
                 restoreBackupToAsyncStorage().then(() => {
                   ToastAndroid.show(
@@ -169,7 +178,7 @@ export async function restoreManualBackup() {
           // console.log("101:", err);
         });
     }
-  );
+  });
 
   // Adiciona o evento ao Analytics
   await analyticsCustomEvent("backupmanual_restaurar");
@@ -189,9 +198,14 @@ export const shareBackupFile = async () => {
 
 // Permissão para pedir o acesso a pasta Downloads
 export const getPermissionWhiteExternalStorage = async () => {
+  if (parseInt(`${Platform.Version}`) >= 33) {
+    return true;
+  }
+
   const granted = await PermissionsAndroid.request(
     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
   );
+
   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
     // console.log("Permissão garantida!");
     return true;

@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { ToastAndroid, AppState, Alert, Linking, View } from "react-native";
+import {
+  ToastAndroid,
+  AppState,
+  Alert,
+  Linking,
+  View,
+  AppStateStatus,
+} from "react-native";
 import {
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -266,7 +273,7 @@ export default function CronometroComp() {
     verificaContadorIniciado();
 
     // Verifica o estado da aplicação para controlar o contador
-    const handleAppStateChange = async (nextAppState: any) => {
+    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
       // console.log('entrouhandle');
       if (
         appState.current.match(/inactive|background/) &&
@@ -329,8 +336,14 @@ export default function CronometroComp() {
 
     AppState.addEventListener("change", handleAppStateChange);
 
+    const subscriptionAppState = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
     return () => {
-      AppState.removeEventListener("change", handleAppStateChange);
+      subscriptionAppState.remove();
+      // AppState.removeEventListener("change", handleAppStateChange);
       clearTimeout(timerBotaoPrecionado);
     };
   }, []);
