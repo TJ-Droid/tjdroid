@@ -145,11 +145,12 @@ const AppWrapper: React.FC = () => {
   return (
     <ThemeProvider theme={actualTheme ?? themes.azulEscuroDefault}>
       <ReactNativePaperProvider>
-        <Routes deepLinkingProp={linking} />
+        <Routes />
       </ReactNativePaperProvider>
     </ThemeProvider>
   );
 };
+
 async function registerForPushNotificationsAsync() {
   let token;
 
