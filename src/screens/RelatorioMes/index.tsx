@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, Alert, ToastAndroid } from "react-native";
 import {
+  SafeAreaView,
+  View,
+  Alert,
+  ToastAndroid,
   FlatList,
   TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+} from "react-native";
+
 import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 

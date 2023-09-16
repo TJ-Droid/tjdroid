@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 
 export const TopSectionContainer = styled.View`
   padding: 20px 15px;

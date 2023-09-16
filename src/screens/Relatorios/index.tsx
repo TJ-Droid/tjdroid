@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { SectionList, ToastAndroid, Alert } from "react-native";
+import {
+  SectionList,
+  ToastAndroid,
+  Alert,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
 import { StackScreenProps } from "@react-navigation/stack";

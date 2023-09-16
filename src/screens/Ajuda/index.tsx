@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Linking, SafeAreaView, ScrollView } from "react-native";
 import {
+  Linking,
+  SafeAreaView,
+  ScrollView,
   TouchableHighlight,
   TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+} from "react-native";
+
 import { useTranslation } from "react-i18next";
 import Accordion from "react-native-collapsible/Accordion";
 

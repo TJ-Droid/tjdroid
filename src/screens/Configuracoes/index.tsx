@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Linking, ToastAndroid } from "react-native";
-import { Switch } from "react-native-gesture-handler";
+import { Text, Linking, ToastAndroid, Switch } from "react-native";
 import Rate, { AndroidMarket } from "react-native-rate";
 import { useThemeContext } from "../../contexts/Theme";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -594,7 +593,7 @@ export default function Configuracoes({ navigation }: Props) {
                 <ItemListTextDescription
                   onPress={() => setObgEscondido((o) => o + 1)}
                 >
-                  {t("screens.configuracoes.version")} 1.1.9
+                  {t("screens.configuracoes.version")} 1.2.0
                 </ItemListTextDescription>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>

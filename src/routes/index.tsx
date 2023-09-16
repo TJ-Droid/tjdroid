@@ -3,7 +3,7 @@ import {
   NavigationContainer,
   NavigationContainerRef,
 } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import analytics from "@react-native-firebase/analytics";
 import { useTranslation } from "react-i18next";
 
@@ -34,7 +34,7 @@ import { ReportType } from "../types/Reports";
 import { CustomTerritoriesType } from "../controllers/territoriosController";
 
 type RoutesTypeProps = {
-  deepLinkingProp: any;
+  // deepLinkingProp: any;
   actualTheme?: ThemeColors;
 };
 
@@ -73,17 +73,18 @@ export interface RootStackParamListType
   Configuracoes: undefined;
 }
 
-const { Navigator, Screen } = createStackNavigator<RootStackParamListType>();
+const Stack = createNativeStackNavigator<RootStackParamListType>();
 
-export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
+export default function Routes({}: RoutesTypeProps) {
   const routeNameRef = React.useRef<string | undefined>(undefined);
-  const navigationRef = React.useRef<NavigationContainerRef>(null);
+  const navigationRef =
+    React.useRef<NavigationContainerRef<RootStackParamListType>>(null);
 
   const { t } = useTranslation();
 
   return (
     <NavigationContainer
-      linking={deepLinkingProp}
+      // linking={deepLinkingProp}
       ref={navigationRef}
       onReady={() => {
         routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name;
@@ -101,14 +102,24 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
         }
         routeNameRef.current = currentRouteName;
       }}
+      // theme={{
+      //   dark: true,
+      //   colors: {
+      //     background: "#000000",
+      //     border: "",
+      //     card: "",
+      //     notification: "",
+      //     primary: "",
+      //     text: "",
+      //   },
+      // }}
     >
-      <Navigator
+      <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          // cardStyle: { backgroundColor: ThemeContext._currentValue.color.bg},
         }}
       >
-        <Screen
+        <Stack.Screen
           name="Home"
           component={Home}
           options={{
@@ -118,79 +129,79 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
           }}
         />
 
-        <Screen
+        <Stack.Screen
           name="Cronometro"
           component={Cronometro}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="CronometroParado"
           component={CronometroParado}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="Pessoas"
           component={Pessoas}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="PessoaVisitas"
           component={PessoaVisitas}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="PessoaEditarVisita"
           component={PessoaEditarVisita}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="PessoaNovaVisita"
           component={PessoaNovaVisita}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="Territorios"
           component={Territorios}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="TerritorioResidencias"
           component={TerritorioResidencias}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="TerritorioResidenciasVisitas"
           component={TerritorioResidenciasVisitas}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="TerritorioResidenciaNovaVisita"
           component={TerritorioResidenciaNovaVisita}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="TerritorioResidenciaEditarVisita"
           component={TerritorioResidenciaEditarVisita}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="TerritorioInformacao"
           component={TerritorioInformacao}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="Relatorios"
           component={Relatorios}
           options={{
@@ -203,25 +214,25 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
           }}
         />
 
-        <Screen
+        <Stack.Screen
           name="RelatorioMes"
           component={RelatorioMes}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="RelatorioDetalhes"
           component={RelatorioDetalhes}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="RelatorioAdicionar"
           component={RelatorioAdicionar}
           options={{ headerShown: false }} // Essa screen usa o Header no proprio componente
         />
 
-        <Screen
+        <Stack.Screen
           name="Ajuda"
           component={Ajuda}
           options={{
@@ -231,7 +242,7 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
           }}
         />
 
-        <Screen
+        <Stack.Screen
           name="Backup"
           component={Backup}
           options={{
@@ -241,7 +252,7 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
           }}
         />
 
-        <Screen
+        <Stack.Screen
           name="Configuracoes"
           component={Configuracoes}
           options={{
@@ -253,7 +264,7 @@ export default function Routes({ deepLinkingProp }: RoutesTypeProps) {
             ),
           }}
         />
-      </Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

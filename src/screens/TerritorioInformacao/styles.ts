@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 
 export const TopSectionContainer = styled.View`
   padding: 10px 15px;

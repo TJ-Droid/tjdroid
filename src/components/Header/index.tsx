@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, View, Share, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import { Menu, Divider } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 

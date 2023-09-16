@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { Alert, ToastAndroid, TouchableOpacity } from "react-native";
 import {
+  Alert,
+  ToastAndroid,
+  TouchableOpacity,
   FlatList,
   TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+} from "react-native";
+
 import { useTranslation } from "react-i18next";
 
 import moment from "moment/min/moment-with-locales";

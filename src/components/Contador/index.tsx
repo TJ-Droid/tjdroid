@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { format, parseISO, formatISO } from "date-fns";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";
 

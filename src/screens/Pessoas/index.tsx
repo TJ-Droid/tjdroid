@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { View, Alert, ToastAndroid } from "react-native";
 import {
+  View,
+  Alert,
+  ToastAndroid,
   FlatList,
   TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+} from "react-native";
+
 import { useTranslation } from "react-i18next";
 
 import Header from "../../components/Header";

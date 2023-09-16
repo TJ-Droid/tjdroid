@@ -7,11 +7,10 @@ import {
   Linking,
   View,
   AppStateStatus,
-} from "react-native";
-import {
   TouchableOpacity,
   TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+} from "react-native";
+
 import {
   salvarAsyncStorage,
   buscarAsyncStorage,

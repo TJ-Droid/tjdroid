@@ -8,11 +8,9 @@ import {
   Text,
   Dimensions,
   Pressable,
-} from "react-native";
-import {
   FlatList,
   TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+} from "react-native";
 
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
