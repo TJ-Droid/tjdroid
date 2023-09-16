@@ -10,7 +10,7 @@
     "gc": "cd android && ./gradlew clean && cd ..",
     "release": "yarn android --variant=release",
     "apk": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
-    "bundle": "cd android && ./gradlew clean && ./gradlew bundleRelease"
+    "bundle": "cd android && ./gradlew clean && ./gradlew bundleRelease && cd .."
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",
