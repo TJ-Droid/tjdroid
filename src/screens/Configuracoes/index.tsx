@@ -54,6 +54,9 @@ export default function Configuracoes({ navigation }: Props) {
     azulClaro: false,
     preto: false,
     marsala: false,
+    vermelho: false,
+    gold: false,
+    violeta: false,
   });
   const [configuracoes, setConfiguracoes] =
     useState<ThemeConfiguracoesScreenType>({
@@ -209,6 +212,9 @@ export default function Configuracoes({ navigation }: Props) {
           azulClaro: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "verde":
@@ -221,6 +227,9 @@ export default function Configuracoes({ navigation }: Props) {
           azulClaro: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "roxo":
@@ -233,6 +242,9 @@ export default function Configuracoes({ navigation }: Props) {
           azulClaro: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "laranja":
@@ -245,6 +257,9 @@ export default function Configuracoes({ navigation }: Props) {
           azulClaro: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "rosa":
@@ -257,6 +272,9 @@ export default function Configuracoes({ navigation }: Props) {
           azulClaro: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "azulClaro":
@@ -269,6 +287,9 @@ export default function Configuracoes({ navigation }: Props) {
           rosa: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "preto":
@@ -281,6 +302,9 @@ export default function Configuracoes({ navigation }: Props) {
           rosa: false,
           azulClaro: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
       case "marsala":
@@ -293,6 +317,54 @@ export default function Configuracoes({ navigation }: Props) {
           rosa: false,
           azulClaro: false,
           marsala: true,
+          vermelho: false,
+          gold: false,
+          violeta: false,
+        });
+        break;
+      case "vermelho":
+        setTemaLocal({
+          preto: false,
+          azulEscuroDefault: false,
+          verde: false,
+          roxo: false,
+          laranja: false,
+          rosa: false,
+          azulClaro: false,
+          marsala: false,
+          vermelho: true,
+          gold: false,
+          violeta: false,
+        });
+        break;
+      case "gold":
+        setTemaLocal({
+          preto: false,
+          azulEscuroDefault: false,
+          verde: false,
+          roxo: false,
+          laranja: false,
+          rosa: false,
+          azulClaro: false,
+          marsala: false,
+          vermelho: false,
+          gold: true,
+          violeta: false,
+        });
+        break;
+      case "violeta":
+        setTemaLocal({
+          preto: false,
+          azulEscuroDefault: false,
+          verde: false,
+          roxo: false,
+          laranja: false,
+          rosa: false,
+          azulClaro: false,
+          marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: true,
         });
         break;
       default:
@@ -305,6 +377,9 @@ export default function Configuracoes({ navigation }: Props) {
           azulClaro: false,
           preto: false,
           marsala: false,
+          vermelho: false,
+          gold: false,
+          violeta: false,
         });
         break;
     }
@@ -382,6 +457,18 @@ export default function Configuracoes({ navigation }: Props) {
                     )}
                   />
                   <ItemListBoxButtonCircleColor
+                    bgColor="#2DA0E1"
+                    onPress={() => salvarTema("azulClaro")}
+                    selected={temaLocal.azulClaro}
+                    accessible={true}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_lightblue"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_lightblue"
+                    )}
+                  />
+                  <ItemListBoxButtonCircleColor
                     bgColor="#50B87C"
                     onPress={() => salvarTema("verde")}
                     selected={temaLocal.verde}
@@ -406,6 +493,18 @@ export default function Configuracoes({ navigation }: Props) {
                     )}
                   />
                   <ItemListBoxButtonCircleColor
+                    bgColor="#D4AF37"
+                    onPress={() => salvarTema("gold")}
+                    selected={temaLocal.gold}
+                    accessible={true}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_gold"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_gold"
+                    )}
+                  />
+                  <ItemListBoxButtonCircleColor
                     bgColor="#EC6FAB"
                     onPress={() => salvarTema("rosa")}
                     selected={temaLocal.rosa}
@@ -418,15 +517,15 @@ export default function Configuracoes({ navigation }: Props) {
                     )}
                   />
                   <ItemListBoxButtonCircleColor
-                    bgColor="#2DA0E1"
-                    onPress={() => salvarTema("azulClaro")}
-                    selected={temaLocal.azulClaro}
+                    bgColor="#C94040"
+                    onPress={() => salvarTema("vermelho")}
+                    selected={temaLocal.vermelho}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_lightblue"
+                      "screens.configuracoes.color_accessibility_label_vermelho"
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_lightblue"
+                      "screens.configuracoes.color_accessibility_hint_vermelho"
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -439,6 +538,18 @@ export default function Configuracoes({ navigation }: Props) {
                     )}
                     accessibilityHint={t(
                       "screens.configuracoes.color_accessibility_hint_marsala"
+                    )}
+                  />
+                  <ItemListBoxButtonCircleColor
+                    bgColor="#6B52D7"
+                    onPress={() => salvarTema("violeta")}
+                    selected={temaLocal.violeta}
+                    accessible={true}
+                    accessibilityLabel={t(
+                      "screens.configuracoes.color_accessibility_label_violeta"
+                    )}
+                    accessibilityHint={t(
+                      "screens.configuracoes.color_accessibility_hint_violeta"
                     )}
                   />
                   <ItemListBoxButtonCircleColor
