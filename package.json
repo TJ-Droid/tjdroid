@@ -9,8 +9,8 @@
     "web": "expo start --web",
     "gc": "cd android && ./gradlew clean && cd ..",
     "release": "yarn android --variant=release",
-    "apk": "cd android && TERM=cygwin ./gradlew clean && ./gradlew assembleRelease && cd ..",
-    "bundle": "cd android && TERM=cygwin  ./gradlew clean && ./gradlew bundleRelease"
+    "apk": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
+    "bundle": "cd android && ./gradlew clean && ./gradlew bundleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",
