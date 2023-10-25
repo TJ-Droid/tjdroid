@@ -48,6 +48,7 @@ If you want to help with translation to your language, please use [the link belo
   * Евгений Пудовкин
   * Igor Toporov
   * Maksimon
+  * Юрий Яковлев
 * #### Polish
   * Piotr Stefański
   * Robert Skorupa
