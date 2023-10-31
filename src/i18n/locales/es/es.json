@@ -58,8 +58,11 @@
         "color_accessibility_label_black": "Tema de color negro",
         "color_accessibility_hint_black": "Cambiar el tema de la aplicación a color negro",
         "error_save_theme": "¡Error al guardar el tema, inténtalo de nuevo!",
+        "error_save_simplified_report": "Error al guardar el informe simplificado, ¡inténtalo de nuevo!",
         "error_load_configs": "Error al cargar la configuración, inténtalo de nuevo.",
-        "hide_message": "¡Gracias por usar la aplicación!"
+        "hide_message": "¡Gracias por usar la aplicación!",
+        "simplified_report_title": "Informe simplificado",
+        "simplified_report_description": "Al habilitar esta opción se ocultarán las revisitas, las colocaciones y los videos en los informes compartidos."
       },
       "pessoas": {
         "screen_name": "Personas",
@@ -103,13 +106,16 @@
         "month_report_deleted_message_success": "¡Los informes mensuales se eliminaron correctamente!",
         "month_report_deleted_message_error": "¡Error al eliminar los informes de este mes!",
         "actual_month_report_delete_message_error": "¡No se pueden eliminar los informes del mes actual!",
-        "month_report_load_error_message": "¡Error al obtener los datos de este mes!"
+        "month_report_load_error_message": "¡Error al obtener los datos de este mes!",
+        "worked_month_description": "¿Participé en algún tipo de ministerio durante el mes?"
       },
       "relatorios": {
         "screen_name": "Informes",
         "screen_empty_title": "¡No se encontraron informes!",
         "screen_empty_message": "Agregue una actividad con el temporizador para que aparezca aquí",
-        "reports_load_message_error": "No se han podido obtener los informes. Inténtelo de nuevo."
+        "reports_load_message_error": "No se han podido obtener los informes. Inténtelo de nuevo.",
+        "menu_month_report": "Informe",
+        "menu_month_report_with_hours": "Informe con horas"
       },
       "territorioinformacao": {
         "territory_description_placeholder": "Ingrese su comentario:",

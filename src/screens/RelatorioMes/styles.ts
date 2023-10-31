@@ -101,3 +101,18 @@ export const ItemListBottomContentText = styled.Text`
   font-size: 14px;
   color: ${({ theme }) => theme.color.text_secondary}70;
 `;
+
+export const StyledContainerWorkedMonth = styled.View`
+  flex-direction: row;
+  align-items: center;
+  border-top-width: 1px;
+  border-top-color: ${({ theme }) => theme.color.primary}20;
+  padding-top: 12px;
+  margin-top: 10px;
+`;
+
+export const StyledContainerWorkedMonthText = styled.Text`
+  font-size: 15px;
+  padding-right: 10px;
+  color: ${({ theme }) => theme.color.text_primary};
+`;

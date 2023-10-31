@@ -7,3 +7,5 @@ export type ReportType = {
   revisitas: number;
   anotacoes: string;
 };
+
+export type MesesTrabalhadosType = string;

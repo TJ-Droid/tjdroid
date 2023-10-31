@@ -58,8 +58,11 @@
         "color_accessibility_label_black": "Czarny motyw",
         "color_accessibility_hint_black": "Zmienia motyw aplikacji na czarny kolor",
         "error_save_theme": "Błąd podczas zapisywania motywu, spróbuj ponownie!",
+        "error_save_simplified_report": "Błąd podczas zapisywania uproszczonego raportu. Spróbuj ponownie!",
         "error_load_configs": "Błąd ładowania ustawień, spróbuj ponownie!",
-        "hide_message": "Dzięki za korzystanie z aplikacji!"
+        "hide_message": "Dzięki za korzystanie z aplikacji!",
+        "simplified_report_title": "Uproszczony raport",
+        "simplified_report_description": "Włączenie tej opcji spowoduje ukrycie ponownych wizyt, miejsc docelowych i filmów w udostępnianych raportach."
       },
       "pessoas": {
         "screen_name": "Osoby",
@@ -103,13 +106,16 @@
         "month_report_deleted_message_success": "Sprawozdanie miesięczne usunięte pomyślnie!",
         "month_report_deleted_message_error": "Błąd podczas usuwania sprawozdania z tego miesiąca!",
         "actual_month_report_delete_message_error": "Nie można usunąć sprawozdania z bieżącego miesiąca!",
-        "month_report_load_error_message": "Błąd podczas wyszukiwania danych w tym miesiącu!"
+        "month_report_load_error_message": "Błąd podczas wyszukiwania danych w tym miesiącu!",
+        "worked_month_description": "Czy w ciągu miesiąca uczestniczyłem w jakiejkolwiek służbie?"
       },
       "relatorios": {
         "screen_name": "Sprawozdania",
         "screen_empty_title": "Nie znaleziono sprawozdań!",
         "screen_empty_message": "Dodaj aktywność za pomocą Chronometru, aby pojawiła się tutaj",
-        "reports_load_message_error": "Błąd podczas pobierania sprawozdań. Spróbuj ponownie!"
+        "reports_load_message_error": "Błąd podczas pobierania sprawozdań. Spróbuj ponownie!",
+        "menu_month_report": "Raport",
+        "menu_month_report_with_hours": "Raport z godzinami"
       },
       "territorioinformacao": {
         "territory_description_placeholder": "Krótki opis:",

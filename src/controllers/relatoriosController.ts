@@ -9,10 +9,10 @@ import {
   formatarLocale,
 } from "../utils/utils";
 // Sem este importacao a tela para
-import moment from "moment/min/moment-with-locales";
+import momentLocales from "moment/min/moment-with-locales";
 
 import minutes_to_hhmm from "../utils/minutes_to_hhmm";
-import { ReportType } from "../types/Reports";
+import { MesesTrabalhadosType, ReportType } from "../types/Reports";
 import { PeopleType } from "../types/People";
 import { ReportCounterType } from "../types/ReportCounter";
 
@@ -69,23 +69,25 @@ export default async function buscarAnosServico() {
       // Se o não existir nenhum relatório, adiciona o mês atual como opção
       if (todosRelatorios.length === 0) {
         todosRelatorios.push({
-          mes_formatado: moment(new Date())
+          mes_formatado: momentLocales(new Date())
             .locale(formatarLocale(appLanguage.language))
             .format("MMMM yy"),
-          mes: moment(new Date()).locale("pt").format("MMMM yy"),
+          mes: momentLocales(new Date()).locale("pt").format("MMMM yy"),
           minutos_formatados: "0:00",
           minutos: 0,
           // data_MMMMyy: moment(new Date()).format("MMMM yy"),
-          data_YYYYMMDD: parseInt(moment(new Date()).format("YYYYMMDD")),
-          data_YYYYMM: parseInt(moment(new Date()).format("YYYYMM")),
+          data_YYYYMMDD: parseInt(momentLocales(new Date()).format("YYYYMMDD")),
+          data_YYYYMM: parseInt(momentLocales(new Date()).format("YYYYMM")),
           id: uuidv4(),
-          data: moment(moment(new Date()).format("YYYY-MM-DD HH:mm")).format(),
+          data: momentLocales(
+            momentLocales(new Date()).format("YYYY-MM-DD HH:mm")
+          ).format(),
           colocacoes: 0,
           videosMostrados: 0,
           revisitas: 0,
           anotacoes: "",
-          data_M: parseInt(moment(new Date()).format("M")),
-          data_yy: parseInt(moment(new Date()).format("yy")),
+          data_M: parseInt(momentLocales(new Date()).format("M")),
+          data_yy: parseInt(momentLocales(new Date()).format("yy")),
         });
       }
 
@@ -95,27 +97,29 @@ export default async function buscarAnosServico() {
 
       let relatoriosOrdenados = todosRelatorios.sort(
         (a, b) =>
-          parseInt(moment(a.data).format("YYYYMMDD")) -
-          parseInt(moment(b.data).format("YYYYMMDD"))
+          parseInt(momentLocales(a.data).format("YYYYMMDD")) -
+          parseInt(momentLocales(b.data).format("YYYYMMDD"))
       );
 
       // Pega o primeiro e ultimo item do array de anos
       let dataPrimeiroRelatorio: number = parseInt(
-        moment([...relatoriosOrdenados].shift()?.data).format("YYYYMM")
+        momentLocales([...relatoriosOrdenados].shift()?.data).format("YYYYMM")
       );
       let dataUltimoRelatorio: number = parseInt(
-        moment([...relatoriosOrdenados].pop()?.data).format("YYYYMM")
+        momentLocales([...relatoriosOrdenados].pop()?.data).format("YYYYMM")
       );
 
       // Verifica se precisa adicionar o mes atual ou nao ao relatorio
-      let existeDataMesAtual = parseInt(moment(new Date()).format("YYYYMM"));
+      let existeDataMesAtual = parseInt(
+        momentLocales(new Date()).format("YYYYMM")
+      );
       if (existeDataMesAtual > dataUltimoRelatorio) {
         dataUltimoRelatorio = existeDataMesAtual;
       }
 
       // Busca os anos do relatórios
       todosRelatorios.map((relatorio) => {
-        todosAnos.push(parseInt(moment(relatorio.data).format("yy")));
+        todosAnos.push(parseInt(momentLocales(relatorio.data).format("yy")));
       });
 
       // Verifica todos os anos do relatorio e separa os unicos
@@ -147,18 +151,26 @@ export default async function buscarAnosServico() {
         (relatorio) => {
           return {
             data: relatorio.data,
-            data_YYYYMMDD: parseInt(moment(relatorio.data).format("YYYYMMDD")),
-            data_MMMMyy: moment(relatorio.data).locale("pt").format("MMMM yy"),
-            data_MMMM: moment(relatorio.data).locale("pt").format("MMMM"),
-            data_M: parseInt(moment(relatorio.data).format("M")),
-            data_yy: parseInt(moment(relatorio.data).format("yy")),
+            data_YYYYMMDD: parseInt(
+              momentLocales(relatorio.data).format("YYYYMMDD")
+            ),
+            data_MMMMyy: momentLocales(relatorio.data)
+              .locale("pt")
+              .format("MMMM yy"),
+            data_MMMM: momentLocales(relatorio.data)
+              .locale("pt")
+              .format("MMMM"),
+            data_M: parseInt(momentLocales(relatorio.data).format("M")),
+            data_yy: parseInt(momentLocales(relatorio.data).format("yy")),
             minutos: relatorio.minutos,
-            mes_formatado: moment(relatorio.data)
+            mes_formatado: momentLocales(relatorio.data)
               .locale(formatarLocale(appLanguage.language))
               .format("MMMM yy"),
-            mes: moment(relatorio.data).locale("pt").format("MMMM yy"),
+            mes: momentLocales(relatorio.data).locale("pt").format("MMMM yy"),
             minutos_formatados: minutes_to_hhmm(relatorio.minutos),
-            data_YYYYMM: parseInt(moment(relatorio.data).format("YYYYMM")),
+            data_YYYYMM: parseInt(
+              momentLocales(relatorio.data).format("YYYYMM")
+            ),
           };
         }
       );
@@ -203,19 +215,27 @@ export default async function buscarAnosServico() {
             }`;
 
             mesesCorrentes.push({
-              data: moment(mesAtualLocal).format(),
-              mes_formatado: moment(mesAtualLocal)
+              data: momentLocales(mesAtualLocal).format(),
+              mes_formatado: momentLocales(mesAtualLocal)
                 .locale(formatarLocale(appLanguage.language))
                 .format("MMMM yy"),
-              mes: moment(mesAtualLocal).locale("pt").format("MMMM yy"),
+              mes: momentLocales(mesAtualLocal).locale("pt").format("MMMM yy"),
               minutos_formatados: "0:00",
               minutos: 0,
-              data_YYYYMMDD: parseInt(moment(mesAtualLocal).format("YYYYMMDD")),
-              data_YYYYMM: parseInt(moment(mesAtualLocal).format("YYYYMM")),
-              data_M: parseInt(moment(mesAtualLocal).format("M")),
-              data_yy: parseInt(moment(mesAtualLocal).format("yy")),
-              data_MMMMyy: moment(mesAtualLocal).locale("pt").format("MMMM yy"),
-              data_MMMM: moment(mesAtualLocal).locale("pt").format("MMMM"),
+              data_YYYYMMDD: parseInt(
+                momentLocales(mesAtualLocal).format("YYYYMMDD")
+              ),
+              data_YYYYMM: parseInt(
+                momentLocales(mesAtualLocal).format("YYYYMM")
+              ),
+              data_M: parseInt(momentLocales(mesAtualLocal).format("M")),
+              data_yy: parseInt(momentLocales(mesAtualLocal).format("yy")),
+              data_MMMMyy: momentLocales(mesAtualLocal)
+                .locale("pt")
+                .format("MMMM yy"),
+              data_MMMM: momentLocales(mesAtualLocal)
+                .locale("pt")
+                .format("MMMM"),
             });
           }
 
@@ -225,7 +245,7 @@ export default async function buscarAnosServico() {
           }, 0);
 
           // Faz a separacao do ano de servico do ano atual
-          const mesNome = moment(mesesCorrentes[0].data).format("MM");
+          const mesNome = momentLocales(mesesCorrentes[0].data).format("MM");
 
           if (
             mesNome === "09" ||
@@ -235,23 +255,29 @@ export default async function buscarAnosServico() {
           ) {
             const mesCorrenteData = mesesCorrentes[0].data;
             mesesDepoisDeSetembroAnoAtual.unshift({
-              mes_formatado: moment(mesCorrenteData)
+              mes_formatado: momentLocales(mesCorrenteData)
                 .locale(formatarLocale(appLanguage.language))
                 .format("MMMM yy"),
-              mes: moment(mesCorrenteData).locale("pt").format("MMMM yy"),
-              minutos_formatados: minutes_to_hhmm(totalMinutosMes),
-              data_YYYYMMDD: parseInt(
-                moment(mesCorrenteData).format("YYYYMMDD")
-              ),
-              data_YYYYMM: parseInt(moment(mesCorrenteData).format("YYYYMM")),
-              minutos: totalMinutosMes,
-              data: mesCorrenteData,
-              data_M: parseInt(moment(mesCorrenteData).format("M")),
-              data_yy: parseInt(moment(mesCorrenteData).format("yy")),
-              data_MMMMyy: moment(mesCorrenteData)
+              mes: momentLocales(mesCorrenteData)
                 .locale("pt")
                 .format("MMMM yy"),
-              data_MMMM: moment(mesCorrenteData).locale("pt").format("MMMM"),
+              minutos_formatados: minutes_to_hhmm(totalMinutosMes),
+              data_YYYYMMDD: parseInt(
+                momentLocales(mesCorrenteData).format("YYYYMMDD")
+              ),
+              data_YYYYMM: parseInt(
+                momentLocales(mesCorrenteData).format("YYYYMM")
+              ),
+              minutos: totalMinutosMes,
+              data: mesCorrenteData,
+              data_M: parseInt(momentLocales(mesCorrenteData).format("M")),
+              data_yy: parseInt(momentLocales(mesCorrenteData).format("yy")),
+              data_MMMMyy: momentLocales(mesCorrenteData)
+                .locale("pt")
+                .format("MMMM yy"),
+              data_MMMM: momentLocales(mesCorrenteData)
+                .locale("pt")
+                .format("MMMM"),
             });
           } else {
             // mesesAntesDeSetembroAnoAtual.unshift({
@@ -273,19 +299,27 @@ export default async function buscarAnosServico() {
               mesAtual <= 9 ? `0${mesAtual}` : mesAtual
             }`;
             mesesCorrentesAnoSeguinte.push({
-              data: moment(mesAtualLocal).format(),
-              mes_formatado: moment(mesAtualLocal)
+              data: momentLocales(mesAtualLocal).format(),
+              mes_formatado: momentLocales(mesAtualLocal)
                 .locale(formatarLocale(appLanguage.language))
                 .format("MMMM yy"),
-              mes: moment(mesAtualLocal).locale("pt").format("MMMM yy"),
+              mes: momentLocales(mesAtualLocal).locale("pt").format("MMMM yy"),
               minutos_formatados: "0:00",
               minutos: 0,
-              data_YYYYMMDD: parseInt(moment(mesAtualLocal).format("YYYYMMDD")),
-              data_YYYYMM: parseInt(moment(mesAtualLocal).format("YYYYMM")),
-              data_M: parseInt(moment(mesAtualLocal).format("M")),
-              data_yy: parseInt(moment(mesAtualLocal).format("yy")),
-              data_MMMMyy: moment(mesAtualLocal).locale("pt").format("MMMM yy"),
-              data_MMMM: moment(mesAtualLocal).locale("pt").format("MMMM"),
+              data_YYYYMMDD: parseInt(
+                momentLocales(mesAtualLocal).format("YYYYMMDD")
+              ),
+              data_YYYYMM: parseInt(
+                momentLocales(mesAtualLocal).format("YYYYMM")
+              ),
+              data_M: parseInt(momentLocales(mesAtualLocal).format("M")),
+              data_yy: parseInt(momentLocales(mesAtualLocal).format("yy")),
+              data_MMMMyy: momentLocales(mesAtualLocal)
+                .locale("pt")
+                .format("MMMM yy"),
+              data_MMMM: momentLocales(mesAtualLocal)
+                .locale("pt")
+                .format("MMMM"),
             });
           }
 
@@ -298,7 +332,7 @@ export default async function buscarAnosServico() {
           );
 
           // Faz a separacao do ano de servico do ano atual
-          const mesAnoSeguinteNome = moment(
+          const mesAnoSeguinteNome = momentLocales(
             mesesCorrentesAnoSeguinte[0].data
           ).format("MM");
 
@@ -318,29 +352,31 @@ export default async function buscarAnosServico() {
             const mesCorrenteAnoSeguinteData =
               mesesCorrentesAnoSeguinte[0].data;
             mesesAntesDeSetembroAnoSeguinte.unshift({
-              mes_formatado: moment(mesCorrenteAnoSeguinteData)
+              mes_formatado: momentLocales(mesCorrenteAnoSeguinteData)
                 .locale(formatarLocale(appLanguage.language))
                 .format("MMMM yy"),
-              mes: moment(mesCorrenteAnoSeguinteData)
+              mes: momentLocales(mesCorrenteAnoSeguinteData)
                 .locale("pt")
                 .format("MMMM yy"),
               minutos_formatados: minutes_to_hhmm(totalMinutosMesAnoSeguinte),
               minutos: totalMinutosMesAnoSeguinte,
               data_YYYYMMDD: parseInt(
-                moment(mesCorrenteAnoSeguinteData).format("YYYYMMDD")
+                momentLocales(mesCorrenteAnoSeguinteData).format("YYYYMMDD")
               ),
               data_YYYYMM: parseInt(
-                moment(mesCorrenteAnoSeguinteData).format("YYYYMM")
+                momentLocales(mesCorrenteAnoSeguinteData).format("YYYYMM")
               ),
               data: mesCorrenteAnoSeguinteData,
-              data_M: parseInt(moment(mesCorrenteAnoSeguinteData).format("M")),
-              data_yy: parseInt(
-                moment(mesCorrenteAnoSeguinteData).format("yy")
+              data_M: parseInt(
+                momentLocales(mesCorrenteAnoSeguinteData).format("M")
               ),
-              data_MMMMyy: moment(mesCorrenteAnoSeguinteData)
+              data_yy: parseInt(
+                momentLocales(mesCorrenteAnoSeguinteData).format("yy")
+              ),
+              data_MMMMyy: momentLocales(mesCorrenteAnoSeguinteData)
                 .locale("pt")
                 .format("MMMM yy"),
-              data_MMMM: moment(mesCorrenteAnoSeguinteData)
+              data_MMMM: momentLocales(mesCorrenteAnoSeguinteData)
                 .locale("pt")
                 .format("MMMM"),
             });
@@ -402,7 +438,10 @@ export async function buscarDadosMesAnoServico(mesAno: string) {
 
       // Pega os relatorios do mes selecionado
       const relatoriosDoMes = todosRelatorios.filter((relatorio) => {
-        return moment(relatorio.data).locale("pt").format("MMMM yy") === mesAno;
+        return (
+          momentLocales(relatorio.data).locale("pt").format("MMMM yy") ===
+          mesAno
+        );
       });
 
       // Ordena os relatorio do mes selecionado por ordem descrescente
@@ -442,7 +481,8 @@ export async function buscarDadosMesAnoServico(mesAno: string) {
             return pessoa.visitas.find((visita) => {
               return (
                 visita.visita === 0 &&
-                moment(visita.data).locale("pt").format("MMMM yy") === mesAno
+                momentLocales(visita.data).locale("pt").format("MMMM yy") ===
+                  mesAno
               );
             });
           })
@@ -491,7 +531,7 @@ export async function editarRelatorio(relatorio: ReportCounterType) {
       return await salvarAsyncStorage(todosRelatorios, "@tjdroid:relatorios")
         .then(() => {
           return {
-            mesAno: moment(atualRelatorio.data)
+            mesAno: momentLocales(atualRelatorio.data)
               .locale("pt")
               .format("MMMM yy") as string,
           };
@@ -504,8 +544,8 @@ export async function editarRelatorio(relatorio: ReportCounterType) {
     }
   };
 
-  const dataRelatorio = moment(
-    moment(
+  const dataRelatorio = momentLocales(
+    momentLocales(
       `${relatorio.dia} ${relatorio.hora}`,
       "DD/MM/YYYY HH:mm",
       true
@@ -546,10 +586,10 @@ export async function salvarNovoRelatorio(relatorio: ReportCounterType) {
           const appLanguage = await buscarAsyncStorageTjDroidIdioma();
 
           return {
-            mesAno: moment(novoRelatorio.data)
+            mesAno: momentLocales(novoRelatorio.data)
               .locale("pt")
               .format("MMMM yy") as string,
-            mesAnoFormatado: moment(novoRelatorio.data)
+            mesAnoFormatado: momentLocales(novoRelatorio.data)
               .locale(formatarLocale(appLanguage.language))
               .format("MMMM yy") as string,
           };
@@ -568,8 +608,8 @@ export async function salvarNovoRelatorio(relatorio: ReportCounterType) {
     }
   };
 
-  const dataRelatorio = moment(
-    moment(
+  const dataRelatorio = momentLocales(
+    momentLocales(
       `${relatorio.dia} ${relatorio.hora}`,
       "DD/MM/YYYY HH:mm",
       true
@@ -608,7 +648,7 @@ export async function deletarRelatorio(
       return await salvarAsyncStorage(todosRelatorios, "@tjdroid:relatorios")
         .then(() => {
           return {
-            mesAno: moment(dataRelatorio, "DD/MM/YYYY")
+            mesAno: momentLocales(dataRelatorio, "DD/MM/YYYY")
               .locale("pt")
               .format("MMMM yy"),
           };
@@ -630,7 +670,7 @@ export async function deletarRelatorio(
 // DELETAR RELATÓRIO MÊS
 export async function deletarRelatorioMes(mes: string) {
   // Verifica se o usuário está tentando excluir os relatório do mês atual e retorna um erro
-  if (moment(new Date()).locale("pt").format("MMMM yy") === mes) {
+  if (momentLocales(new Date()).locale("pt").format("MMMM yy") === mes) {
     return 2;
   }
 
@@ -641,7 +681,9 @@ export async function deletarRelatorioMes(mes: string) {
       // Pega os relatorios do mes selecionado
       const todosRelatoriosMenosOExcluido = todosRelatorios.filter(
         (relatorio) => {
-          return moment(relatorio.data).locale("pt").format("MMMM yy") !== mes;
+          return (
+            momentLocales(relatorio.data).locale("pt").format("MMMM yy") !== mes
+          );
         }
       );
 
@@ -657,4 +699,62 @@ export async function deletarRelatorioMes(mes: string) {
         });
     }
   );
+}
+
+// Busca se o mes trabalhado
+export async function verificarSeMesTrabalhado(mesAno: string) {
+  return await buscarAsyncStorage("@tjdroid:meses_trabalhados")
+    .then(async (meses: MesesTrabalhadosType[]) => {
+      // Pega os relatorios do mes selecionado
+      const isRelatoriosMesExiste = meses.find((mes) => {
+        return mes === mesAno;
+      });
+      return !!isRelatoriosMesExiste;
+    })
+    .catch(() => {
+      return undefined;
+    });
+}
+
+// Salva o mês trabalhado
+export async function toggleSalvarMesTrabalhado(mesAno: string) {
+  return await buscarAsyncStorage("@tjdroid:meses_trabalhados")
+    .then(async (meses: MesesTrabalhadosType[]) => {
+      // Pega os relatorios do mes selecionado
+      const isRelatoriosMesExiste = meses.find((mes) => {
+        return mes === mesAno;
+      });
+
+      // Verifica se existe, remove
+      if (!!isRelatoriosMesExiste) {
+        const outrosMeses = meses.filter((mes) => {
+          return mes !== mesAno;
+        });
+
+        return await salvarAsyncStorage(
+          outrosMeses,
+          "@tjdroid:meses_trabalhados"
+        )
+          .then(async () => {
+            return false;
+          })
+          .catch(() => {
+            return undefined;
+          });
+      } else {
+        return await salvarAsyncStorage(
+          [...meses, mesAno],
+          "@tjdroid:meses_trabalhados"
+        )
+          .then(async () => {
+            return true;
+          })
+          .catch(() => {
+            return undefined;
+          });
+      }
+    })
+    .catch(() => {
+      return undefined;
+    });
 }

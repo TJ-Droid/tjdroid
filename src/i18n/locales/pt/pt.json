@@ -58,8 +58,11 @@
         "color_accessibility_label_black": "Tema cor preto",
         "color_accessibility_hint_black": "Altera o tema do aplicativo para a cor preta",
         "error_save_theme": "Erro ao salvar o tema, tente de novo!",
+        "error_save_simplified_report": "Erro ao salvar o relatório simplificado, tente de novo!",
         "error_load_configs": "Erro ao carregar as configurações, tente de novo!",
-        "hide_message": "Obrigado por usar o App!"
+        "hide_message": "Obrigado por usar o App!",
+        "simplified_report_title": "Relatório simplificado",
+        "simplified_report_description": "Habilitar essa opção irá ocultar as Revisitas, Colocações e Vídeos nos relatórios compartilhados."
       },
       "pessoas": {
         "screen_name": "Pessoas",
@@ -103,13 +106,16 @@
         "month_report_deleted_message_success": "Relatórios do mês excluídos com sucesso!",
         "month_report_deleted_message_error": "Erro ao excluir os relatórios desse mês!",
         "actual_month_report_delete_message_error": "Não é possível excluir os relatórios do mês atual!",
-        "month_report_load_error_message": "Erro ao buscar os dados desse mês!"
+        "month_report_load_error_message": "Erro ao buscar os dados desse mês!",
+        "worked_month_description": "Participei em alguma modalidade do ministério durante o mês?"
       },
       "relatorios": {
         "screen_name": "Relatórios",
         "screen_empty_title": "Nenhum relatório encontrado!",
         "screen_empty_message": "Adicione uma atividade com o cronômetro para ela aparecer aqui",
-        "reports_load_message_error": "Erro ao buscar relatórios, tente de novo!"
+        "reports_load_message_error": "Erro ao buscar relatórios, tente de novo!",
+        "menu_month_report": "Relatório",
+        "menu_month_report_with_hours": "Relatório com horas"
       },
       "territorioinformacao": {
         "territory_description_placeholder": "Digite sua observação:",

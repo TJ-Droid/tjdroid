@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Linking, ToastAndroid, Switch } from "react-native";
+import { Text, Linking, ToastAndroid, Switch, View } from "react-native";
 import Rate, { AndroidMarket } from "react-native-rate";
 import { useThemeContext } from "../../contexts/Theme";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -64,6 +64,8 @@ export default function Configuracoes({ navigation }: Props) {
       darkMode: false,
     });
   const [obgEscondido, setObgEscondido] = useState(0);
+  const [isRelatorioSimplificadoAtivado, setIsRelatorioSimplificadoAtivado] =
+    useState(true);
 
   // Altera o idioma para o selecionado
   const languageSelected = (language: string) => {
@@ -96,6 +98,11 @@ export default function Configuracoes({ navigation }: Props) {
 
           // Seta o tema do app
           salvarTemaLocal(configs.actualTheme);
+
+          // Salva o relatorio simplificado estado local
+          setIsRelatorioSimplificadoAtivado(
+            configs?.isRelatorioSimplificado ?? true
+          );
 
           // Seta o carregando para false, tirando a mensagem de carregando
           setCarregando(false);
@@ -156,6 +163,35 @@ export default function Configuracoes({ navigation }: Props) {
       // Adiciona o evento ao Analytics
       await analyticsCustomEvent("config_toque_cor", { cor: "darkMode" });
     }
+  };
+
+  // Função do Switch de Relatório Simplificado
+  const toggleRelatorioSimplificado = async (isAtivado: boolean) => {
+    // Salva no Storage
+    await salvarConfiguracoes({
+      ...configuracoes,
+      isRelatorioSimplificado: isAtivado,
+    })
+      .then((dados) => {
+        // Trata o retorno
+        if (dados) {
+          // Salva no estado local
+          setIsRelatorioSimplificadoAtivado(isAtivado);
+        } else {
+          // Se erro, dispara o toast
+          ToastAndroid.show(
+            `${t("screens.configuracoes.error_save_simplified_report")}`,
+            ToastAndroid.SHORT
+          );
+        }
+      })
+      .catch(() => {
+        // Se erro, dispara o toast
+        ToastAndroid.show(
+          `${t("screens.configuracoes.error_save_simplified_report")}`,
+          ToastAndroid.SHORT
+        );
+      });
   };
 
   // Função para salvar o tema selecionado
@@ -611,6 +647,34 @@ export default function Configuracoes({ navigation }: Props) {
           </ItemList>
 
           <SectionDivider>
+            <SectionDividerText>{t("screens.home.reports")}</SectionDividerText>
+          </SectionDivider>
+
+          <ItemList>
+            <StyledFeatherLeftIcon name="file-minus" />
+            <ItemListSpaceBetween>
+              <View style={{ flex: 1, flexDirection: "column" }}>
+                <ItemListTextTitle numberOfLines={1}>
+                  {t("screens.configuracoes.simplified_report_title")}
+                </ItemListTextTitle>
+                <ItemListTextDescription>
+                  {t("screens.configuracoes.simplified_report_description")}
+                </ItemListTextDescription>
+              </View>
+
+              <Switch
+                style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
+                trackColor={{ false: "#767577", true: "#94EB8C" }}
+                thumbColor={
+                  isRelatorioSimplificadoAtivado ? "#42B240" : "#f4f3f4"
+                }
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleRelatorioSimplificado}
+                value={isRelatorioSimplificadoAtivado}
+              />
+            </ItemListSpaceBetween>
+          </ItemList>
+          <SectionDivider>
             <SectionDividerText>
               {t("screens.configuracoes.infos")}
             </SectionDividerText>
@@ -704,7 +768,7 @@ export default function Configuracoes({ navigation }: Props) {
                 <ItemListTextDescription
                   onPress={() => setObgEscondido((o) => o + 1)}
                 >
-                  {t("screens.configuracoes.version")} 1.2.0
+                  {t("screens.configuracoes.version")} 1.2.1
                 </ItemListTextDescription>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>

@@ -58,8 +58,11 @@
         "color_accessibility_label_black": "Black color theme",
         "color_accessibility_hint_black": "Changes the application theme to black color",
         "error_save_theme": "Error saving theme, try again!",
+        "error_save_simplified_report": "Error saving the simplified report, try again!",
         "error_load_configs": "Error loading settings, try again!",
-        "hide_message": "Thanks for using the App!"
+        "hide_message": "Thanks for using the App!",
+        "simplified_report_title": "Simplified Report",
+        "simplified_report_description": "Enabling this option will hide Revisits, Placements and Videos in shared reports."
       },
       "pessoas": {
         "screen_name": "People",
@@ -103,13 +106,16 @@
         "month_report_deleted_message_success": "Month reports successfully deleted!",
         "month_report_deleted_message_error": "Error deleting this month's reports!",
         "actual_month_report_delete_message_error": "Cannot delete current month reports!",
-        "month_report_load_error_message": "Error searching this month's data!"
+        "month_report_load_error_message": "Error searching this month's data!",
+        "worked_month_description": "Did I participate in any type of ministry during the month?"
       },
       "relatorios": {
         "screen_name": "Reports",
         "screen_empty_title": "No reports found!",
         "screen_empty_message": "Add a activity with the Chronometer for it to appear here",
-        "reports_load_message_error": "Error fetching reports, try again!"
+        "reports_load_message_error": "Error fetching reports, try again!",
+        "menu_month_report": "Report",
+        "menu_month_report_with_hours": "Report with hours"
       },
       "territorioinformacao": {
         "territory_description_placeholder": "Short description:",

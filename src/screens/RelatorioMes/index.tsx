@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
+  Text,
   Alert,
   ToastAndroid,
   FlatList,
@@ -11,7 +12,8 @@ import {
 import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-import moment from "moment/min/moment-with-locales";
+import momentLocales from "moment/min/moment-with-locales";
+import moment from "moment";
 import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 
 import Header from "../../components/Header";
@@ -25,13 +27,16 @@ import {
 import {
   buscarDadosMesAnoServico,
   deletarRelatorio,
+  toggleSalvarMesTrabalhado,
   SelectedMonthServiceDataType,
+  verificarSeMesTrabalhado,
 } from "../../controllers/relatoriosController";
 
 import { RootStackParamListType } from "../../routes";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ReportType } from "../../types/Reports";
 import { AppLanguages } from "../../types/Languages";
+import CustomSwitch from "../../components/CustomSwitch";
 import {
   Container,
   ItemList,
@@ -48,6 +53,8 @@ import {
   ItemListMidleContentText,
   ItemListBottomContent,
   ItemListBottomContentText,
+  StyledContainerWorkedMonth,
+  StyledContainerWorkedMonthText,
 } from "./styles";
 
 type ProfileScreenRouteProp = StackScreenProps<
@@ -70,6 +77,8 @@ export default function RelatorioMes({ route, navigation }: Props) {
 
   const [reload, setReload] = useState(false);
   const [carregando, setCarregando] = useState(true);
+  const [isMesTrabalhado, setIsMesTrabalhado] = useState(false);
+  const [carregandoMesTrabalhado, setCarregandoMesTrabalhado] = useState(false);
   const [todosRelatoriosDoMes, setTodosRelatoriosDoMes] = useState<
     ReportType[]
   >([]);
@@ -130,6 +139,10 @@ export default function RelatorioMes({ route, navigation }: Props) {
               t("screens.relatoriomes.month_report_load_error_message"),
               ToastAndroid.SHORT
             );
+          })
+          .finally(async () => {
+            // Verifica se o mês foi trabalhdo
+            carregarSeMesFoiTrabalhado();
           });
         // }
       };
@@ -203,6 +216,68 @@ export default function RelatorioMes({ route, navigation }: Props) {
       });
   }
 
+  // Verifica se o mes foi trabalhado
+  const carregarSeMesFoiTrabalhado = async () => {
+    const mesAnoDessaTela = moment(`${mesAno}`, "MMMM yy", true).format(
+      "MM/YYYY"
+    );
+    await verificarSeMesTrabalhado(mesAnoDessaTela)
+      .then((dados) => {
+        if (typeof dados === "boolean") {
+          setIsMesTrabalhado(dados);
+        } else {
+          // Mensagem Toast
+          ToastAndroid.show(
+            t("screens.errors.error_message_1"),
+            ToastAndroid.SHORT
+          );
+        }
+      })
+      .catch(() => {
+        // Mensagem Toast
+        ToastAndroid.show(
+          t("screens.errors.error_message_1"),
+          ToastAndroid.SHORT
+        );
+      });
+  };
+
+  // Toggle do Mes Trabalhado
+  const handleCheckMesTrabalhado = async (isChecked: boolean) => {
+    // Loading
+    setCarregandoMesTrabalhado(true);
+
+    // Pega o anoMes formatado
+    const mesAnoDessaTela = moment(`${mesAno}`, "MMMM yy", true).format(
+      "MM/YYYY"
+    );
+
+    // Toggle do Mes Trabalhado
+    await toggleSalvarMesTrabalhado(mesAnoDessaTela)
+      .then((dados) => {
+        if (typeof dados === "boolean") {
+          setIsMesTrabalhado(dados);
+        } else {
+          // Mensagem Toast
+          ToastAndroid.show(
+            t("screens.errors.error_message_1"),
+            ToastAndroid.SHORT
+          );
+        }
+        // Remove Loading
+        setCarregandoMesTrabalhado(false);
+      })
+      .catch(() => {
+        // Remove Loading
+        setCarregandoMesTrabalhado(false);
+        // Mensagem Toast
+        ToastAndroid.show(
+          t("screens.errors.error_message_1"),
+          ToastAndroid.SHORT
+        );
+      });
+  };
+
   const Item = ({ item }: { item: ReportType }) => (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate("RelatorioDetalhes", { ...item })}
@@ -211,7 +286,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
       <ItemList>
         <ItemListTopContent>
           <ItemListTopContentDayText style={{ flexShrink: 1 }}>
-            {moment(item.data)
+            {momentLocales(item.data)
               .locale(formatarLocale(appLanguageLocal?.language))
               .format("DD/MM/yy, dddd, HH:mm")}
           </ItemListTopContentDayText>
@@ -281,7 +356,11 @@ export default function RelatorioMes({ route, navigation }: Props) {
         capitalize
         showGoBackReportDetails
         showReportAdd={{ mesAno }}
-        showReportSend={{ totaisDoMes, mesAnoFormatado }}
+        showReportSend={{
+          totaisDoMes,
+          mesAnoFormatado,
+          isMesTrabalhado: isMesTrabalhado,
+        }}
       />
       {!carregando ? (
         <Container>
@@ -347,6 +426,22 @@ export default function RelatorioMes({ route, navigation }: Props) {
                 }`}
               </HeaderTotalsBottomSectionText>
             </HeaderTotalsBottomSection>
+            <StyledContainerWorkedMonth>
+              <View style={{ flex: 1 }}>
+                <StyledContainerWorkedMonthText>
+                  {t("screens.relatoriomes.worked_month_description")}
+                </StyledContainerWorkedMonthText>
+              </View>
+              <View>
+                <CustomSwitch
+                  disabled={carregandoMesTrabalhado}
+                  isChecked={isMesTrabalhado}
+                  option1Text={t("words.yes")}
+                  option2Text={t("words.no")}
+                  onSelectSwitch={(v) => handleCheckMesTrabalhado(v)}
+                />
+              </View>
+            </StyledContainerWorkedMonth>
           </HeaderTotalsBox>
           <FlatList
             style={{ width: "100%", marginBottom: 114 }}

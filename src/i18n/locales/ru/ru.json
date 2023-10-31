@@ -58,8 +58,11 @@
         "color_accessibility_label_black": "Черная тема",
         "color_accessibility_hint_black": "Изменяет черный цвет темы приложения",
         "error_save_theme": "Ошибка сохранения темы, попробуйте еще раз!",
+        "error_save_simplified_report": "Ошибка при сохранении упрощенного отчета. Повторите попытку.",
         "error_load_configs": "Ошибка чтения настроек. Повторите попытку!",
-        "hide_message": "Спасибо за использование приложения!"
+        "hide_message": "Спасибо за использование приложения!",
+        "simplified_report_title": "Упрощенный отчет",
+        "simplified_report_description": "Включение этой опции позволит скрыть повторные посещения, места размещения и видео в общих отчетах."
       },
       "pessoas": {
         "screen_name": "Люди",
@@ -103,13 +106,16 @@
         "month_report_deleted_message_success": "Месячные отчёты успешно удалены!",
         "month_report_deleted_message_error": "Ошибка при удалении отчетов за этот месяц!",
         "actual_month_report_delete_message_error": "Невозможно удалить отчёты за текущий месяц!",
-        "month_report_load_error_message": "Ошибка поиска данных за этот месяц!"
+        "month_report_load_error_message": "Ошибка поиска данных за этот месяц!",
+        "worked_month_description": "Участвовал ли я в каком-либо служении в течение месяца?"
       },
       "relatorios": {
         "screen_name": "Отчёты",
         "screen_empty_title": "Отчёты не найдены!",
         "screen_empty_message": "Добавьте активность с помощью Хронометра",
-        "reports_load_message_error": "Ошибка получения ответов. Попробуйте ещё раз!"
+        "reports_load_message_error": "Ошибка получения ответов. Попробуйте ещё раз!",
+        "menu_month_report": "Отчет",
+        "menu_month_report_with_hours": "Отчет с часами"
       },
       "territorioinformacao": {
         "territory_description_placeholder": "Краткое описание:",

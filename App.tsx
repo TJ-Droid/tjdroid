@@ -3,7 +3,10 @@ import { Provider as ReactNativePaperProvider } from "react-native-paper";
 import { ThemeProvider } from "styled-components";
 import AppLoading from "expo-app-loading";
 
-import { carregarConfiguracoes } from "./src/controllers/configuracoesController";
+import {
+  carregarConfiguracoes,
+  salvarConfiguracoes,
+} from "./src/controllers/configuracoesController";
 import ThemeContextProvider, { useThemeContext } from "./src/contexts/Theme";
 import Routes from "./src/routes";
 import themes from "./src/themes";
@@ -62,18 +65,25 @@ const AppWrapper: React.FC = () => {
     // Carrega as configuracoes salvas no Storage
     const carregaConfiguracoes = async () => {
       // Chama o controller para carregar as configurações
-      await carregarConfiguracoes().then((configs) => {
+      await carregarConfiguracoes().then(async (configs) => {
         // Checa se é a primeira vez que está carregando as configurações
-        if (configs !== undefined) {
+        if (configs.length === 0) {
+          // Se for a primeira vez, seta o tema padrão
+          handleSwicthTheme(themes["azulEscuroDefault"]);
+
+          // Salva o relatorio simplificado estado local
+          await salvarConfiguracoes({
+            actualTheme: "azulEscuroDefault",
+            darkMode: false,
+            isRelatorioSimplificado: true,
+          });
+        } else {
           // Verifica qual tema aplicar
           if (configs.darkMode === true) {
             handleSwicthTheme(themes["darkMode"]);
           } else {
             handleSwicthTheme(themes[configs?.actualTheme as ThemeColors]);
           }
-        } else {
-          // Se for a primeira vez, seta o tema padrão
-          handleSwicthTheme(themes["azulEscuroDefault"]);
         }
       });
     };

@@ -63,10 +63,12 @@ import {
   StyledIoniconsHeaderButtons,
 } from "./styles";
 import { TerritoryDispositionType } from "../../types/Territories";
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 type ShowReportSendType = {
   totaisDoMes: Partial<SelectedMonthServiceDataType>;
   mesAnoFormatado?: string;
+  isMesTrabalhado: boolean;
 };
 
 type TerritoryType = {
@@ -224,40 +226,84 @@ export default function Header({
 
   // Script do botão de Compartilhar
   // COMPARTILHAR RELATÓRIO
-  function compartilharRelatorio(relatorio: ShowReportSendType) {
+  function compartilharRelatorio(
+    relatorio: ShowReportSendType,
+    comHoras?: boolean
+  ) {
     const compartilhar = async () => {
-      const {
-        totalColocacoes,
-        totalMinutos,
-        totalRevisitas,
-        totalVideosMostrados,
-        totalEstudosBiblicos,
-      } = relatorio.totaisDoMes;
+      // Chama o controller para carregar as configurações
+      await carregarConfiguracoes().then(async (configs) => {
+        // Trata o retorno
+        if (configs) {
+          const {
+            totalColocacoes,
+            totalMinutos,
+            totalRevisitas,
+            totalVideosMostrados,
+            totalEstudosBiblicos,
+          } = relatorio.totaisDoMes;
 
-      try {
-        // Monta o texto para o compartilhamento
-        // Capitaliza o mês do ano
-        await Share.share({
-          message: `${t("components.header.share_report_title")} ${(
-            relatorio.mesAnoFormatado ?? ""
-          ).replace(/^\w/, (c) => c.toUpperCase())}\n\n${t(
-            "components.header.share_report_hours"
-          )}: ${minutes_to_hhmm(totalMinutos ?? 0)}\n${t(
-            "components.header.share_report_bible_studies"
-          )}: ${totalEstudosBiblicos} \n${t(
-            "components.header.share_report_revisits"
-          )}: ${totalRevisitas}\n${t(
-            "components.header.share_report_placements"
-          )}: ${totalColocacoes}\n${t(
-            "components.header.share_report_videos_showed"
-          )}: ${totalVideosMostrados}`,
-        });
-      } catch (e) {
-        ToastAndroid.show(
-          t("components.header.share_report_error_message"),
-          ToastAndroid.LONG
-        );
-      }
+          try {
+            // Monta o texto do relatório
+            const relatorioText = comHoras
+              ? `${t("components.header.share_report_title")} ${(
+                  relatorio.mesAnoFormatado ?? ""
+                ).replace(/^\w/, (c) => c.toUpperCase())}\n\n${t(
+                  "screens.relatoriomes.worked_month_description"
+                )} ${
+                  relatorio.isMesTrabalhado ? t("words.yes") : t("words.no")
+                }. \n${t(
+                  "components.header.share_report_hours"
+                )}: ${minutes_to_hhmm(totalMinutos ?? 0)}\n${t(
+                  "components.header.share_report_bible_studies"
+                )}: ${totalEstudosBiblicos}${
+                  !!configs?.isRelatorioSimplificado
+                    ? ``
+                    : `\n${t(
+                        "components.header.share_report_revisits"
+                      )}: ${totalRevisitas}\n${t(
+                        "components.header.share_report_placements"
+                      )}: ${totalColocacoes}\n${t(
+                        "components.header.share_report_videos_showed"
+                      )}: ${totalVideosMostrados}`
+                }`
+              : `${t("components.header.share_report_title")} ${(
+                  relatorio.mesAnoFormatado ?? ""
+                ).replace(/^\w/, (c) => c.toUpperCase())}\n\n${t(
+                  "screens.relatoriomes.worked_month_description"
+                )} ${
+                  relatorio.isMesTrabalhado ? t("words.yes") : t("words.no")
+                }. \n${t(
+                  "components.header.share_report_bible_studies"
+                )}: ${totalEstudosBiblicos}${
+                  !!configs?.isRelatorioSimplificado
+                    ? ``
+                    : `\n${t(
+                        "components.header.share_report_revisits"
+                      )}: ${totalRevisitas}\n${t(
+                        "components.header.share_report_placements"
+                      )}: ${totalColocacoes}\n${t(
+                        "components.header.share_report_videos_showed"
+                      )}: ${totalVideosMostrados}`
+                }`;
+
+            // Monta o texto para o compartilhamento
+            // Capitaliza o mês do ano
+            await Share.share({ message: relatorioText });
+          } catch (e) {
+            ToastAndroid.show(
+              t("components.header.share_report_error_message"),
+              ToastAndroid.LONG
+            );
+          }
+        } else {
+          // Se erro, dispara o toast
+          ToastAndroid.show(
+            `${t("screens.configuracoes.error_load_configs")}`,
+            ToastAndroid.SHORT
+          );
+        }
+      });
     };
     compartilhar();
   }
@@ -1275,11 +1321,37 @@ export default function Header({
 
           {showReportSend ? (
             <WrapperButton>
-              <TouchableOpacity
-                onPress={() => compartilharRelatorio(showReportSend)}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  flex: 1,
+                }}
               >
-                <StyledIoniconsHeaderButtons name="share-social" size={29} />
-              </TouchableOpacity>
+                <Menu
+                  visible={addMenu}
+                  onDismiss={closeAddMenu}
+                  anchor={
+                    <TouchableOpacity onPress={openAddMenu}>
+                      <StyledIoniconsHeaderButtons
+                        name="share-social"
+                        size={29}
+                      />
+                    </TouchableOpacity>
+                  }
+                >
+                  <Menu.Item
+                    onPress={() => compartilharRelatorio(showReportSend)}
+                    title={t("screens.relatorios.menu_month_report")}
+                    icon="file-outline"
+                  />
+                  <Menu.Item
+                    onPress={() => compartilharRelatorio(showReportSend, true)}
+                    title={t("screens.relatorios.menu_month_report_with_hours")}
+                    icon="file-clock"
+                  />
+                </Menu>
+              </View>
             </WrapperButton>
           ) : (
             <View></View>

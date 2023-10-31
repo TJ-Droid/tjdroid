@@ -15,6 +15,7 @@ export const buscarConfiguracoesStorage = async () => {
       const newConfig: SettingsType = {
         darkMode: false,
         actualTheme: "azulEscuroDefault",
+        isRelatorioSimplificado: true,
       };
       // Salva
       await salvarAsyncStorage(newConfig, "@tjdroid:config");

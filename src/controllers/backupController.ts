@@ -79,7 +79,6 @@ function errorAlert(errorMessage = null) {
 export async function generateManualBackup() {
   getPermissionWhiteExternalStorage().then((permissionResponse) => {
     // Confere se o usuario permitiu salvar nos Downloads
-    console.log("permissionResponse: ", permissionResponse);
     if (permissionResponse)
       createBackupFolder()
         .then(() => {
@@ -91,34 +90,40 @@ export async function generateManualBackup() {
                     .then(() => {
                       createJsonFileFromAsyncStorage("config")
                         .then(() => {
-                          // Zipa a pasta criada acima e gera o .zip
-                          zipBackupFolder()
+                          createJsonFileFromAsyncStorage("meses_trabalhados")
                             .then(() => {
-                              // Exclui a pasta do backup
-                              deleteBackupFolder()
+                              // Zipa a pasta criada acima e gera o .zip
+                              zipBackupFolder()
                                 .then(() => {
-                                  // Mensagem Toast
-                                  ToastAndroid.show(
-                                    `${i18next.t(
-                                      "controllers.backupcontroller_toast_backup_generate_success"
-                                    )} 👏`,
-                                    ToastAndroid.SHORT
-                                  );
-
-                                  shareBackupFile()
+                                  // Exclui a pasta do backup
+                                  deleteBackupFolder()
                                     .then(() => {
-                                      // processo concluido!
+                                      // Mensagem Toast
+                                      ToastAndroid.show(
+                                        `${i18next.t(
+                                          "controllers.backupcontroller_toast_backup_generate_success"
+                                        )} 👏`,
+                                        ToastAndroid.SHORT
+                                      );
+
+                                      shareBackupFile()
+                                        .then(() => {
+                                          // processo concluido!
+                                        })
+                                        .catch((err) => {
+                                          // console.log("120-shareBackupFile:",err);
+                                        });
                                     })
                                     .catch((err) => {
-                                      // console.log("120-shareBackupFile:",err);
+                                      // console.log("118-deleteBackupFolder:",err);
                                     });
                                 })
                                 .catch((err) => {
-                                  // console.log("118-deleteBackupFolder:",err);
+                                  // console.log("117-zipBackupFolder:",err);
                                 });
                             })
                             .catch((err) => {
-                              // console.log("117-zipBackupFolder:",err);
+                              // console.log("107-config:",err);
                             });
                         })
                         .catch((err) => {
@@ -408,7 +413,29 @@ export async function restoreBackupToAsyncStorage() {
           RNFS.readFile(result.path, "utf8")
             .then(async (result) => {
               // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              await AsyncStorage.setItem("@tjdroid:config", result);
+              await AsyncStorage.setItem(
+                "@tjdroid:config",
+                JSON.stringify({
+                  ...JSON.parse(result),
+                  isRelatorioSimplificado: true,
+                })
+              );
+            })
+            .catch((err) => {
+              // console.log("102:",err);
+              errorAlert(
+                i18next.t(
+                  "controllers.backupcontroller_alert_backup_restore_error"
+                )
+              );
+            });
+        }
+
+        if (result.name === "meses_trabalhados.json") {
+          RNFS.readFile(result.path, "utf8")
+            .then(async (result) => {
+              // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
+              await AsyncStorage.setItem("@tjdroid:meses_trabalhados", result);
             })
             .catch((err) => {
               // console.log("102:",err);
