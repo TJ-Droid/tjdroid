@@ -78,6 +78,15 @@ const AppWrapper: React.FC = () => {
             isRelatorioSimplificado: true,
           });
         } else {
+          // Verifica se a nova opção não existe e salva ela
+          if (configs?.isRelatorioSimplificado === undefined) {
+            // Salva o relatorio simplificado estado local
+            await salvarConfiguracoes({
+              ...configs,
+              isRelatorioSimplificado: true,
+            });
+          }
+
           // Verifica qual tema aplicar
           if (configs.darkMode === true) {
             handleSwicthTheme(themes["darkMode"]);
