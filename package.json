@@ -53,7 +53,7 @@
     "react-native-safe-area-context": "^4.7.2",
     "react-native-screens": "^3.25.0",
     "react-native-svg": "13.9.0",
-    "react-native-svg-transformer": "^0.14.3",
+    "react-native-svg-transformer": "^1.5.0",
     "react-native-web": "~0.19.6",
     "react-native-zip-archive": "^6.0.9",
     "react-xml-parser": "^1.1.8",
