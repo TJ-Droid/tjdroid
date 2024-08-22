@@ -52,6 +52,8 @@ If you want to help with translation to your language, please use [the link belo
 * #### Polish
   * Piotr Stefański
   * Robert Skorupa
+* #### Ukrainian
+  * Alex Pawl
 
 ### ➡️ How to use Crowdin to translate to your language:
 <p align="center">
