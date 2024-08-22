@@ -16,6 +16,7 @@ const LANGUAGES_OPTIONS = [
   { language: "es", label: "Español (100%)" },
   { language: "ru", label: "Русский (100%)" },
   { language: "pl", label: "Polski (100%)" },
+  { language: "uk", label: "Українець (100%)" },
 ];
 
 type SelectPickerLanguagesPropsType = {

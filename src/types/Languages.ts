@@ -1,1 +1,1 @@
-export type AppLanguages = "en" | "pt" | "es" | "ru" | "pl";
+export type AppLanguages = "en" | "pt" | "es" | "ru" | "pl" | "uk";
