@@ -708,9 +708,7 @@ export default function Configuracoes({ navigation }: Props) {
                     onPress={async () => {
                       // Adiciona o evento ao Analytics
                       await analyticsCustomEvent("config_toque_politprivlgpd");
-                      Linking.openURL(
-                        "https://pedropaulodev.notion.site/Pol-tica-de-Privacidade-e-LGPD-dc8a17a00aa14566a9238f5024674d9a"
-                      );
+                      Linking.openURL("https://tj-droid.github.io/");
                     }}
                   >
                     {t("screens.configuracoes.terms_description")}

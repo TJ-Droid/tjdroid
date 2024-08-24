@@ -108,9 +108,7 @@ const Ajuda = () => {
           {section.identificator === "privaciandpolicy" && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL(
-                  "https://pedropaulodev.notion.site/Pol-tica-de-Privacidade-e-LGPD-dc8a17a00aa14566a9238f5024674d9a"
-                );
+                Linking.openURL("https://tj-droid.github.io/");
               }}
             >
               <StyledFeatherIcon name="external-link" size={22} />
