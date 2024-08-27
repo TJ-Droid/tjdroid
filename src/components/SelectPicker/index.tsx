@@ -46,9 +46,15 @@ export default function SelectPicker({
     },
     {
       value: 4,
+      bgColor: "#d7754930",
+      fontColor: "#d77549",
+      label: i18next.t("selectpickeroptions.absentee"),
+    },
+    {
+      value: 5,
       bgColor: "#c33f5530",
       fontColor: "#c33f55",
-      label: i18next.t("selectpickeroptions.absentee"),
+      label: i18next.t("selectpickeroptions.refused"),
     },
   ] as SelectPickerOptionsType[];
 

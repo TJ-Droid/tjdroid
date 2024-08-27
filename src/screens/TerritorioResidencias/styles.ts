@@ -32,12 +32,16 @@ export const ItemListTerritory = styled.View`
   flex-direction: row;
 `;
 
-export const ItemListTerritoryTitle = styled.Text`
+export const ItemListTerritoryTitle = styled.Text<{
+  isLineThrough: boolean;
+}>`
   font-size: 18px;
   color: ${({ theme }) => theme.color.text_primary}99;
   text-transform: capitalize;
   font-weight: bold;
   padding: 0px 0px 8px 0px;
+  text-decoration: ${({ isLineThrough }) =>
+    isLineThrough ? "line-through" : "none"};
 `;
 
 export const ItemListTerritoryQuantityVisits = styled.Text`

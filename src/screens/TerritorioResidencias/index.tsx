@@ -203,7 +203,11 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
         <ItemListTerritoryColor bgColor={item.corVisita} />
         <ItemList>
           <ItemListTerritory>
-            <ItemListTerritoryTitle ellipsizeMode="tail" numberOfLines={2}>
+            <ItemListTerritoryTitle
+              ellipsizeMode="tail"
+              numberOfLines={2}
+              isLineThrough={item?.corVisita === "#c33f55"}
+            >
               {item.titulo}
             </ItemListTerritoryTitle>
 
