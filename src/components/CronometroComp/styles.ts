@@ -5,7 +5,6 @@ import { ScrollView } from "react-native";
 export const TopSectionContainer = styled.View`
   padding: 20px 15px;
   width: 100%;
-  min-height: 170px;
 `;
 
 export const TopSectionContainerArea = styled.View`

@@ -706,9 +706,12 @@ export async function verificarSeMesTrabalhado(mesAno: string) {
   return await buscarAsyncStorage("@tjdroid:meses_trabalhados")
     .then(async (meses: MesesTrabalhadosType[]) => {
       // Pega os relatorios do mes selecionado
-      const isRelatoriosMesExiste = meses.find((mes) => {
-        return mes === mesAno;
-      });
+      const isRelatoriosMesExiste =
+        typeof meses === "object"
+          ? false
+          : (meses as MesesTrabalhadosType[]).find((mes) => {
+              return mes === mesAno;
+            });
       return !!isRelatoriosMesExiste;
     })
     .catch(() => {

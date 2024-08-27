@@ -29,6 +29,7 @@ import {
   StyledFeatherIconSectionButton,
   BottomSectionLabelDateTimeText,
 } from "./styles";
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 export type ContadorPropsType = {
   relatorioId?: string;
@@ -75,6 +76,9 @@ export default function Contador({
   const [timerBotaoPrecionado, setTimerBotaoPrecionado] = useState<
     ReturnType<typeof setTimeout>
   >(setTimeout(() => {}));
+
+  const [isRelatorioSimplificadoAtivado, setIsRelatorioSimplificadoAtivado] =
+    useState(true);
 
   const [minutos, setMinutos] = useState(0);
   const [relatorio, setRelatorio] = useState({
@@ -238,6 +242,23 @@ export default function Contador({
     clearTimeout(timerBotaoPrecionado);
   }
 
+  useEffect(() => {
+    const loadConfiguracoes = async () => {
+      // Chama o controller para carregar as configurações
+      await carregarConfiguracoes().then(async (configs) => {
+        // Trata o retorno
+        if (configs) {
+          try {
+            setIsRelatorioSimplificadoAtivado(
+              !!configs?.isRelatorioSimplificado
+            );
+          } catch (e) {}
+        }
+      });
+    };
+    loadConfiguracoes();
+  }, []);
+
   return (
     <>
       {paginaCronometroParado && (
@@ -329,7 +350,9 @@ export default function Contador({
         </TopSectionContainer>
 
         <BottomSectionContainer>
-          <BottomSectionActionButtonsContainer>
+          <BottomSectionActionButtonsContainer
+            ocultarCampos={isRelatorioSimplificadoAtivado}
+          >
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
                 <BottomSectionLabelText>
@@ -356,107 +379,120 @@ export default function Contador({
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.placements")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+            {!isRelatorioSimplificadoAtivado ? (
+              <>
+                <BottomSectionButtonsWrapper>
+                  <BottomSectionTextArea>
+                    <BottomSectionLabelText>
+                      {t("words.placements")}:
+                    </BottomSectionLabelText>
+                  </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("colocacoes", "");
-                  }}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                  <BottomSectionButtonsArea>
+                    <TouchableOpacity
+                      onPress={() => {
+                        contar("colocacoes", "");
+                      }}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton
+                          name="minus"
+                          size={20}
+                        />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {relatorio.colocacoes}
-                </BottomSectionQuantityText>
+                    <BottomSectionQuantityText>
+                      {relatorio.colocacoes}
+                    </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("colocacoes", "soma");
-                  }}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <TouchableOpacity
+                      onPress={() => {
+                        contar("colocacoes", "soma");
+                      }}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton name="plus" size={20} />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
+                  </BottomSectionButtonsArea>
+                </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.videos_showed")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+                <BottomSectionButtonsWrapper>
+                  <BottomSectionTextArea>
+                    <BottomSectionLabelText>
+                      {t("words.videos_showed")}:
+                    </BottomSectionLabelText>
+                  </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("videosMostrados", "");
-                  }}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                  <BottomSectionButtonsArea>
+                    <TouchableOpacity
+                      onPress={() => {
+                        contar("videosMostrados", "");
+                      }}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton
+                          name="minus"
+                          size={20}
+                        />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {relatorio.videosMostrados}
-                </BottomSectionQuantityText>
+                    <BottomSectionQuantityText>
+                      {relatorio.videosMostrados}
+                    </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("videosMostrados", "soma");
-                  }}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <TouchableOpacity
+                      onPress={() => {
+                        contar("videosMostrados", "soma");
+                      }}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton name="plus" size={20} />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
+                  </BottomSectionButtonsArea>
+                </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.revisits")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+                <BottomSectionButtonsWrapper>
+                  <BottomSectionTextArea>
+                    <BottomSectionLabelText>
+                      {t("words.revisits")}:
+                    </BottomSectionLabelText>
+                  </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("revisitas", "");
-                  }}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                  <BottomSectionButtonsArea>
+                    <TouchableOpacity
+                      onPress={() => {
+                        contar("revisitas", "");
+                      }}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton
+                          name="minus"
+                          size={20}
+                        />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {relatorio.revisitas}
-                </BottomSectionQuantityText>
+                    <BottomSectionQuantityText>
+                      {relatorio.revisitas}
+                    </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("revisitas", "soma");
-                  }}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <TouchableOpacity
+                      onPress={() => {
+                        contar("revisitas", "soma");
+                      }}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton name="plus" size={20} />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
+                  </BottomSectionButtonsArea>
+                </BottomSectionButtonsWrapper>
+              </>
+            ) : null}
           </BottomSectionActionButtonsContainer>
         </BottomSectionContainer>
       </StyledScrollView>

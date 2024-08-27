@@ -33,9 +33,12 @@ export const BottomSectionContainer = styled.View`
   padding: 20px 15px;
 `;
 
-export const BottomSectionActionButtonsContainer = styled.View`
+export const BottomSectionActionButtonsContainer = styled.View<{
+  ocultarCampos?: boolean;
+}>`
   width: 100%;
-  min-height: 200px;
+  height: auto;
+  min-height: ${({ ocultarCampos }) => (ocultarCampos ? `110px` : "200px")};
   max-height: 200px;
 `;
 

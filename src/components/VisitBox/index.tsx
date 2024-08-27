@@ -23,6 +23,7 @@ import {
   StyledFeatherIconSectionButton,
   BottomSectionLabelDateTimeText,
 } from "./styles";
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 type VisitBoxPropsType = {
   visitData: VisitDataType;
@@ -44,6 +45,9 @@ export function VisitBox({
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const [isRelatorioSimplificadoAtivado, setIsRelatorioSimplificadoAtivado] =
+    useState(true);
 
   const [visitDataState, setVisitDataState] =
     useState<VisitDataType>(visitData);
@@ -139,6 +143,23 @@ export function VisitBox({
     setVisitDataState({ ...visitDataState, visita: indexSelected });
   }
 
+  useEffect(() => {
+    const loadConfiguracoes = async () => {
+      // Chama o controller para carregar as configurações
+      await carregarConfiguracoes().then(async (configs) => {
+        // Trata o retorno
+        if (configs) {
+          try {
+            setIsRelatorioSimplificadoAtivado(
+              !!configs?.isRelatorioSimplificado
+            );
+          } catch (e) {}
+        }
+      });
+    };
+    loadConfiguracoes();
+  }, []);
+
   return (
     <>
       <StyledScrollView>
@@ -178,7 +199,9 @@ export function VisitBox({
         </TopSectionContainer>
 
         <BottomSectionContainer>
-          <BottomSectionActionButtonsContainer>
+          <BottomSectionActionButtonsContainer
+            ocultarCampos={isRelatorioSimplificadoAtivado}
+          >
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>
                 <BottomSectionLabelText>
@@ -205,59 +228,73 @@ export function VisitBox({
               </BottomSectionButtonsArea>
             </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.placements")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+            {!isRelatorioSimplificadoAtivado ? (
+              <>
+                <BottomSectionButtonsWrapper>
+                  <BottomSectionTextArea>
+                    <BottomSectionLabelText>
+                      {t("words.placements")}:
+                    </BottomSectionLabelText>
+                  </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity onPress={() => contar("colocacoes", "")}>
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                  <BottomSectionButtonsArea>
+                    <TouchableOpacity onPress={() => contar("colocacoes", "")}>
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton
+                          name="minus"
+                          size={20}
+                        />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {visitDataState.colocacoes}
-                </BottomSectionQuantityText>
+                    <BottomSectionQuantityText>
+                      {visitDataState.colocacoes}
+                    </BottomSectionQuantityText>
 
-                <TouchableOpacity onPress={() => contar("colocacoes", "soma")}>
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <TouchableOpacity
+                      onPress={() => contar("colocacoes", "soma")}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton name="plus" size={20} />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
+                  </BottomSectionButtonsArea>
+                </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.videos")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+                <BottomSectionButtonsWrapper>
+                  <BottomSectionTextArea>
+                    <BottomSectionLabelText>
+                      {t("words.videos")}:
+                    </BottomSectionLabelText>
+                  </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity onPress={() => contar("videosMostrados", "")}>
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                  <BottomSectionButtonsArea>
+                    <TouchableOpacity
+                      onPress={() => contar("videosMostrados", "")}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton
+                          name="minus"
+                          size={20}
+                        />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {visitDataState.videosMostrados}
-                </BottomSectionQuantityText>
+                    <BottomSectionQuantityText>
+                      {visitDataState.videosMostrados}
+                    </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => contar("videosMostrados", "soma")}
-                >
-                  <BottomSectionButtonWrapper>
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <TouchableOpacity
+                      onPress={() => contar("videosMostrados", "soma")}
+                    >
+                      <BottomSectionButtonWrapper>
+                        <StyledFeatherIconSectionButton name="plus" size={20} />
+                      </BottomSectionButtonWrapper>
+                    </TouchableOpacity>
+                  </BottomSectionButtonsArea>
+                </BottomSectionButtonsWrapper>
+              </>
+            ) : null}
 
             <BottomSectionButtonsWrapper>
               <BottomSectionTextArea>

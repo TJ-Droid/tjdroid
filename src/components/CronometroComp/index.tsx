@@ -59,6 +59,7 @@ import {
   BottomSectionTextAreaVideoBulletButton,
   BottomSectionTextAreaVideoBulletText,
 } from "./styles";
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 type ReportParamType = {
   colocacoes: number;
@@ -96,6 +97,9 @@ export default function CronometroComp() {
     hora: "00:00",
     colocacoes: 0,
   });
+
+  const [isRelatorioSimplificadoAtivado, setIsRelatorioSimplificadoAtivado] =
+    useState(true);
 
   // Hook para monitorar as adições de minutos
   useInterval(
@@ -829,6 +833,23 @@ export default function CronometroComp() {
     }
   }
 
+  useEffect(() => {
+    const loadConfiguracoes = async () => {
+      // Chama o controller para carregar as configurações
+      await carregarConfiguracoes().then(async (configs) => {
+        // Trata o retorno
+        if (configs) {
+          try {
+            setIsRelatorioSimplificadoAtivado(
+              !!configs?.isRelatorioSimplificado
+            );
+          } catch (e) {}
+        }
+      });
+    };
+    loadConfiguracoes();
+  }, []);
+
   return (
     <>
       <Header
@@ -836,7 +857,15 @@ export default function CronometroComp() {
         showGoBackHome
       />
 
-      <StyledScrollView>
+      <StyledScrollView
+        contentContainerStyle={{
+          flex: 1,
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          alignContent: "center",
+        }}
+      >
         <TopSectionContainer>
           <TopSectionContainerArea>
             <ContadorArea>
@@ -957,139 +986,141 @@ export default function CronometroComp() {
         </TopSectionContainer>
 
         <BottomSectionContainer>
-          <BottomSectionActionButtonsContainer>
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.placements")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+          {!isRelatorioSimplificadoAtivado ? (
+            <BottomSectionActionButtonsContainer>
+              <BottomSectionButtonsWrapper>
+                <BottomSectionTextArea>
+                  <BottomSectionLabelText>
+                    {t("words.placements")}:
+                  </BottomSectionLabelText>
+                </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("colocacoes", "");
-                  }}
-                  disabled={contadorDesativado}
-                >
-                  <BottomSectionButtonWrapper
-                    style={
-                      contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
-                    }
+                <BottomSectionButtonsArea>
+                  <TouchableOpacity
+                    onPress={() => {
+                      contar("colocacoes", "");
+                    }}
+                    disabled={contadorDesativado}
                   >
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                    <BottomSectionButtonWrapper
+                      style={
+                        contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
+                      }
+                    >
+                      <StyledFeatherIconSectionButton name="minus" size={20} />
+                    </BottomSectionButtonWrapper>
+                  </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {relatorio.colocacoes}
-                </BottomSectionQuantityText>
+                  <BottomSectionQuantityText>
+                    {relatorio.colocacoes}
+                  </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("colocacoes", "soma");
-                  }}
-                  disabled={contadorDesativado}
-                >
-                  <BottomSectionButtonWrapper
-                    style={
-                      contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
-                    }
+                  <TouchableOpacity
+                    onPress={() => {
+                      contar("colocacoes", "soma");
+                    }}
+                    disabled={contadorDesativado}
                   >
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <BottomSectionButtonWrapper
+                      style={
+                        contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
+                      }
+                    >
+                      <StyledFeatherIconSectionButton name="plus" size={20} />
+                    </BottomSectionButtonWrapper>
+                  </TouchableOpacity>
+                </BottomSectionButtonsArea>
+              </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.videos_showed")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+              <BottomSectionButtonsWrapper>
+                <BottomSectionTextArea>
+                  <BottomSectionLabelText>
+                    {t("words.videos_showed")}:
+                  </BottomSectionLabelText>
+                </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("videosMostrados", "");
-                  }}
-                  disabled={contadorDesativado}
-                >
-                  <BottomSectionButtonWrapper
-                    style={
-                      contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
-                    }
+                <BottomSectionButtonsArea>
+                  <TouchableOpacity
+                    onPress={() => {
+                      contar("videosMostrados", "");
+                    }}
+                    disabled={contadorDesativado}
                   >
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                    <BottomSectionButtonWrapper
+                      style={
+                        contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
+                      }
+                    >
+                      <StyledFeatherIconSectionButton name="minus" size={20} />
+                    </BottomSectionButtonWrapper>
+                  </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {relatorio.videosMostrados}
-                </BottomSectionQuantityText>
+                  <BottomSectionQuantityText>
+                    {relatorio.videosMostrados}
+                  </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("videosMostrados", "soma");
-                  }}
-                  disabled={contadorDesativado}
-                >
-                  <BottomSectionButtonWrapper
-                    style={
-                      contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
-                    }
+                  <TouchableOpacity
+                    onPress={() => {
+                      contar("videosMostrados", "soma");
+                    }}
+                    disabled={contadorDesativado}
                   >
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
+                    <BottomSectionButtonWrapper
+                      style={
+                        contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
+                      }
+                    >
+                      <StyledFeatherIconSectionButton name="plus" size={20} />
+                    </BottomSectionButtonWrapper>
+                  </TouchableOpacity>
+                </BottomSectionButtonsArea>
+              </BottomSectionButtonsWrapper>
 
-            <BottomSectionButtonsWrapper>
-              <BottomSectionTextArea>
-                <BottomSectionLabelText>
-                  {t("words.revisits")}:
-                </BottomSectionLabelText>
-              </BottomSectionTextArea>
+              <BottomSectionButtonsWrapper>
+                <BottomSectionTextArea>
+                  <BottomSectionLabelText>
+                    {t("words.revisits")}:
+                  </BottomSectionLabelText>
+                </BottomSectionTextArea>
 
-              <BottomSectionButtonsArea>
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("revisitas", "");
-                  }}
-                  disabled={contadorDesativado}
-                >
-                  <BottomSectionButtonWrapper
-                    style={
-                      contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
-                    }
+                <BottomSectionButtonsArea>
+                  <TouchableOpacity
+                    onPress={() => {
+                      contar("revisitas", "");
+                    }}
+                    disabled={contadorDesativado}
                   >
-                    <StyledFeatherIconSectionButton name="minus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
+                    <BottomSectionButtonWrapper
+                      style={
+                        contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
+                      }
+                    >
+                      <StyledFeatherIconSectionButton name="minus" size={20} />
+                    </BottomSectionButtonWrapper>
+                  </TouchableOpacity>
 
-                <BottomSectionQuantityText>
-                  {relatorio.revisitas}
-                </BottomSectionQuantityText>
+                  <BottomSectionQuantityText>
+                    {relatorio.revisitas}
+                  </BottomSectionQuantityText>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    contar("revisitas", "soma");
-                  }}
-                  disabled={contadorDesativado}
-                >
-                  <BottomSectionButtonWrapper
-                    style={
-                      contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
-                    }
+                  <TouchableOpacity
+                    onPress={() => {
+                      contar("revisitas", "soma");
+                    }}
+                    disabled={contadorDesativado}
                   >
-                    <StyledFeatherIconSectionButton name="plus" size={20} />
-                  </BottomSectionButtonWrapper>
-                </TouchableOpacity>
-              </BottomSectionButtonsArea>
-            </BottomSectionButtonsWrapper>
-          </BottomSectionActionButtonsContainer>
+                    <BottomSectionButtonWrapper
+                      style={
+                        contadorDesativado ? { opacity: 0.5 } : { opacity: 1 }
+                      }
+                    >
+                      <StyledFeatherIconSectionButton name="plus" size={20} />
+                    </BottomSectionButtonWrapper>
+                  </TouchableOpacity>
+                </BottomSectionButtonsArea>
+              </BottomSectionButtonsWrapper>
+            </BottomSectionActionButtonsContainer>
+          ) : null}
 
           <BottomSectionMessageContainer>
             <BottomSectionMessageText>

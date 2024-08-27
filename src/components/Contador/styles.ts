@@ -55,13 +55,14 @@ export const ContadorMinutesText = styled.Text`
 export const BottomSectionContainer = styled.View`
   background: ${({ theme }) => theme.color.primary}08;
   width: 100%;
-  min-height: 100px;
-  padding: 20px 15px;
 `;
 
-export const BottomSectionActionButtonsContainer = styled.View`
+export const BottomSectionActionButtonsContainer = styled.View<{
+  ocultarCampos?: boolean;
+}>`
   width: 100%;
-  min-height: 200px;
+  height: auto;
+  min-height: ${({ ocultarCampos }) => (ocultarCampos ? `80px` : "200px")};
   max-height: 200px;
 `;
 

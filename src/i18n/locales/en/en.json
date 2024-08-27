@@ -62,7 +62,7 @@
         "error_load_configs": "Error loading settings, try again!",
         "hide_message": "Thanks for using the App!",
         "simplified_report_title": "Simplified Report",
-        "simplified_report_description": "Enabling this option will hide Revisits, Placements and Videos in shared reports."
+        "simplified_report_description": "Enabling this option will hide Revisits, Placements, and Videos on all screens and in shared reports."
       },
       "pessoas": {
         "screen_name": "People",
