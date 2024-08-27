@@ -3,7 +3,7 @@
     "name": "TJ Droid",
     "slug": "tjdroid",
     "scheme": "dev.pedropaulo.tjdroid",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "jsEngine": "hermes",
     "assetBundlePatterns": ["**/*"],
     "orientation": "portrait",
