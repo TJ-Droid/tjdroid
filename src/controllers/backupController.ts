@@ -245,7 +245,7 @@ export const createJsonFileFromAsyncStorage = async (
   const pathJsonFile = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${nomeArquivoStorage}.json`;
 
   let response =
-    (await AsyncStorage.getItem(`@tjdroid:${nomeArquivoStorage}`)) ?? "{}";
+    (await AsyncStorage.getItem(`@tjdroid:${nomeArquivoStorage}`)) ?? "[]";
 
   // Cria o arquivo json
   return await RNFS.writeFile(
