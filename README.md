@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Print do projeto" src=".github/banner.png" width="100%">
+  <img alt="Project Banner" src=".github/banner.png" width="100%">
 </p>
 
 [![Crowdin](https://badges.crowdin.net/tjdroid/localized.svg)](https://crowdin.com/project/tjdroid)
@@ -57,7 +57,7 @@ If you want to help with translation to your language, please use [the link belo
 
 ### ➡️ How to use Crowdin to translate to your language:
 <p align="center">
-  <img alt="Print do projeto" src=".github/translate-tutorial.gif" width="100%">
+  <img alt="Crowdin GIF Tutorial" src=".github/translate-tutorial.gif" width="100%">
 </p>
 
 ## 🚀 Tecnologies

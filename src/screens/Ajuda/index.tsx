@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Linking,
-  SafeAreaView,
   ScrollView,
   TouchableHighlight,
   TouchableWithoutFeedback,
@@ -10,11 +9,12 @@ import {
 import { useTranslation } from "react-i18next";
 import Accordion from "react-native-collapsible/Accordion";
 
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Container,
   DescriptionText,
-  HeaderText,
   HeaderDescriptionContainer,
+  HeaderText,
   HeaderTextContainer,
   StyledFeatherIcon,
 } from "./styles";

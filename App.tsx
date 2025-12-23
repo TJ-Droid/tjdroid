@@ -1,25 +1,24 @@
+import AppLoading from "expo-app-loading";
+import * as Linking from "expo-linking";
 import React, { useEffect, useRef, useState } from "react";
 import { Provider as ReactNativePaperProvider } from "react-native-paper";
 import { ThemeProvider } from "styled-components";
-import AppLoading from "expo-app-loading";
-
+import ThemeContextProvider, { useThemeContext } from "./src/contexts/Theme";
 import {
   carregarConfiguracoes,
   salvarConfiguracoes,
 } from "./src/controllers/configuracoesController";
-import ThemeContextProvider, { useThemeContext } from "./src/contexts/Theme";
 import Routes from "./src/routes";
 import themes from "./src/themes";
-
-import * as Linking from "expo-linking";
-const prefix = Linking.createURL("/");
-
 // import Constants from 'expo-constants';
-import * as Notifications from "expo-notifications";
-import { ParsedURL } from "expo-linking";
-import { ThemeColors, ThemeType } from "./src/types/Theme";
-import { Platform } from "react-native";
+import { StyledStatusBar } from "@/components/Header/styles";
 import * as Device from "expo-device";
+import { ParsedURL } from "expo-linking";
+import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemeColors, ThemeType } from "./src/types/Theme";
+const prefix = Linking.createURL("/");
 
 // Configurações do Push Notification
 Notifications.setNotificationHandler({
@@ -27,13 +26,24 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
 export default function App() {
   return (
     <ThemeContextProvider>
-      <AppWrapper />
+      <ReactNativePaperProvider>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: "#000",
+          }}
+        >
+          <AppWrapper />
+        </SafeAreaView>
+      </ReactNativePaperProvider>
     </ThemeContextProvider>
   );
 }
@@ -163,9 +173,8 @@ const AppWrapper: React.FC = () => {
 
   return (
     <ThemeProvider theme={actualTheme ?? themes.azulEscuroDefault}>
-      <ReactNativePaperProvider>
-        <Routes />
-      </ReactNativePaperProvider>
+      <StyledStatusBar />
+      <Routes />
     </ThemeProvider>
   );
 };

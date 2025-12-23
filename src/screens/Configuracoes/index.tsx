@@ -1,36 +1,36 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Text, Linking, ToastAndroid, Switch, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { Linking, Switch, Text, ToastAndroid, View } from "react-native";
 import Rate, { AndroidMarket } from "react-native-rate";
-import { useThemeContext } from "../../contexts/Theme";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import SelectPickerLanguages from "../../components/SelectPickerLanguages";
+import { useThemeContext } from "../../contexts/Theme";
 import {
   carregarConfiguracoes,
   salvarConfiguracoes,
 } from "../../controllers/configuracoesController";
+import { RootStackParamListType } from "../../routes";
 import { analyticsCustomEvent } from "../../services/AnalyticsCustomEvents";
-import SelectPickerLanguages from "../../components/SelectPickerLanguages";
-import { useTranslation } from "react-i18next";
 import themes from "../../themes";
+import { AppLanguages } from "../../types/Languages";
 import { ThemeColors, ThemeConfiguracoesScreenType } from "../../types/Theme";
 import {
   Container,
   ItemList,
-  ItemListTitleSpace60,
-  ItemListTitleSpace100,
-  ItemListTextTitle,
+  ItemListBoxButtonCircleColor,
+  ItemListBoxSpace,
+  ItemListSpaceBetween,
   ItemListTextDescription,
   ItemListTextDescriptionTranslation,
-  ItemListBoxSpace,
-  ItemListBoxButtonCircleColor,
-  StyledFeatherLeftIcon,
-  ItemListSpaceBetween,
+  ItemListTextDescriptionTranslationIcon,
+  ItemListTextTitle,
+  ItemListTitleSpace100,
+  ItemListTitleSpace60,
   SectionDivider,
   SectionDividerText,
-  ItemListTextDescriptionTranslationIcon,
+  StyledFeatherLeftIcon,
 } from "./styles";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamListType } from "../../routes";
-import { AppLanguages } from "../../types/Languages";
 
 type ProfileScreenRouteProp = StackScreenProps<
   RootStackParamListType,

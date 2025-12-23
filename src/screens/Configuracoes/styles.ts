@@ -1,5 +1,5 @@
-import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
+import styled from "styled-components/native";
 
 export const Container = styled.ScrollView`
   background: ${({ theme }) => theme.color.bg};

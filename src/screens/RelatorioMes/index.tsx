@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView,
-  View,
-  Text,
   Alert,
-  ToastAndroid,
   FlatList,
+  ToastAndroid,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
 import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-import momentLocales from "moment/min/moment-with-locales";
 import moment from "moment";
+import momentLocales from "moment/min/moment-with-locales";
 import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 
+import EmptyMessage from "../../components/EmptyMessage";
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import EmptyMessage from "../../components/EmptyMessage";
 import {
   buscarAsyncStorageTjDroidIdioma,
   formatarLocale,
@@ -27,32 +25,33 @@ import {
 import {
   buscarDadosMesAnoServico,
   deletarRelatorio,
-  toggleSalvarMesTrabalhado,
   SelectedMonthServiceDataType,
+  toggleSalvarMesTrabalhado,
   verificarSeMesTrabalhado,
 } from "../../controllers/relatoriosController";
 
-import { RootStackParamListType } from "../../routes";
 import { StackScreenProps } from "@react-navigation/stack";
-import { ReportType } from "../../types/Reports";
-import { AppLanguages } from "../../types/Languages";
+import { SafeAreaView } from "react-native-safe-area-context";
 import CustomSwitch from "../../components/CustomSwitch";
+import { RootStackParamListType } from "../../routes";
+import { AppLanguages } from "../../types/Languages";
+import { ReportType } from "../../types/Reports";
 import {
   Container,
-  ItemList,
+  HeaderTotalsBottomSection,
+  HeaderTotalsBottomSectionText,
   HeaderTotalsBox,
   HeaderTotalsTopSection,
-  HeaderTotalsBottomSection,
-  HeaderTotalsTopSectionText,
   HeaderTotalsTopSectionHours,
-  HeaderTotalsBottomSectionText,
+  HeaderTotalsTopSectionText,
+  ItemList,
+  ItemListBottomContent,
+  ItemListBottomContentText,
+  ItemListMidleContent,
+  ItemListMidleContentText,
   ItemListTopContent,
   ItemListTopContentDayText,
   ItemListTopContentHoursText,
-  ItemListMidleContent,
-  ItemListMidleContentText,
-  ItemListBottomContent,
-  ItemListBottomContentText,
   StyledContainerWorkedMonth,
   StyledContainerWorkedMonthText,
 } from "./styles";

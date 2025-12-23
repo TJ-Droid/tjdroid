@@ -1,6 +1,6 @@
-import styled from "styled-components/native";
-import { StatusBar, TouchableOpacity } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { StatusBar, TouchableOpacity } from "react-native";
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.color.header_bg};

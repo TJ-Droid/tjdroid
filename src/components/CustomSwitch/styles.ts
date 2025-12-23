@@ -1,5 +1,5 @@
-import styled from "styled-components/native";
 import { TouchableOpacity } from "react-native";
+import styled from "styled-components/native";
 
 export const StyledContainer = styled.View`
   min-width: 110px;
@@ -19,7 +19,7 @@ export const StyledButtonSwitch = styled(TouchableOpacity)<{
   padding-left: 4px;
   padding-right: 4px;
   padding-top: 4px;
-  padding-bottom: 4px
+  padding-bottom: 4px;
   background-color: ${({ isSelected, theme }) =>
     isSelected ? theme.color.primary : "#ffffff00"};
   border-radius: 50px;

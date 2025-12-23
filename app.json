@@ -2,38 +2,49 @@
   "expo": {
     "name": "TJ Droid",
     "slug": "tjdroid",
-    "scheme": "dev.pedropaulo.tjdroid",
     "version": "1.2.3",
-    "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0277bd"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
+    "icon": "./src/assets/images/icon.png",
+    "scheme": "dev.pedropaulo.tjdroid",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "package": "dev.pedropaulo.tjdroid",
-      "useNextNotificationsApi": true,
-      "versionCode": 34,
+      "versionCode": 37,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0277bd"
+        "backgroundColor": "#0277bd",
+        "foregroundImage": "./src/assets/images/android-icon-foreground.png",
+        "backgroundImage": "./src/assets/images/android-icon-background.png",
+        "monochromeImage": "./src/assets/images/android-icon-monochrome.png"
       },
-      "permissions": []
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "output": "static",
+      "favicon": "./src/assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./src/assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#0277bd",
+          "dark": {
+            "backgroundColor": "#0277bd"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
     }
-  },
-  "name": "TJ Droid",
-  "displayName": "TJ Droid"
+  }
 }
