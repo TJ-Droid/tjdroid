@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   ToastAndroid,
   TouchableOpacity,
-  FlatList,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useTranslation } from "react-i18next";
 import {
   buscarAsyncStorageTjDroidIdioma,
   formatarLocale,
@@ -15,10 +15,10 @@ import {
 
 import moment from "moment/min/moment-with-locales";
 
-import Header from "../../components/Header";
 import DialogModal from "../../components/DialogModal";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
+import Header from "../../components/Header";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 import {
   buscarResidenciasVisitas,
@@ -28,20 +28,20 @@ import {
   excluirVisitaCasa,
 } from "../../controllers/territoriosController";
 
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { AppLanguages } from "../../types/Languages";
 import {
   Container,
+  HeaderBoxPersonName,
+  HeaderPersonName,
+  HeaderPersonNameIcon,
   ItemList,
   ItemListDay,
   ItemListTextDay,
   ItemListTextDayInfo,
   ItemListTextLastVisit,
-  HeaderBoxPersonName,
-  HeaderPersonName,
-  HeaderPersonNameIcon,
 } from "./styles";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamListType } from "../../routes";
-import { AppLanguages } from "../../types/Languages";
 
 type ProfileScreenRouteProp = StackScreenProps<
   RootStackParamListType,
@@ -365,8 +365,9 @@ export default function TerritorioResidenciasVisitas({
       {carregando ? (
         <LoadingSpinner />
       ) : (
-        <FlatList
-          style={{ width: "100%", paddingBottom: 150 }}
+        <FlashList
+          style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: 50 }}
           data={allVisitasResidencia.visitas}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}

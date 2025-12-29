@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
-  View,
   Alert,
   ToastAndroid,
-  FlatList,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
-import { useTranslation } from "react-i18next";
 
+import EmptyMessage from "../../components/EmptyMessage";
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import EmptyMessage from "../../components/EmptyMessage";
 
 import buscarTerritorios, {
   CustomTerritoriesType,
+  deletarTerritorio,
 } from "../../controllers/territoriosController";
-import { deletarTerritorio } from "../../controllers/territoriosController";
 
+import { StackScreenProps } from "@react-navigation/stack";
+import { FlashList } from "@shopify/flash-list";
+import { RootStackParamListType } from "../../routes";
 import {
   Container,
   ItemList,
@@ -26,8 +28,6 @@ import {
   ItemListTextDateSelected,
   ItemListTextDateWorked,
 } from "./styles";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamListType } from "../../routes";
 
 type ProfileScreenRouteProp = StackScreenProps<
   RootStackParamListType,
@@ -185,8 +185,9 @@ export default function Territorios({ navigation }: Props) {
       {carregando ? (
         <LoadingSpinner />
       ) : (
-        <FlatList
+        <FlashList
           style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: 50 }}
           data={allTerritorios}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}

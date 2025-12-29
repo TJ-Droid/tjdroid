@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  View,
   Alert,
-  ToastAndroid,
-  Text,
   Dimensions,
   Pressable,
-  FlatList,
+  Text,
+  ToastAndroid,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
+import EmptyMessage from "../../components/EmptyMessage";
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import EmptyMessage from "../../components/EmptyMessage";
 
 import {
   buscarTerritoriosResidencias,
@@ -22,21 +22,21 @@ import {
   TerritoryHomesInterface,
 } from "../../controllers/territoriosController";
 
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
+import { TerritoryDispositionType } from "../../types/Territories";
 import {
   Container,
   ItemList,
   ItemListTerritory,
   ItemListTerritoryColor,
-  ItemListTerritoryTitle,
+  ItemListTerritoryDescription,
   ItemListTerritoryQuantityVisits,
   ItemListTerritoryQuantityZeroVisits,
-  ItemListTerritoryDescription,
   ItemListTerritoryTextBold,
+  ItemListTerritoryTitle,
   TerritoryBoxText,
 } from "./styles";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamListType } from "../../routes";
-import { TerritoryDispositionType } from "../../types/Territories";
 
 // Número de linhas
 const NUM_COLUMNS = 6;
@@ -323,8 +323,9 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
       {carregando ? (
         <LoadingSpinner />
       ) : visualDisposition !== "caixas" ? (
-        <FlatList
+        <FlashList
           style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: 50 }}
           data={allTerritoriosResidencias}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}
@@ -332,7 +333,7 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
           keyExtractor={(_, index) => "_" + index}
         />
       ) : (
-        <FlatList
+        <FlashList
           style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12 }}
           contentContainerStyle={{ paddingBottom: 20 }}
           data={allTerritoriosResidencias}

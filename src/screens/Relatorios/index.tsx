@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  SectionList,
-  ToastAndroid,
-  Alert,
-  TouchableWithoutFeedback,
-  SectionListRenderItemInfo,
-} from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  SectionList,
+  SectionListRenderItemInfo,
+  ToastAndroid,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 import { StackScreenProps } from "@react-navigation/stack";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyMessage from "../../components/EmptyMessage";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 import { RootStackParamListType } from "../../routes";
 
@@ -23,12 +23,12 @@ import buscarAnosServico, {
 
 import {
   Container,
-  ItemList,
-  ItemListMonthHour,
-  ItemListTextMonth,
-  ItemListTextHour,
   HeaderItemList,
   HeaderItemListText,
+  ItemList,
+  ItemListMonthHour,
+  ItemListTextHour,
+  ItemListTextMonth,
 } from "./styles";
 
 type ReportSectionHeaderProps = {
@@ -142,7 +142,7 @@ export default function Relatorios({ navigation }: Props) {
     };
   }, [isFocused, reload, t]);
 
-    // Deleta relatorio do mes selecionado
+  // Deleta relatorio do mes selecionado
   const handleDeletarRelatorioMes = useCallback(
     (mes: string) => {
       deletarRelatorioMes(mes)
@@ -155,7 +155,9 @@ export default function Relatorios({ navigation }: Props) {
             setReload((prev) => !prev);
           } else if (dados === 2) {
             ToastAndroid.show(
-              t("screens.relatoriomes.actual_month_report_delete_message_error"),
+              t(
+                "screens.relatoriomes.actual_month_report_delete_message_error"
+              ),
               ToastAndroid.LONG
             );
           } else {
@@ -213,10 +215,7 @@ export default function Relatorios({ navigation }: Props) {
 
   const handleLongPressReport = useCallback(
     (item: MonthTotalsType) =>
-      alertaExclusaoRelatorioMes(
-        item.mes,
-        item.mes_formatado.toUpperCase()
-      ),
+      alertaExclusaoRelatorioMes(item.mes, item.mes_formatado.toUpperCase()),
     [alertaExclusaoRelatorioMes]
   );
 
@@ -228,7 +227,9 @@ export default function Relatorios({ navigation }: Props) {
   );
 
   const renderItem = useCallback(
-    ({ item }: SectionListRenderItemInfo<MonthTotalsType, SectionHeadersType>) => (
+    ({
+      item,
+    }: SectionListRenderItemInfo<MonthTotalsType, SectionHeadersType>) => (
       <ReportListItem
         item={item}
         onPress={handleNavigateToReport}
@@ -258,6 +259,7 @@ export default function Relatorios({ navigation }: Props) {
         <Container>
           <SectionList
             style={{ width: "100%" }}
+            contentContainerStyle={{ paddingBottom: 80 }}
             sections={allAnosServicosOrdenados}
             renderSectionHeader={renderSectionHeader}
             renderItem={renderItem}

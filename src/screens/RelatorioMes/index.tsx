@@ -1,7 +1,7 @@
+import { FlashList } from "@shopify/flash-list";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
-  FlatList,
   ToastAndroid,
   TouchableWithoutFeedback,
   View,
@@ -442,8 +442,9 @@ export default function RelatorioMes({ route, navigation }: Props) {
               </View>
             </StyledContainerWorkedMonth>
           </HeaderTotalsBox>
-          <FlatList
+          <FlashList
             style={{ width: "100%", marginBottom: 114 }}
+            contentContainerStyle={{ paddingBottom: 50 }}
             data={todosRelatoriosDoMes}
             renderItem={Item}
             ListEmptyComponent={EmptyListMessage}

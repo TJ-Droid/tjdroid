@@ -48,6 +48,8 @@ export const HeaderItemList = styled.View`
   background: ${({ theme }) => theme.color.bg_list_divider};
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.color.primary}20;
+  border-top-width: 1px;
+  border-top-color: ${({ theme }) => theme.color.primary}00;
 `;
 
 export const HeaderItemListText = styled.Text`

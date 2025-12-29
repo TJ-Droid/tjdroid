@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
+import React, { useEffect, useState } from "react";
 import {
-  View,
   Alert,
   ToastAndroid,
-  FlatList,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
 import { useTranslation } from "react-i18next";
 
+import EmptyMessage from "../../components/EmptyMessage";
 import Header from "../../components/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import EmptyMessage from "../../components/EmptyMessage";
 
 import buscarPessoas, {
   BuscarPessoasType,
   deletarPessoa,
 } from "../../controllers/pessoasController";
 
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamListType } from "../../routes";
 import {
   Container,
   ItemList,
   ItemListPerson,
-  ItemListTextName,
   ItemListTextDateVisits,
   ItemListTextLastVisit,
+  ItemListTextName,
   ItemListTextNoVisits,
 } from "./styles";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamListType } from "../../routes";
 
 type ProfileScreenRouteProp = StackScreenProps<
   RootStackParamListType,
@@ -187,8 +187,9 @@ export default function Pessoas({ navigation }: Props) {
       {carregando ? (
         <LoadingSpinner />
       ) : (
-        <FlatList
+        <FlashList
           style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: 50 }}
           data={allPessoasOrdenadas}
           renderItem={Item}
           ListEmptyComponent={EmptyListMessage}
