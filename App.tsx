@@ -34,16 +34,14 @@ Notifications.setNotificationHandler({
 export default function App() {
   return (
     <ThemeContextProvider>
-      <ReactNativePaperProvider>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: "#000",
-          }}
-        >
-          <AppWrapper />
-        </SafeAreaView>
-      </ReactNativePaperProvider>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#000",
+        }}
+      >
+        <AppWrapper />
+      </SafeAreaView>
     </ThemeContextProvider>
   );
 }
@@ -173,8 +171,10 @@ const AppWrapper: React.FC = () => {
 
   return (
     <ThemeProvider theme={actualTheme ?? themes.azulEscuroDefault}>
-      <StyledStatusBar />
-      <Routes />
+      <ReactNativePaperProvider>
+        <StyledStatusBar />
+        <Routes />
+      </ReactNativePaperProvider>
     </ThemeProvider>
   );
 };
