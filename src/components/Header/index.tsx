@@ -1,9 +1,16 @@
-import React, { useState } from "react";
-import { Alert, View, Share, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
-import { Menu, Divider } from "react-native-paper";
+import React, { useCallback, useState } from "react";
+import {
+  Alert,
+  Share,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { useTranslation } from "react-i18next";
+import { Divider, Menu } from "react-native-paper";
 
 import "react-native-get-random-values";
 // import "moment/locale/pt-br";
@@ -11,59 +18,59 @@ import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 import DialogModal from "../DialogModal";
 
 import {
-  editarRelatorio,
-  salvarNovoRelatorio,
-  deletarRelatorio,
-  SelectedMonthServiceDataType,
-} from "../../controllers/relatoriosController";
-import {
+  deletarPessoa,
+  editarVisita,
   excluirVisita,
   salvarPessoa,
-  editarVisita,
   salvarVisita,
-  deletarPessoa,
   SalvarVisitaType,
 } from "../../controllers/pessoasController";
 import {
-  salvarNovoTerritorio,
-  alterarDisposicaoVisualTerritorio,
-  editarNomeTerritorio,
-  deletarTerritorio,
+  deletarRelatorio,
+  editarRelatorio,
+  salvarNovoRelatorio,
+  SelectedMonthServiceDataType,
+} from "../../controllers/relatoriosController";
+import {
   adicionarUmaResidencia,
   adicionarVariasResidencias,
+  alterarDisposicaoVisualTerritorio,
   deletarResidenciaTerritorio,
-  salvarVisitaCasa,
+  deletarTerritorio,
   editarNomeIdentificadorResidencia,
-  excluirVisitaCasa,
+  editarNomeTerritorio,
   editarVisitaCasa,
+  excluirVisitaCasa,
   salvarInformacoesTerritorio,
-  VisitCustomSearchHomeVisitIterface,
+  salvarNovoTerritorio,
+  salvarVisitaCasa,
   SearchTerritoryInfoType,
+  VisitCustomSearchHomeVisitIterface,
 } from "../../controllers/territoriosController";
 
-import { VisitDataType } from "../../types/Visits";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { ReportCounterType } from "../../types/ReportCounter";
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 import { RootStackParamListType } from "../../routes";
+import { ReportCounterType } from "../../types/ReportCounter";
+import { TerritoryDispositionType } from "../../types/Territories";
+import { VisitDataType } from "../../types/Visits";
 import {
-  Container,
-  ContainerTitleButtons,
-  Title,
-  ContainerButtons,
-  WrapperButton,
-  StyledFeatherHeaderButtons,
   ButtonText,
-  StyledStatusBar,
+  Container,
+  ContainerButtons,
+  ContainerTitleButtons,
   StyledButton,
   StyledButtonDelete,
+  StyledButtonGoBack,
   StyledButtonSave,
+  StyledFeatherHeaderButtons,
   StyledFeatherHeaderButtonsIcon,
   StyledFeatherHeaderButtonsIconRed,
-  StyledButtonGoBack,
   StyledIoniconsHeaderButtons,
+  StyledStatusBar,
+  Title,
+  WrapperButton,
 } from "./styles";
-import { TerritoryDispositionType } from "../../types/Territories";
-import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 type ShowReportSendType = {
   totaisDoMes: Partial<SelectedMonthServiceDataType>;
@@ -115,6 +122,14 @@ type HeaderPropsType = {
   showEditTerritoryInfo?: SearchTerritoryInfoType;
 };
 
+const styles = StyleSheet.create({
+  titleCapitalize: { textTransform: "capitalize" },
+  titleNone: { textTransform: "none" },
+  row: { flexDirection: "row" },
+  menuWrapper: { flexDirection: "row", justifyContent: "center", flex: 1 },
+  menuDeleteItem: { backgroundColor: "#ff000030" },
+});
+
 export default function Header({
   title = "",
   capitalize = true,
@@ -155,12 +170,12 @@ export default function Header({
     useNavigation<StackNavigationProp<RootStackParamListType>>();
 
   const [addMenu, setAddMenu] = useState(false);
-  const openAddMenu = () => setAddMenu(true);
-  const closeAddMenu = () => setAddMenu(false);
+  const openAddMenu = useCallback(() => setAddMenu(true), []);
+  const closeAddMenu = useCallback(() => setAddMenu(false), []);
 
   const [dotsMenu, setDotsMenu] = useState(false);
-  const openDotsMenu = () => setDotsMenu(true);
-  const closeDotsMenu = () => setDotsMenu(false);
+  const openDotsMenu = useCallback(() => setDotsMenu(true), []);
+  const closeDotsMenu = useCallback(() => setDotsMenu(false), []);
 
   // Dialog states
   const [dialogNewPersonVisible, setDialogNewPersonVisible] = useState(false);
@@ -177,18 +192,31 @@ export default function Header({
   const [dialogAddTerritoryHomeVisible, setDialogAddTerritoryHomeVisible] =
     useState(false);
 
-  // Change disposition state
-  const [visualDisposition, setVisualDisposition] = useState("");
-
-  function voltarHome() {
-    navigation.navigate("Home");
-  }
-  function voltarPessoas() {
-    navigation.navigate("Pessoas");
-  }
-  function voltarAtras() {
-    navigation.goBack();
-  }
+  const voltarHome = useCallback(
+    () => navigation.navigate("Home"),
+    [navigation]
+  );
+  const voltarPessoas = useCallback(
+    () => navigation.navigate("Pessoas"),
+    [navigation]
+  );
+  const voltarAtras = useCallback(() => navigation.goBack(), [navigation]);
+  const navigateToRelatorios = useCallback(
+    () => navigation.navigate("Relatorios"),
+    [navigation]
+  );
+  const navigateToBackup = useCallback(
+    () => navigation.navigate("Backup"),
+    [navigation]
+  );
+  const navigateToAjuda = useCallback(
+    () => navigation.navigate("Ajuda"),
+    [navigation]
+  );
+  const navigateToConfiguracoes = useCallback(
+    () => navigation.navigate("Configuracoes"),
+    [navigation]
+  );
 
   // Dialog Open Function
   function handleOpenDialogNewPerson(value: boolean) {
@@ -896,9 +924,6 @@ export default function Header({
     novosDados.visualDisposition =
       novosDados.visualDisposition === "linhas" ? "caixas" : "linhas";
 
-    // Seta o estado para mudar o icone na barra
-    setVisualDisposition(novosDados.visualDisposition);
-
     // Manda o retorno para a funcao atualizar a lista da tela
     showChangeDispositionFunc(novosDados.visualDisposition);
 
@@ -1132,33 +1157,25 @@ export default function Header({
       <StyledStatusBar />
 
       {showGoBack && (
-        <StyledButtonGoBack
-          onPress={() => {
-            voltarAtras();
-          }}
-        >
+        <StyledButtonGoBack onPress={voltarAtras}>
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
         </StyledButtonGoBack>
       )}
 
       {showGoBackHome && (
-        <StyledButtonGoBack onPress={() => voltarHome()}>
+        <StyledButtonGoBack onPress={voltarHome}>
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
         </StyledButtonGoBack>
       )}
 
       {showGoBackPersons && (
-        <StyledButtonGoBack onPress={() => voltarPessoas()}>
+        <StyledButtonGoBack onPress={voltarPessoas}>
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
         </StyledButtonGoBack>
       )}
 
       {showGoBackReportDetails && (
-        <StyledButtonGoBack
-          onPress={() => {
-            navigation.navigate("Relatorios");
-          }}
-        >
+        <StyledButtonGoBack onPress={navigateToRelatorios}>
           <StyledFeatherHeaderButtons name="arrow-left" size={30} />
         </StyledButtonGoBack>
       )}
@@ -1167,16 +1184,16 @@ export default function Header({
         <Title
           ellipsizeMode="tail"
           numberOfLines={2}
-          style={{ textTransform: capitalize ? "capitalize" : "none" }}
+          style={capitalize ? styles.titleCapitalize : styles.titleNone}
         >
           {title}
         </Title>
 
         <ContainerButtons>
           {isHomePage ? (
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.row}>
               <WrapperButton>
-                <TouchableOpacity onPress={() => navigation.navigate("Backup")}>
+                <TouchableOpacity onPress={navigateToBackup}>
                   <StyledFeatherHeaderButtons
                     name="arrow-down-circle"
                     size={29}
@@ -1184,21 +1201,17 @@ export default function Header({
                 </TouchableOpacity>
               </WrapperButton>
               <WrapperButton>
-                <TouchableOpacity onPress={() => navigation.navigate("Ajuda")}>
+                <TouchableOpacity onPress={navigateToAjuda}>
                   <StyledFeatherHeaderButtons name="help-circle" size={29} />
                 </TouchableOpacity>
               </WrapperButton>
               <WrapperButton>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Configuracoes")}
-                >
+                <TouchableOpacity onPress={navigateToConfiguracoes}>
                   <StyledFeatherHeaderButtons name="settings" size={29} />
                 </TouchableOpacity>
               </WrapperButton>
             </View>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showContadorSave ? (
             <>
@@ -1227,9 +1240,7 @@ export default function Header({
                 </StyledButton>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showReportSave ? (
             <>
@@ -1260,9 +1271,7 @@ export default function Header({
                 </StyledButtonDelete>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showNewReportSave ? (
             <>
@@ -1291,19 +1300,15 @@ export default function Header({
                 </StyledButton>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showCancel ? (
             <WrapperButton>
-              <StyledButton onPress={() => voltarAtras()}>
+              <StyledButton onPress={voltarAtras}>
                 <StyledFeatherHeaderButtons name="x-square" size={29} />
               </StyledButton>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showReportAdd ? (
             <WrapperButton>
@@ -1315,19 +1320,11 @@ export default function Header({
                 <StyledFeatherHeaderButtons name="file-plus" size={29} />
               </TouchableOpacity>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showReportSend ? (
             <WrapperButton>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  flex: 1,
-                }}
-              >
+              <View style={styles.menuWrapper}>
                 <Menu
                   visible={addMenu}
                   onDismiss={closeAddMenu}
@@ -1343,19 +1340,17 @@ export default function Header({
                   <Menu.Item
                     onPress={() => compartilharRelatorio(showReportSend)}
                     title={t("screens.relatorios.menu_month_report")}
-                    icon="file-outline"
+                    leadingIcon="file-outline"
                   />
                   <Menu.Item
                     onPress={() => compartilharRelatorio(showReportSend, true)}
                     title={t("screens.relatorios.menu_month_report_with_hours")}
-                    icon="file-clock"
+                    leadingIcon="file-clock"
                   />
                 </Menu>
               </View>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showAddNewPerson ? (
             <WrapperButton>
@@ -1363,9 +1358,7 @@ export default function Header({
                 <StyledFeatherHeaderButtons name="user-plus" size={29} />
               </TouchableOpacity>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showAddPersonVisit ? (
             <WrapperButton>
@@ -1379,9 +1372,7 @@ export default function Header({
                 <StyledFeatherHeaderButtons name="plus-square" size={29} />
               </StyledButton>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showAddHomeVisit ? (
             <WrapperButton>
@@ -1396,9 +1387,7 @@ export default function Header({
                 <StyledFeatherHeaderButtons name="plus-square" size={29} />
               </StyledButton>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showEditHomeIdentifier ? (
             <WrapperButton>
@@ -1408,9 +1397,7 @@ export default function Header({
                 <StyledFeatherHeaderButtons name="edit-2" size={24} />
               </StyledButton>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showDeletePerson ? (
             <WrapperButton>
@@ -1420,9 +1407,7 @@ export default function Header({
                 <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
               </StyledButtonDelete>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showDeleteTerritoryHome ? (
             <WrapperButton>
@@ -1437,9 +1422,7 @@ export default function Header({
                 <StyledFeatherHeaderButtonsIconRed name="trash-2" size={29} />
               </StyledButtonDelete>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showEditPersonVisit &&
           Object.keys(showEditPersonVisit).length !== 0 ? (
@@ -1471,9 +1454,7 @@ export default function Header({
                 </StyledButtonDelete>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showEditHomeVisit ? (
             <>
@@ -1505,9 +1486,7 @@ export default function Header({
                 </StyledButtonDelete>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showEditTerritoryInfo ? (
             <>
@@ -1526,9 +1505,7 @@ export default function Header({
                 </StyledButtonSave>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showNewPersonVisit ? (
             <>
@@ -1557,9 +1534,7 @@ export default function Header({
                 </StyledButton>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showNewHomeVisit ? (
             <>
@@ -1588,9 +1563,7 @@ export default function Header({
                 </StyledButton>
               </WrapperButton>
             </>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showAddNewTerritory ? (
             <WrapperButton>
@@ -1598,19 +1571,11 @@ export default function Header({
                 <StyledFeatherHeaderButtons name="plus-square" size={29} />
               </StyledButton>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showOptionAddNewResidences ? (
             <WrapperButton>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  flex: 1,
-                }}
-              >
+              <View style={styles.menuWrapper}>
                 <Menu
                   visible={addMenu}
                   onDismiss={closeAddMenu}
@@ -1628,19 +1593,17 @@ export default function Header({
                       handleAdicionarUmaResidencia(territoryData.territoryId)
                     }
                     title={t("components.header.menu_item_add_one_house")}
-                    icon="home"
+                    leadingIcon="home"
                   />
                   <Menu.Item
                     onPress={() => handleOpenDialogTerritoryHome(true)}
                     title={t("components.header.menu_item_add_one_many_houses")}
-                    icon="home-group"
+                    leadingIcon="home-group"
                   />
                 </Menu>
               </View>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showChangeDisposition ? (
             <WrapperButton>
@@ -1654,19 +1617,11 @@ export default function Header({
                 )}
               </StyledButton>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
 
           {showTerritoryMenu ? (
             <WrapperButton>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  flex: 1,
-                }}
-              >
+              <View style={styles.menuWrapper}>
                 <Menu
                   visible={dotsMenu}
                   onDismiss={closeDotsMenu}
@@ -1686,12 +1641,12 @@ export default function Header({
                       })
                     }
                     title={t("components.header.menu_item_infos")}
-                    icon="information-outline"
+                    leadingIcon="information-outline"
                   />
                   <Menu.Item
                     onPress={() => handleOpenDialogChangeNameTerritory(true)}
                     title={t("components.header.menu_item_rename")}
-                    icon="pencil-outline"
+                    leadingIcon="pencil-outline"
                   />
                   {/* <Menu.Item onPress={() => {}} title="Ordenar" icon="sort" /> */}
                   <Divider />
@@ -1703,15 +1658,13 @@ export default function Header({
                       )
                     }
                     title={t("components.header.menu_item_remove")}
-                    icon="trash-can-outline"
-                    style={{ backgroundColor: "#ff000030" }}
+                    leadingIcon="trash-can-outline"
+                    style={styles.menuDeleteItem}
                   />
                 </Menu>
               </View>
             </WrapperButton>
-          ) : (
-            <View></View>
-          )}
+          ) : null}
         </ContainerButtons>
       </ContainerTitleButtons>
     </Container>
