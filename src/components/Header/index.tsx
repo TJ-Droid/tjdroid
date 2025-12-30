@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Alert,
   Share,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   menuDeleteItem: { backgroundColor: "#ff000030" },
 });
 
-export default function Header({
+function Header({
   title = "",
   capitalize = true,
   showGoBack = false,
@@ -227,38 +227,46 @@ export default function Header({
   );
 
   // Dialog Open Function
-  function handleOpenDialogNewPerson(value: boolean) {
+  const handleOpenDialogNewPerson = useCallback((value: boolean) => {
     setDialogNewPersonVisible(value);
-  }
-  function handleOpenDialogNewTerritory(value: boolean) {
+  }, []);
+  const handleOpenDialogNewTerritory = useCallback((value: boolean) => {
     setDialogNewTerritoryVisible(value);
-  }
-  function handleOpenDialogChangeNameTerritory(value: boolean) {
+  }, []);
+  const handleOpenDialogChangeNameTerritory = useCallback((value: boolean) => {
     setDialogChangeNameTerritoryVisible(value);
-  }
-  function handleOpenDialogChangeHomeIdentifier(value: boolean) {
+  }, []);
+  const handleOpenDialogChangeHomeIdentifier = useCallback((value: boolean) => {
     setDialogChangeHomeIdentifierVisible(value);
-  }
-  function handleOpenDialogTerritoryHome(value: boolean) {
+  }, []);
+  const handleOpenDialogTerritoryHome = useCallback((value: boolean) => {
     setDialogAddTerritoryHomeVisible(value);
-  }
+  }, []);
 
   // Dialog Cancel Function
-  function handleCancelDialogNewPerson() {
+  const handleCancelDialogNewPerson = useCallback(() => {
     setDialogNewPersonVisible(false);
-  }
-  function handleCancelDialogNewTerritory() {
+  }, []);
+  const handleCancelDialogNewTerritory = useCallback(() => {
     setDialogNewTerritoryVisible(false);
-  }
-  function handleCancelDialogChangeNameTerritory() {
+  }, []);
+  const handleCancelDialogChangeNameTerritory = useCallback(() => {
     setDialogChangeNameTerritoryVisible(false);
-  }
-  function handleCancelDialogChangeHomeIdentifier() {
+  }, []);
+  const handleCancelDialogChangeHomeIdentifier = useCallback(() => {
     setDialogChangeHomeIdentifierVisible(false);
-  }
-  function handleCancelDialogTerritoryHome() {
+  }, []);
+  const handleCancelDialogTerritoryHome = useCallback(() => {
     setDialogAddTerritoryHomeVisible(false);
-  }
+  }, []);
+
+  const hasEditPersonVisit = useMemo(() => {
+    if (!showEditPersonVisit) {
+      return false;
+    }
+
+    return Object.keys(showEditPersonVisit).length !== 0;
+  }, [showEditPersonVisit]);
 
   // Script do botão de Compartilhar
   // COMPARTILHAR RELATÓRIO
@@ -1438,14 +1446,13 @@ export default function Header({
             </WrapperButton>
           ) : null}
 
-          {showEditPersonVisit &&
-          Object.keys(showEditPersonVisit).length !== 0 ? (
+          {hasEditPersonVisit ? (
             <>
               <WrapperButton>
                 <StyledButtonSave
                   onPress={() =>
                     /* Vai voltar para a página da pessoa na hora de salvar */
-                    handleEditarVisitaFeita(showEditPersonVisit)
+                    handleEditarVisitaFeita(showEditPersonVisit as any)
                   }
                 >
                   <ButtonText>{t("words.save")}</ButtonText>
@@ -1459,8 +1466,8 @@ export default function Header({
                 <StyledButtonDelete
                   onPress={() =>
                     alertaDeletarVisitaPessoa(
-                      showEditPersonVisit.idPessoa,
-                      showEditPersonVisit.idVisita
+                      showEditPersonVisit?.idPessoa as any,
+                      showEditPersonVisit?.idVisita as any
                     )
                   }
                 >
@@ -1686,3 +1693,5 @@ export default function Header({
     </Container>
   );
 }
+
+export default React.memo(Header);
