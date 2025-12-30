@@ -1,5 +1,5 @@
-import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
+import styled from "styled-components/native";
 import IconGoogleDrive from "../../images/svg/iconGoogleDrive";
 
 export const Container = styled.ScrollView`
@@ -93,6 +93,17 @@ export const StyledZipIcon = styled.Text`
   padding: 0px 5px 3px 5px;
   border-radius: 3px;
   margin-left: 10px;
+`;
+
+export const StyledStorageTypeIcon = styled.Text`
+  background-color: ${({ theme }) => theme.color.text_list_divider}20;
+  color: ${({ theme }) => theme.color.primary}80;
+  padding: 3px 5px 3px 5px;
+  border-radius: 3px;
+  margin-left: 10px;
+  position: absolute;
+  right: 6px;
+  font-size: 10px;
 `;
 
 export const StyledFeatherButtonWrapper = styled.View<{

@@ -53,6 +53,10 @@ const getStorage = () => {
   return storage;
 };
 
+export const getStorageTypeLabel = () => {
+  return getStorage() ? "MMKV" : "AsyncStorage";
+};
+
 const ensureMigrated = async () => {
   const currentStorage = getStorage();
   if (!currentStorage) {

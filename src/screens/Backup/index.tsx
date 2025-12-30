@@ -5,26 +5,29 @@ import {
   generateManualBackup,
   restoreManualBackup,
 } from "../../controllers/backupController";
+import { getStorageTypeLabel } from "../../services/AsyncStorageMethods";
 
 import {
   Container,
   ItemList,
   ItemListColumn,
-  ItemListTitleSpace,
-  ItemListTextTitle,
-  ItemListTextDescription,
   ItemListSpaceBetween,
+  ItemListTextDescription,
+  ItemListTextTitle,
+  ItemListTitleSpace,
   SectionDivider,
   SectionDividerText,
-  StyledZipIcon,
-  StyledFeatherButtonWrapper,
-  StyledFeatherButtonLeftOverlay,
   StyledFeatherButtonLeftIcon,
+  StyledFeatherButtonLeftOverlay,
   StyledFeatherButtonText,
+  StyledFeatherButtonWrapper,
+  StyledStorageTypeIcon,
+  StyledZipIcon,
 } from "./styles";
 
 export default function Backup() {
   const { t } = useTranslation();
+  const storageTypeLabel = getStorageTypeLabel();
   return (
     <Container>
       {/* <SectionDivider>
@@ -112,6 +115,7 @@ export default function Backup() {
           {t("screens.backup.manual_backup")}
         </SectionDividerText>
         <StyledZipIcon>.zip</StyledZipIcon>
+        <StyledStorageTypeIcon>{storageTypeLabel}</StyledStorageTypeIcon>
       </SectionDivider>
 
       <ItemListColumn>
