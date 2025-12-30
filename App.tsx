@@ -33,19 +33,30 @@ Notifications.setNotificationHandler({
 export default function App() {
   return (
     <ThemeContextProvider>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: "#000",
-        }}
-      >
-        <ReactNativePaperProvider>
-          <AppWrapper />
-        </ReactNativePaperProvider>
-      </SafeAreaView>
+      <AppContainer />
     </ThemeContextProvider>
   );
 }
+
+const AppContainer: React.FC = () => {
+  const { actualTheme } = useThemeContext();
+  const backgroundColor =
+    actualTheme?.color.statusbar_bg ??
+    themes.azulEscuroDefault.color.statusbar_bg;
+
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor,
+      }}
+    >
+      <ReactNativePaperProvider>
+        <AppWrapper />
+      </ReactNativePaperProvider>
+    </SafeAreaView>
+  );
+};
 
 const AppWrapper: React.FC = () => {
   // THEME STATE CONTEXT
