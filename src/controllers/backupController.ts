@@ -156,40 +156,40 @@ export async function generateManualBackup() {
 
 // Função restaurar o .zip do backup manual
 export async function restoreManualBackup() {
-  await DocumentPicker.getDocumentAsync({
+  let restored = false;
+  const result = await DocumentPicker.getDocumentAsync({
     type: "application/zip",
     multiple: false,
-  }).then((result) => {
-    if (result.canceled) {
-      // console.log("Nenhum documento selecionado!");
-      return;
-    }
-
-    if (result.assets.length === 1) {
-      // Passos para restaurar o backup
-      createBackupFolder()
-        .then((cbfResponse) => {
-          if (cbfResponse)
-            unzipBackupFolderURI(result.assets[0].uri).then((unzipResponse) => {
-              if (unzipResponse)
-                restoreBackupToAsyncStorage().then(() => {
-                  ToastAndroid.show(
-                    `${i18next.t(
-                      "controllers.backupcontroller_toast_backup_restore_success"
-                    )} 👏`,
-                    ToastAndroid.LONG
-                  );
-                });
-            });
-        })
-        .catch((err) => {
-          // console.log("101:", err);
-        });
-    }
   });
+
+  if (result.canceled) {
+    // console.log("Nenhum documento selecionado!");
+  } else if (result.assets.length === 1) {
+    // Passos para restaurar o backup
+    try {
+      const folderCreated = await createBackupFolder();
+      if (folderCreated) {
+        const unzipped = await unzipBackupFolderURI(result.assets[0].uri);
+        if (unzipped) {
+          restored = await restoreBackupToAsyncStorage();
+          if (restored) {
+            ToastAndroid.show(
+              `${i18next.t(
+                "controllers.backupcontroller_toast_backup_restore_success"
+              )} \u{1F44F}`,
+              ToastAndroid.LONG
+            );
+          }
+        }
+      }
+    } catch (err) {
+      // console.log("101:", err);
+    }
+  }
 
   // Adiciona o evento ao Analytics
   await analyticsCustomEvent("backupmanual_restaurar");
+  return restored;
 }
 
 // Abre o Expo Share para a pessoa poder salvar o arquivo arquivo onde desejar logo de cara
@@ -363,122 +363,66 @@ export const deleteBackupFolder = async () => {
 // Função que está listando as pastas do backup e restaurando o backup para o asyncstorage
 export async function restoreBackupToAsyncStorage() {
   // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
-  return RNFS.readDir(`${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`)
-    .then(async (statResult) => {
-      // Percorre todos os arquivos salvos, 4 ao todo
-      statResult.map((result) => {
-        if (result.name === "relatorios.json") {
-          RNFS.readFile(result.path, "utf8")
-            .then(async (result) => {
-              // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              const parsed = JSON.parse(result);
-              await salvarAsyncStorage(
-                parsed === null ? [] : parsed,
-                "@tjdroid:relatorios"
-              );
-            })
-            .catch((err) => {
-              // console.log("102:",err);
-              errorAlert(
-                i18next.t(
-                  "controllers.backupcontroller_alert_backup_restore_error"
-                )
-              );
-            });
-        }
+  try {
+    const statResult = await RNFS.readDir(
+      `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}`
+    );
+    const restoreTasks = statResult.map(async (result) => {
+      const restoreTargets = {
+        "relatorios.json": {
+          key: "@tjdroid:relatorios",
+          normalize: (parsed: any) => (parsed === null ? [] : parsed),
+        },
+        "territorios.json": {
+          key: "@tjdroid:territorios",
+          normalize: (parsed: any) => (parsed === null ? [] : parsed),
+        },
+        "pessoas.json": {
+          key: "@tjdroid:pessoas",
+          normalize: (parsed: any) => (parsed === null ? [] : parsed),
+        },
+        "config.json": {
+          key: "@tjdroid:config",
+          normalize: (parsed: any) => ({
+            ...(parsed ?? {}),
+            isRelatorioSimplificado: true,
+          }),
+        },
+        "meses_trabalhados.json": {
+          key: "@tjdroid:meses_trabalhados",
+          normalize: (parsed: any) => (parsed === null ? [] : parsed),
+        },
+      };
 
-        if (result.name === "territorios.json") {
-          RNFS.readFile(result.path, "utf8")
-            .then(async (result) => {
-              // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              const parsed = JSON.parse(result);
-              await salvarAsyncStorage(
-                parsed === null ? [] : parsed,
-                "@tjdroid:territorios"
-              );
-            })
-            .catch((err) => {
-              // console.log("102:",err);
-              errorAlert(
-                i18next.t(
-                  "controllers.backupcontroller_alert_backup_restore_error"
-                )
-              );
-            });
-        }
+      const target = restoreTargets[result.name as keyof typeof restoreTargets];
+      if (!target) {
+        return true;
+      }
 
-        if (result.name === "pessoas.json") {
-          RNFS.readFile(result.path, "utf8")
-            .then(async (result) => {
-              // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              const parsed = JSON.parse(result);
-              await salvarAsyncStorage(
-                parsed === null ? [] : parsed,
-                "@tjdroid:pessoas"
-              );
-            })
-            .catch((err) => {
-              // console.log("102:",err);
-              errorAlert(
-                i18next.t(
-                  "controllers.backupcontroller_alert_backup_restore_error"
-                )
-              );
-            });
-        }
-
-        if (result.name === "config.json") {
-          RNFS.readFile(result.path, "utf8")
-            .then(async (result) => {
-              // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              const parsed = JSON.parse(result);
-              await salvarAsyncStorage(
-                {
-                  ...(parsed ?? {}),
-                  isRelatorioSimplificado: true,
-                },
-                "@tjdroid:config"
-              );
-            })
-            .catch((err) => {
-              // console.log("102:",err);
-              errorAlert(
-                i18next.t(
-                  "controllers.backupcontroller_alert_backup_restore_error"
-                )
-              );
-            });
-        }
-
-        if (result.name === "meses_trabalhados.json") {
-          RNFS.readFile(result.path, "utf8")
-            .then(async (result) => {
-              // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              const parsed = JSON.parse(result);
-              await salvarAsyncStorage(
-                parsed === null ? [] : parsed,
-                "@tjdroid:meses_trabalhados"
-              );
-            })
-            .catch((err) => {
-              // console.log("102:",err);
-              errorAlert(
-                i18next.t(
-                  "controllers.backupcontroller_alert_backup_restore_error"
-                )
-              );
-            });
-        }
-      });
-    })
-    .catch((err) => {
-      // SETAR UM ALERT DE ERRO
-      errorAlert(
-        i18next.t("controllers.backupcontroller_alert_backup_restore_error")
-      );
-      // console.log("Erro ao restaurar os dados #1: ", err.message, err.code);
-      return false;
+      try {
+        const raw = await RNFS.readFile(result.path, "utf8");
+        const parsed = JSON.parse(raw);
+        await salvarAsyncStorage(target.normalize(parsed), target.key);
+        return true;
+      } catch (err) {
+        // console.log("102:",err);
+        errorAlert(
+          i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+        );
+        return false;
+      }
     });
+
+    const results = await Promise.all(restoreTasks);
+    return results.every(Boolean);
+  } catch (err) {
+    // SETAR UM ALERT DE ERRO
+    errorAlert(
+      i18next.t("controllers.backupcontroller_alert_backup_restore_error")
+    );
+    // console.log("Erro ao restaurar os dados #1: ", err.message, err.code);
+    return false;
+  }
 }
 
 // Script para fazer o upload para o Drive-Dropbox futuramente

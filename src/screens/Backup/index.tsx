@@ -1,11 +1,15 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
+import { useThemeContext } from "../../contexts/Theme";
 import {
   generateManualBackup,
   restoreManualBackup,
 } from "../../controllers/backupController";
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 import { getStorageTypeLabel } from "../../services/AsyncStorageMethods";
+import themes from "../../themes";
+import { ThemeColors } from "../../types/Theme";
 
 import {
   Container,
@@ -27,7 +31,35 @@ import {
 
 export default function Backup() {
   const { t } = useTranslation();
+  const { setActualTheme } = useThemeContext();
   const storageTypeLabel = getStorageTypeLabel();
+
+  const applyRestoredTheme = async () => {
+    if (!setActualTheme) {
+      return;
+    }
+
+    const configs = await carregarConfiguracoes();
+    if (!configs || Array.isArray(configs)) {
+      setActualTheme(themes.azulEscuroDefault);
+      return;
+    }
+
+    if (configs.darkMode) {
+      setActualTheme(themes.darkMode);
+      return;
+    }
+
+    const themeKey = configs.actualTheme as ThemeColors;
+    setActualTheme(themes[themeKey] ?? themes.azulEscuroDefault);
+  };
+
+  const handleRestoreBackup = async () => {
+    const restored = await restoreManualBackup();
+    if (restored) {
+      await applyRestoredTheme();
+    }
+  };
   return (
     <Container>
       {/* <SectionDivider>
@@ -137,7 +169,7 @@ export default function Backup() {
         <TouchableOpacity
           activeOpacity={0.8}
           style={{ width: "100%" }}
-          onPress={() => restoreManualBackup()}
+          onPress={handleRestoreBackup}
         >
           <StyledFeatherButtonWrapper bgColor="#195734" marginBottom="0px">
             <StyledFeatherButtonLeftOverlay>
