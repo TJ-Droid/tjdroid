@@ -294,7 +294,7 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
           }}
         >
           <TerritoryBoxText adjustsFontSizeToFit numberOfLines={1}>
-            {item.titulo.toString().substring(0, 3)}
+            {item.titulo.toString()}
           </TerritoryBoxText>
         </Pressable>
       </View>
@@ -334,8 +334,8 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
         />
       ) : (
         <FlashList
-          style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12 }}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          style={{ flex: 1, paddingHorizontal: 12 }}
+          contentContainerStyle={{ paddingTop: 10, paddingBottom: 30 }}
           data={allTerritoriosResidencias}
           renderItem={ItemBox}
           ListEmptyComponent={EmptyListMessage}

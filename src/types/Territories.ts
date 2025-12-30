@@ -7,6 +7,7 @@ export type TerritoriesType = {
   disposicao?: TerritoryDispositionType;
   informacoes: TerritoryInfoType;
   casas: TerritoryHomeType[];
+  // predio: TerritoryPredioType[];
 };
 
 export type TerritoryInfoType = {
@@ -15,6 +16,12 @@ export type TerritoryInfoType = {
   dataTrabalhado: string;
   ultimaVisita: string;
 };
+
+// export type TerritoryPredioType = {
+//   idPredio: string;
+//   posicao: number;
+//   casas: TerritoryHomeType[];
+// };
 
 export type TerritoryHomeType = {
   id: string;

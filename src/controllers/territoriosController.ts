@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 import moment from "moment";
 import "moment/locale/pt-br";
+import { v4 as uuidv4 } from "uuid";
 
 // importa as opcoes para o SelectPicker para as opções de de tipos visitas
 import {
@@ -436,8 +436,18 @@ export async function adicionarUmaResidencia(territorioId: string) {
 // ADICIONAR UM TERRITORIO
 export async function adicionarVariasResidencias(
   territorioId: string,
-  qtd: number
+  numeroInicial: number,
+  numeroFinal: number
 ) {
+  // Validacoes adicionais
+  if (numeroFinal - numeroInicial < 0) {
+    return undefined;
+  }
+
+  if (numeroFinal - numeroInicial > 100) {
+    return undefined;
+  }
+
   const adicionarVariasResidencias = async () => {
     try {
       let todosTerritorios: TerritoriesType[] = await buscarAsyncStorage(
@@ -449,13 +459,13 @@ export async function adicionarVariasResidencias(
         (territorio) => territorio.id === territorioId
       );
 
-      for (let i = 1; i <= qtd; i++) {
+      for (let i = numeroInicial; i <= numeroFinal; i++) {
         // Se não tiver nenhuma residência, adiciona o primeiro, se não, busca pelo último e adiciona mais um
         if (todosTerritorios[indexTerritorio].casas.length === 0) {
           // Adiciona Uma Residencia
           todosTerritorios[indexTerritorio].casas.push({
             id: uuidv4(),
-            nome: `${1}`,
+            nome: `${i}`,
             nomeMorador: "",
             posicao: 1,
             interessado: 0,
@@ -470,7 +480,7 @@ export async function adicionarVariasResidencias(
           // Adiciona Uma Residencia
           todosTerritorios[indexTerritorio].casas.push({
             id: uuidv4(),
-            nome: `${ultimaResidencia[0].posicao + 1}`,
+            nome: `${i}`,
             nomeMorador: "",
             posicao: ultimaResidencia[0].posicao + 1,
             interessado: 0,

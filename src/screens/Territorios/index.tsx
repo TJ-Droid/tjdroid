@@ -47,46 +47,43 @@ export default function Territorios({ navigation }: Props) {
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    setCarregando(true);
-    // let continuarBuscarDados = true;
+    let ativo = true;
+
+    const buscarDados = async () => {
+      try {
+        const dados = await buscarTerritorios();
+        if (!ativo) {
+          return;
+        }
+
+        if (dados) {
+          setAllTerritorios(dados);
+        } else {
+          ToastAndroid.show(
+            t("screens.territorios.territory_load_message_error"),
+            ToastAndroid.LONG
+          );
+        }
+      } catch (error) {
+        ToastAndroid.show(
+          t("screens.territorios.territory_load_message_error"),
+          ToastAndroid.LONG
+        );
+      } finally {
+        if (ativo) {
+          setCarregando(false);
+        }
+      }
+    };
 
     if (isFocused) {
-      const buscarDados = async () => {
-        // if (continuarBuscarDados) {
-        // Busca os anos de Servico para setar no SectionList
-        await buscarTerritorios()
-          .then((dados) => {
-            // Trata o retorno
-            if (dados) {
-              // Seta o estado com todos os territórios para o SectionList
-              setAllTerritorios(dados);
-
-              // Retira a mensagem de carregando
-              setCarregando(false);
-            } else {
-              // Retira a mensagem de carregando
-              setCarregando(false);
-
-              // Mensagem Toast
-              ToastAndroid.show(
-                t("screens.territorios.territory_load_message_error"),
-                ToastAndroid.LONG
-              );
-            }
-          })
-          .catch((error) => {
-            // Mensagem Toast
-            ToastAndroid.show(
-              t("screens.territorios.territory_load_message_error"),
-              ToastAndroid.LONG
-            );
-          });
-        // }
-      };
+      setCarregando(true);
       buscarDados();
     }
 
-    // return () => (continuarBuscarDados = false);
+    return () => {
+      ativo = false;
+    };
   }, [isFocused, reload]);
 
   // ALERTA de DELETAR TERRITÓRIO

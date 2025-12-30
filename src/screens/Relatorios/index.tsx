@@ -99,12 +99,6 @@ export default function Relatorios({ navigation }: Props) {
     let isActive = true;
 
     const carregarDados = async () => {
-      if (!isFocused) {
-        return;
-      }
-
-      setCarregando(true);
-
       try {
         const dados = await buscarAnosServico();
         if (!isActive) {
@@ -135,7 +129,14 @@ export default function Relatorios({ navigation }: Props) {
       }
     };
 
-    carregarDados();
+    if (isFocused) {
+      setCarregando(true);
+      setTimeout(() => {
+        carregarDados();
+      }, 100);
+    } else {
+      setCarregando(false);
+    }
 
     return () => {
       isActive = false;

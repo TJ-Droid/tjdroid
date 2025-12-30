@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
+import { v4 as uuidv4 } from "uuid";
 import {
   buscarAsyncStorage,
   salvarAsyncStorage,
@@ -11,10 +11,10 @@ import {
 // Sem este importacao a tela para
 import momentLocales from "moment/min/moment-with-locales";
 
-import minutes_to_hhmm from "../utils/minutes_to_hhmm";
-import { MesesTrabalhadosType, ReportType } from "../types/Reports";
 import { PeopleType } from "../types/People";
 import { ReportCounterType } from "../types/ReportCounter";
+import { MesesTrabalhadosType, ReportType } from "../types/Reports";
+import minutes_to_hhmm from "../utils/minutes_to_hhmm";
 
 interface CustomReportType extends ReportType {
   mes_formatado: string;
@@ -706,12 +706,9 @@ export async function verificarSeMesTrabalhado(mesAno: string) {
   return await buscarAsyncStorage("@tjdroid:meses_trabalhados")
     .then(async (meses: MesesTrabalhadosType[]) => {
       // Pega os relatorios do mes selecionado
-      const isRelatoriosMesExiste =
-        typeof meses === "object"
-          ? false
-          : (meses as MesesTrabalhadosType[]).find((mes) => {
-              return mes === mesAno;
-            });
+      const isRelatoriosMesExiste = Array.isArray(meses)
+        ? meses.find((mes) => mes === mesAno)
+        : false;
       return !!isRelatoriosMesExiste;
     })
     .catch(() => {
@@ -723,14 +720,15 @@ export async function verificarSeMesTrabalhado(mesAno: string) {
 export async function toggleSalvarMesTrabalhado(mesAno: string) {
   return await buscarAsyncStorage("@tjdroid:meses_trabalhados")
     .then(async (meses: MesesTrabalhadosType[]) => {
+      const mesesTrabalhados = Array.isArray(meses) ? meses : [];
       // Pega os relatorios do mes selecionado
-      const isRelatoriosMesExiste = meses.find((mes) => {
+      const isRelatoriosMesExiste = mesesTrabalhados.find((mes) => {
         return mes === mesAno;
       });
 
       // Verifica se existe, remove
       if (!!isRelatoriosMesExiste) {
-        const outrosMeses = meses.filter((mes) => {
+        const outrosMeses = mesesTrabalhados.filter((mes) => {
           return mes !== mesAno;
         });
 
@@ -746,7 +744,7 @@ export async function toggleSalvarMesTrabalhado(mesAno: string) {
           });
       } else {
         return await salvarAsyncStorage(
-          [...meses, mesAno],
+          [...mesesTrabalhados, mesAno],
           "@tjdroid:meses_trabalhados"
         )
           .then(async () => {

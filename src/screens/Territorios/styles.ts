@@ -1,7 +1,8 @@
-import styled from 'styled-components/native';
+import { SafeAreaView } from "react-native-safe-area-context";
+import styled from "styled-components/native";
 
-export const Container = styled.SafeAreaView`
-  background: ${({theme}) => theme.color.bg};
+export const Container = styled(SafeAreaView)`
+  background: ${({ theme }) => theme.color.bg};
   width: 100%;
   height: 100%;
   flex-direction: column;
@@ -17,9 +18,9 @@ export const ItemList = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: ${({theme}) => theme.color.bg};
+  background: ${({ theme }) => theme.color.bg};
   border-bottom-width: 1px;
-  border-bottom-color: ${({theme}) => theme.color.primary}20;
+  border-bottom-color: ${({ theme }) => theme.color.primary}20;
 `;
 
 export const ItemListTerritory = styled.View`
@@ -31,13 +32,13 @@ export const ItemListTerritory = styled.View`
 export const ItemListTerritoryTextName = styled.Text`
   width: 100%;
   font-size: 18px;
-  color: ${({theme}) => theme.color.text_secondary};
+  color: ${({ theme }) => theme.color.text_secondary};
   /* text-transform: capitalize; */
 `;
 
 export const ItemListTextDateSelected = styled.Text`
   font-size: 16px;
-  color: ${({theme}) => theme.color.text_secondary}99;
+  color: ${({ theme }) => theme.color.text_secondary}99;
   text-align: right;
   padding: 0px 2px;
   border-radius: 40px;
@@ -45,7 +46,7 @@ export const ItemListTextDateSelected = styled.Text`
 
 export const ItemListTextDateWorked = styled.Text`
   font-size: 16px;
-  color: ${({theme}) => theme.color.text_secondary};
+  color: ${({ theme }) => theme.color.text_secondary};
   text-align: right;
   padding: 0px 2px;
   border-radius: 40px;

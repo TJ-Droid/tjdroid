@@ -15,8 +15,11 @@ import * as Device from "expo-device";
 import * as DocumentPicker from "expo-document-picker";
 import * as Sharing from "expo-sharing";
 import { format } from "date-fns";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { analyticsCustomEvent } from "../services/AnalyticsCustomEvents";
+import {
+  buscarAsyncStorage,
+  salvarAsyncStorage,
+} from "../services/AsyncStorageMethods";
 
 // CONSTANTES
 const BACKUP_PATH = DocumentDirectoryPath;
@@ -244,15 +247,18 @@ export const createJsonFileFromAsyncStorage = async (
 ) => {
   const pathJsonFile = `${BACKUP_PATH}/${BACKUP_FOLDER_NAME}/${nomeArquivoStorage}.json`;
 
-  let response =
-    (await AsyncStorage.getItem(`@tjdroid:${nomeArquivoStorage}`)) ?? "[]";
+  const response = await buscarAsyncStorage(`@tjdroid:${nomeArquivoStorage}`);
+  const normalized =
+    response !== undefined && response !== null && response !== false
+      ? response
+      : [];
 
   // Cria o arquivo json
   return await RNFS.writeFile(
     pathJsonFile,
     JSON.stringify(
       // Busca os dados do AsyncStorage correspondente
-      JSON.parse(response) === null ? [] : JSON.parse(response)
+      normalized
     ),
     "utf8"
   )
@@ -365,7 +371,11 @@ export async function restoreBackupToAsyncStorage() {
           RNFS.readFile(result.path, "utf8")
             .then(async (result) => {
               // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              await AsyncStorage.setItem("@tjdroid:relatorios", result);
+              const parsed = JSON.parse(result);
+              await salvarAsyncStorage(
+                parsed === null ? [] : parsed,
+                "@tjdroid:relatorios"
+              );
             })
             .catch((err) => {
               // console.log("102:",err);
@@ -381,7 +391,11 @@ export async function restoreBackupToAsyncStorage() {
           RNFS.readFile(result.path, "utf8")
             .then(async (result) => {
               // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              await AsyncStorage.setItem("@tjdroid:territorios", result);
+              const parsed = JSON.parse(result);
+              await salvarAsyncStorage(
+                parsed === null ? [] : parsed,
+                "@tjdroid:territorios"
+              );
             })
             .catch((err) => {
               // console.log("102:",err);
@@ -397,7 +411,11 @@ export async function restoreBackupToAsyncStorage() {
           RNFS.readFile(result.path, "utf8")
             .then(async (result) => {
               // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              await AsyncStorage.setItem("@tjdroid:pessoas", result);
+              const parsed = JSON.parse(result);
+              await salvarAsyncStorage(
+                parsed === null ? [] : parsed,
+                "@tjdroid:pessoas"
+              );
             })
             .catch((err) => {
               // console.log("102:",err);
@@ -413,12 +431,13 @@ export async function restoreBackupToAsyncStorage() {
           RNFS.readFile(result.path, "utf8")
             .then(async (result) => {
               // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              await AsyncStorage.setItem(
-                "@tjdroid:config",
-                JSON.stringify({
-                  ...JSON.parse(result),
+              const parsed = JSON.parse(result);
+              await salvarAsyncStorage(
+                {
+                  ...(parsed ?? {}),
                   isRelatorioSimplificado: true,
-                })
+                },
+                "@tjdroid:config"
               );
             })
             .catch((err) => {
@@ -435,7 +454,11 @@ export async function restoreBackupToAsyncStorage() {
           RNFS.readFile(result.path, "utf8")
             .then(async (result) => {
               // AQUI VAI RESTAURAR O BACKUP NO ASYNCSTORAGE
-              await AsyncStorage.setItem("@tjdroid:meses_trabalhados", result);
+              const parsed = JSON.parse(result);
+              await salvarAsyncStorage(
+                parsed === null ? [] : parsed,
+                "@tjdroid:meses_trabalhados"
+              );
             })
             .catch((err) => {
               // console.log("102:",err);

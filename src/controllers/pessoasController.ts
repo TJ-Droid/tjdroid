@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
 import i18next from "i18next";
 import moment from "moment";
 import "moment/locale/pt-br";
+import { v4 as uuidv4 } from "uuid";
 
 // importa as opcoes para o SelectPicker para as opções de de tipos visitas
 import {

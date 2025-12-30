@@ -23,7 +23,6 @@ const prefix = Linking.createURL("/");
 // Configurações do Push Notification
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
     shouldShowBanner: true,
@@ -40,7 +39,9 @@ export default function App() {
           backgroundColor: "#000",
         }}
       >
-        <AppWrapper />
+        <ReactNativePaperProvider>
+          <AppWrapper />
+        </ReactNativePaperProvider>
       </SafeAreaView>
     </ThemeContextProvider>
   );
@@ -72,35 +73,31 @@ const AppWrapper: React.FC = () => {
   useEffect(() => {
     // Carrega as configuracoes salvas no Storage
     const carregaConfiguracoes = async () => {
-      // Chama o controller para carregar as configurações
+      // Chama o controller para carregar as configuracoes
       await carregarConfiguracoes().then(async (configs) => {
-        // Checa se é a primeira vez que está carregando as configurações
-        if (configs.length === 0) {
-          // Se for a primeira vez, seta o tema padrão
-          handleSwicthTheme(themes["azulEscuroDefault"]);
+        const defaultConfig = {
+          actualTheme: "azulEscuroDefault",
+          darkMode: false,
+          isRelatorioSimplificado: true,
+        };
 
-          // Salva o relatorio simplificado estado local
+        if (!configs || configs === false || Array.isArray(configs)) {
+          handleSwicthTheme(themes["azulEscuroDefault"]);
+          await salvarConfiguracoes(defaultConfig);
+          return;
+        }
+
+        if (configs.isRelatorioSimplificado === undefined) {
           await salvarConfiguracoes({
-            actualTheme: "azulEscuroDefault",
-            darkMode: false,
+            ...configs,
             isRelatorioSimplificado: true,
           });
-        } else {
-          // Verifica se a nova opção não existe e salva ela
-          if (configs?.isRelatorioSimplificado === undefined) {
-            // Salva o relatorio simplificado estado local
-            await salvarConfiguracoes({
-              ...configs,
-              isRelatorioSimplificado: true,
-            });
-          }
+        }
 
-          // Verifica qual tema aplicar
-          if (configs.darkMode === true) {
-            handleSwicthTheme(themes["darkMode"]);
-          } else {
-            handleSwicthTheme(themes[configs?.actualTheme as ThemeColors]);
-          }
+        if (configs.darkMode === true) {
+          handleSwicthTheme(themes["darkMode"]);
+        } else {
+          handleSwicthTheme(themes[configs.actualTheme as ThemeColors]);
         }
       });
     };
@@ -120,7 +117,7 @@ const AppWrapper: React.FC = () => {
       getInitialURL();
     }
 
-    // CONFIGURAÇÕES DO PUSH NOTIFICATION
+    // CONFIGURACOES DO PUSH NOTIFICATION
     // Pega o token do push
     registerForPushNotificationsAsync().then((token) => {});
     // setExpoPushToken(token)
@@ -144,7 +141,7 @@ const AppWrapper: React.FC = () => {
 
     return () => {
       // Linking.removeEventListener("url", linkData);
-      // // Remove as configurações do Push Notification
+      // // Remove as configuracoes do Push Notification
       // Notifications.removeNotificationSubscription(
       //   notificationListener.current
       // );
@@ -171,10 +168,8 @@ const AppWrapper: React.FC = () => {
 
   return (
     <ThemeProvider theme={actualTheme ?? themes.azulEscuroDefault}>
-      <ReactNativePaperProvider>
-        <StyledStatusBar />
-        <Routes />
-      </ReactNativePaperProvider>
+      <StyledStatusBar />
+      <Routes />
     </ThemeProvider>
   );
 };
