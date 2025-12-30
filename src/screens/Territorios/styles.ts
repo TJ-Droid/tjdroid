@@ -1,3 +1,4 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
@@ -51,4 +52,17 @@ export const ItemListTextDateWorked = styled.Text`
   padding: 0px 2px;
   border-radius: 40px;
   font-weight: bold;
+`;
+
+export const DateIconContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+`;
+
+export const StyledMaterialCommunityIconsDateIcon = styled(
+  MaterialCommunityIcons
+)`
+  color: ${({ theme }) => theme.color.primary_dark};
 `;

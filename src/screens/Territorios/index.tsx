@@ -22,11 +22,13 @@ import { FlashList } from "@shopify/flash-list";
 import { RootStackParamListType } from "../../routes";
 import {
   Container,
+  DateIconContainer,
   ItemList,
   ItemListTerritory,
   ItemListTerritoryTextName,
   ItemListTextDateSelected,
   ItemListTextDateWorked,
+  StyledMaterialCommunityIconsDateIcon,
 } from "./styles";
 
 type ProfileScreenRouteProp = StackScreenProps<
@@ -148,14 +150,27 @@ export default function Territorios({ navigation }: Props) {
             {item.nome}
           </ItemListTerritoryTextName>
         </ItemListTerritory>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          <ItemListTextDateSelected>
-            {item.dataSelecionado}
-          </ItemListTextDateSelected>
+        <View>
+          <DateIconContainer>
+            <ItemListTextDateSelected>
+              {item.dataSelecionado}
+            </ItemListTextDateSelected>
+            <StyledMaterialCommunityIconsDateIcon
+              name="calendar-clock"
+              size={12}
+            />
+          </DateIconContainer>
+
           {item.dataTrabalhado !== "--" ? (
-            <ItemListTextDateWorked>
-              {item.dataTrabalhado}
-            </ItemListTextDateWorked>
+            <DateIconContainer>
+              <ItemListTextDateWorked>
+                {item.dataTrabalhado}
+              </ItemListTextDateWorked>
+              <StyledMaterialCommunityIconsDateIcon
+                name="calendar-check"
+                size={12}
+              />
+            </DateIconContainer>
           ) : (
             <></>
           )}
