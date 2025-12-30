@@ -210,8 +210,10 @@
       "dialogmodal": {
         "input_placeholder": "Digite aqui:",
         "empty_error_message": "O campo não pode ficar vazio!",
+        "empty_error_message_fields": "Os campos não podem ficar vazios!",
         "less_than_1_error_message": "O campo não pode ser menor que 1",
-        "more_than_100_error_message": "O campo não pode ser maior que 100"
+        "more_than_100_error_message": "O campo/intervalo não pode ser maior que 100",
+        "first_value_must_be_greater_than_second_message": "O segundo valor deve ser maior que o primeiro."
       },
       "visitbox": {
         "input_placeholder": "Digite sua observação:"
@@ -282,7 +284,7 @@
         "dialogmodal_edit_territory_name_title": "EDITAR NOME TERRITÓRIO",
         "dialogmodal_edit_territory_name_description": "Digite o novo nome no campo abaixo:",
         "dialogmodal_add_many_houses_title": "ADICIONAR VÁRIAS",
-        "dialogmodal_add_many_houses_description": "Digite a quantidade de casas que deseja adicionar: (Máx. 100 por vez)",
+        "dialogmodal_add_many_houses_description": "Digite a quantidade de casas que deseja adicionar (máx. 100 por vez):",
         "dialogmodal_edit_territory_identificador_title": "EDITAR IDENTIFICADOR RESIDÊNCIA",
         "dialogmodal_edit_territory_identificador_description": "Digite o novo nome no campo abaixo:",
         "menu_item_add_one_house": "Adicionar Uma",

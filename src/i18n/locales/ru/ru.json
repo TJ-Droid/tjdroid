@@ -210,9 +210,10 @@
       "dialogmodal": {
         "input_placeholder": "Введите текст:",
         "empty_error_message": "Поле не может быть пустым!",
+        "empty_error_message_fields": "Поля не могут оставаться пустыми!",
         "less_than_1_error_message": "Значение не может быть меньше 1",
-        "more_than_100_error_message": "Значение не может быть больше 100",
-        "first_value_must_be_greater_than_second_message": "Второе значение должно быть больше первого"
+        "more_than_100_error_message": "Поле/диапазон не может быть больше 100",
+        "first_value_must_be_greater_than_second_message": "Второе значение должно быть больше первого."
       },
       "visitbox": {
         "input_placeholder": "Введите вашу заметку:"
@@ -283,7 +284,7 @@
         "dialogmodal_edit_territory_name_title": "ИЗМЕНИТЬ НАЗВАНИЕ ТЕРРИТОРИИ",
         "dialogmodal_edit_territory_name_description": "Введите новое имя в поле ниже:",
         "dialogmodal_add_many_houses_title": "ДОБАВИТЬ НЕСКОЛЬКО",
-        "dialogmodal_add_many_houses_description": "Введите количество домов, которые вы хотите добавить: (максимум 100 за раз)",
+        "dialogmodal_add_many_houses_description": "Введите количество домов, которые вы хотите добавить (максимум 100 за раз):",
         "dialogmodal_edit_territory_identificador_title": "ИЗМЕНИТЬ ИДЕНТИФИКАТОР ДОМА",
         "dialogmodal_edit_territory_identificador_description": "Введите новое имя в поле ниже:",
         "menu_item_add_one_house": "Добавить один",

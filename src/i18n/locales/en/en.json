@@ -210,8 +210,10 @@
       "dialogmodal": {
         "input_placeholder": "Type here:",
         "empty_error_message": "The field cannot be empty!",
+        "empty_error_message_fields": "The fields cannot be left empty!",
         "less_than_1_error_message": "The field cannot be less than 1",
-        "more_than_100_error_message": "Field cannot be greater than 100"
+        "more_than_100_error_message": "The field/range cannot be greater than 100",
+        "first_value_must_be_greater_than_second_message": "The second value must be greater than the first."
       },
       "visitbox": {
         "input_placeholder": "Enter your note:"
@@ -282,7 +284,7 @@
         "dialogmodal_edit_territory_name_title": "EDIT TERRITORY NAME",
         "dialogmodal_edit_territory_name_description": "Type the new name in the field below:",
         "dialogmodal_add_many_houses_title": "ADD MULTIPLE",
-        "dialogmodal_add_many_houses_description": "Enter the number of houses you want to add: (Max. 100 at a time)",
+        "dialogmodal_add_many_houses_description": "Enter the number of houses you want to add (max. 100 at a time):",
         "dialogmodal_edit_territory_identificador_title": "EDIT HOME IDENTIFIER",
         "dialogmodal_edit_territory_identificador_description": "Type the new name in the field below:",
         "menu_item_add_one_house": "Add One",

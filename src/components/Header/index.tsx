@@ -72,6 +72,14 @@ import {
   WrapperButton,
 } from "./styles";
 
+type TerritoryTypeLocal = {
+  nome: string;
+  idTerritorio: string;
+  idPredio: string;
+  idCasa?: string;
+  swipeCurrentID?: number;
+};
+
 type ShowReportSendType = {
   totaisDoMes: Partial<SelectedMonthServiceDataType>;
   mesAnoFormatado?: string;
@@ -1051,8 +1059,12 @@ export default function Header({
   }
 
   // ADICIONAR VÁRIAS RESIDÊNCIAS
-  function handleAdicionarVariasResidencias(territorioId: string, qtd: number) {
-    adicionarVariasResidencias(territorioId, qtd)
+  function handleAdicionarVariasResidencias(
+    territorioId: string,
+    qtdInicial: number,
+    qtdFinal: number
+  ) {
+    adicionarVariasResidencias(territorioId, qtdInicial, qtdFinal)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -1121,15 +1133,16 @@ export default function Header({
 
       <DialogModal
         dialogVisibleProp={dialogAddTerritoryHomeVisible}
-        keyboardTypeNumber
+        keyboardTypeNumberAddManyHouses
         dialogTitle={t("components.header.dialogmodal_add_many_houses_title")}
         dialogMessage={t(
           "components.header.dialogmodal_add_many_houses_description"
         )}
-        dialogFunction={(qttToAdd) =>
+        dialogFunction={(qttInicial, qttFinal) =>
           handleAdicionarVariasResidencias(
             territoryData.territoryId,
-            parseInt(qttToAdd.replace(/[^0-9]/g, ""))
+            parseInt(qttInicial.replace(/[^0-9]/g, "")),
+            parseInt((qttFinal ?? "0").replace(/[^0-9]/g, ""))
           )
         }
         dialogCloseFunction={() => handleCancelDialogTerritoryHome()}
