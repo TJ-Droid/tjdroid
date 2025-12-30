@@ -1339,6 +1339,7 @@ export default function Header({
             <WrapperButton>
               <View style={styles.menuWrapper}>
                 <Menu
+                  key={`menu-showReportSend-${addMenu}`}
                   visible={addMenu}
                   onDismiss={closeAddMenu}
                   anchor={
@@ -1590,6 +1591,7 @@ export default function Header({
             <WrapperButton>
               <View style={styles.menuWrapper}>
                 <Menu
+                  key={`menu-showOptionAddNewResidences-${addMenu}`}
                   visible={addMenu}
                   onDismiss={closeAddMenu}
                   anchor={
@@ -1636,6 +1638,7 @@ export default function Header({
             <WrapperButton>
               <View style={styles.menuWrapper}>
                 <Menu
+                  key={`menu-showTerritoryMenu-${dotsMenu}`}
                   visible={dotsMenu}
                   onDismiss={closeDotsMenu}
                   anchor={
