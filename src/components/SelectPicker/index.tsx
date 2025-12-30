@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import i18next from "i18next";
-import { View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import i18next from "i18next";
+import React, { memo, useCallback, useMemo } from "react";
+import { Appearance, View } from "react-native";
 
 type SelectPickerPropsType = {
   visita: number;
@@ -15,95 +15,135 @@ type SelectPickerOptionsType = {
   label: string;
 };
 
-export default function SelectPicker({
+type SelectPickerBaseOptionsType = {
+  value: number;
+  bgColor: string;
+  fontColorLight: string;
+  fontColorDark: string;
+  labelKey: string;
+};
+
+const SELECT_PICKER_BASE_OPTIONS: SelectPickerBaseOptionsType[] = [
+  {
+    value: 0,
+    bgColor: "#5e913430",
+    fontColorLight: "#5e9134",
+    fontColorDark: "#5e9134",
+    labelKey: "selectpickeroptions.bible_studies",
+  },
+  {
+    value: 1,
+    bgColor: "#7346ad30",
+    fontColorLight: "#7346ad",
+    fontColorDark: "#9166caff",
+    labelKey: "selectpickeroptions.revisit",
+  },
+  {
+    value: 2,
+    bgColor: "#25467c30",
+    fontColorLight: "#25467c",
+    fontColorDark: "#4476c7ff",
+    labelKey: "selectpickeroptions.second_visit",
+  },
+  {
+    value: 3,
+    bgColor: "#4a6da730",
+    fontColorLight: "#4a6da7",
+    fontColorDark: "#7e9fd3ff",
+    labelKey: "selectpickeroptions.first_visit",
+  },
+  {
+    value: 4,
+    bgColor: "#d7754930",
+    fontColorLight: "#d77549",
+    fontColorDark: "#d77549",
+    labelKey: "selectpickeroptions.absentee",
+  },
+  {
+    value: 5,
+    bgColor: "#c33f5530",
+    fontColorLight: "#c33f55",
+    fontColorDark: "#c33f55",
+    labelKey: "selectpickeroptions.refused",
+  },
+];
+
+function SelectPicker({
   visita = 0,
   onChangeVisitValue,
 }: SelectPickerPropsType) {
-  const SELECT_PICKER_OPTIONS = [
-    {
-      value: 0,
-      bgColor: "#5e913430",
-      fontColor: "#5e9134",
-      label: i18next.t("selectpickeroptions.bible_studies"),
-    },
-    {
-      value: 1,
-      bgColor: "#7346ad30",
-      fontColor: "#7346ad",
-      label: i18next.t("selectpickeroptions.revisit"),
-    },
-    {
-      value: 2,
-      bgColor: "#25467c30",
-      fontColor: "#25467c",
-      label: i18next.t("selectpickeroptions.second_visit"),
-    },
-    {
-      value: 3,
-      bgColor: "#4a6da730",
-      fontColor: "#4a6da7",
-      label: i18next.t("selectpickeroptions.first_visit"),
-    },
-    {
-      value: 4,
-      bgColor: "#d7754930",
-      fontColor: "#d77549",
-      label: i18next.t("selectpickeroptions.absentee"),
-    },
-    {
-      value: 5,
-      bgColor: "#c33f5530",
-      fontColor: "#c33f55",
-      label: i18next.t("selectpickeroptions.refused"),
-    },
-  ] as SelectPickerOptionsType[];
+  const colorScheme = Appearance.getColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
-  const [pickerOptionSelected, setPickerOptionSelected] = useState(visita);
-  const [bgPickerColor, setBgPickerColor] = useState(
-    SELECT_PICKER_OPTIONS[visita].bgColor
-  );
-  const [bgFontColor, setBgFontColor] = useState(
-    SELECT_PICKER_OPTIONS[visita].fontColor
+  const pickerOptions = useMemo(
+    () =>
+      SELECT_PICKER_BASE_OPTIONS.map((item) => ({
+        value: item.value,
+        bgColor: item.bgColor,
+        fontColor: isDarkMode ? item.fontColorDark : item.fontColorLight,
+        label: i18next.t(item.labelKey),
+      })) as SelectPickerOptionsType[],
+    [isDarkMode, i18next.language]
   );
 
-  function handlePickerValueChange(itemIndex: number) {
-    setPickerOptionSelected(itemIndex);
-    setBgPickerColor(SELECT_PICKER_OPTIONS[itemIndex].bgColor);
-    setBgFontColor(SELECT_PICKER_OPTIONS[itemIndex].fontColor);
-    // Leva o ID para o select acima
-    onChangeVisitValue(itemIndex);
-  }
+  const selectedOption = useMemo(
+    () =>
+      pickerOptions.find((item) => item.value === visita) ??
+      pickerOptions[0],
+    [pickerOptions, visita]
+  );
+  const bgPickerColor = selectedOption.bgColor;
+  const bgFontColor = selectedOption.fontColor;
+
+  const handlePickerValueChange = useCallback(
+    (itemIndex: number) => {
+      // Leva o ID para o select acima
+      onChangeVisitValue(itemIndex);
+    },
+    [onChangeVisitValue]
+  );
+
+  const containerStyle = useMemo(
+    () => ({
+      backgroundColor: bgPickerColor,
+      borderRadius: 7,
+      height: 42,
+      borderLeftWidth: 7,
+      borderLeftColor: bgFontColor,
+    }),
+    [bgFontColor, bgPickerColor]
+  );
+
+  const pickerStyle = useMemo(
+    () => ({ width: 180, marginTop: -6, color: bgFontColor }),
+    [bgFontColor]
+  );
+
+  const pickerItems = useMemo(
+    () =>
+      pickerOptions.map((item) => (
+        <Picker.Item
+          key={item.value}
+          label={`${item.label}`}
+          value={item.value}
+          color={item.fontColor}
+        />
+      )),
+    [pickerOptions]
+  );
 
   return (
-    <View
-      style={{
-        backgroundColor: bgPickerColor,
-        borderRadius: 7,
-        height: 42,
-        borderLeftWidth: 7,
-        borderLeftColor: bgFontColor,
-      }}
-    >
+    <View style={containerStyle}>
       <Picker
-        selectedValue={
-          // pickerOptions.length === 0 ? visita : pickerOptions.value
-          pickerOptionSelected
-        }
-        style={{ width: 180, marginTop: -6 }}
-        onValueChange={(itemIndex) => handlePickerValueChange(itemIndex)}
+        selectedValue={visita}
+        style={pickerStyle}
+        onValueChange={handlePickerValueChange}
         dropdownIconColor={bgFontColor}
       >
-        {SELECT_PICKER_OPTIONS.map((item) => {
-          return (
-            <Picker.Item
-              key={item.value}
-              label={`${item.label}`}
-              value={item.value}
-              color={item.fontColor}
-            />
-          );
-        })}
+        {pickerItems}
       </Picker>
     </View>
   );
 }
+
+export default memo(SelectPicker);
