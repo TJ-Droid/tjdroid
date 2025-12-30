@@ -151,7 +151,7 @@ const Ajuda = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
           <Accordion
             activeSections={activeSections}
             //for any default active section
