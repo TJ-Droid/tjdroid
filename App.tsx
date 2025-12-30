@@ -1,7 +1,6 @@
 import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
 import React, { useEffect, useRef, useState } from "react";
-import { Provider as ReactNativePaperProvider } from "react-native-paper";
 import { ThemeProvider } from "styled-components";
 import ThemeContextProvider, { useThemeContext } from "./src/contexts/Theme";
 import {
@@ -16,6 +15,7 @@ import * as Device from "expo-device";
 import { ParsedURL } from "expo-linking";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeColors, ThemeType } from "./src/types/Theme";
 const prefix = Linking.createURL("/");
@@ -51,9 +51,9 @@ const AppContainer: React.FC = () => {
         backgroundColor,
       }}
     >
-      <ReactNativePaperProvider>
+      <PaperProvider>
         <AppWrapper />
-      </ReactNativePaperProvider>
+      </PaperProvider>
     </SafeAreaView>
   );
 };

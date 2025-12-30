@@ -12,7 +12,8 @@
     "gc": "cd android && ./gradlew clean && cd ..",
     "release": "yarn android --variant=release",
     "apk": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
-    "bundle": "cd android && ./gradlew clean && ./gradlew bundleRelease && cd .."
+    "bundle": "cd android && ./gradlew clean && ./gradlew bundleRelease && cd ..",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -51,6 +52,7 @@
     "i18next": "^21.6.0",
     "jotai": "^2.3.1",
     "moment": "^2.29.4",
+    "patch-package": "^8.0.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-i18next": "^11.15.1",
