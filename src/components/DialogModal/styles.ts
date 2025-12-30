@@ -2,12 +2,15 @@ import Dialog from "react-native-dialog";
 import styled from "styled-components/native";
 
 export const StyledDialogContainer = styled(Dialog.Container).attrs(
-  ({ theme }) => ({
-    contentStyle: {
-      backgroundColor: `${theme.color.dialog_modal_bg}`,
-      borderWidth: 1,
-      borderColor: `${theme.color.primary}40`,
-    },
+  ({ theme, contentStyle }) => ({
+    contentStyle: [
+      {
+        backgroundColor: `${theme.color.dialog_modal_bg}`,
+        borderWidth: 1,
+        borderColor: `${theme.color.primary}40`,
+      },
+      contentStyle,
+    ],
   })
 )``;
 

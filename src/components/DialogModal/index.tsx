@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Keyboard, Platform } from "react-native";
 import { View } from "react-native-animatable";
 
 import {
@@ -53,6 +54,29 @@ export default function DialogModal({
 
   // Dialog states
   const [inputsValues, setInputsValue] = useState(BLANK_INPUT_STATES);
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+
+  useEffect(() => {
+    if (!dialogVisibleProp) {
+      setKeyboardOffset(0);
+      return;
+    }
+
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
+      const keyboardHeight = e.endCoordinates?.height ?? 0;
+      if (keyboardHeight > 0) {
+        setKeyboardOffset(Math.min(keyboardHeight / 2, 180));
+      }
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardOffset(0);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [dialogVisibleProp]);
 
   useEffect(() => {
     if (dialogValue) {
@@ -225,12 +249,18 @@ export default function DialogModal({
     }
   }
 
+  const dialogContentStyle =
+    Platform.OS === "android" && keyboardOffset > 0
+      ? { transform: [{ translateY: -keyboardOffset }] }
+      : undefined;
+
   return (
-    <>
-      <StyledDialogContainer
-        visible={dialogVisibleProp}
-        onBackdropPress={handleCancelDialog}
-      >
+    <StyledDialogContainer
+      visible={dialogVisibleProp}
+      onBackdropPress={handleCancelDialog}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : undefined}
+      contentStyle={dialogContentStyle}
+    >
         <TextsContainer>
           <StyledDialogTitle>{dialogTitle}</StyledDialogTitle>
           <StyledDialogDescription>{dialogMessage}</StyledDialogDescription>
@@ -294,17 +324,16 @@ export default function DialogModal({
           />
         )}
 
-        <ButtonsContainer>
-          <StyledDialogButtonCancel
-            label={t("words.cancel")}
-            onPress={handleCancelDialog}
-          />
-          <StyledDialogButtonOk
-            label={t("words.add")}
-            onPress={handleSubmitButton}
-          />
-        </ButtonsContainer>
-      </StyledDialogContainer>
-    </>
+      <ButtonsContainer>
+        <StyledDialogButtonCancel
+          label={t("words.cancel")}
+          onPress={handleCancelDialog}
+        />
+        <StyledDialogButtonOk
+          label={t("words.add")}
+          onPress={handleSubmitButton}
+        />
+      </ButtonsContainer>
+    </StyledDialogContainer>
   );
 }
