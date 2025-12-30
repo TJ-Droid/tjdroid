@@ -74,6 +74,8 @@ If you want to help with translation to your language, please use [the link belo
 -   [x] @react-native-picker/picker
 -   [x] @react-native-firebase/analytics
 -   [x] @react-native-firebase/app
+-   [x] @shopify/flash-list
+-   [x] @expo/vector-icons
 -   [x] expo
 -   [x] expo-app-loading
 -   [x] expo-clipboard
@@ -81,6 +83,7 @@ If you want to help with translation to your language, please use [the link belo
 -   [x] expo-document-picker
 -   [x] expo-notifications
 -   [x] expo-sharing
+-   [x] expo-application
 -   [x] react-native-collapsible
 -   [x] react-native-dialog
 -   [x] react-native-fs
