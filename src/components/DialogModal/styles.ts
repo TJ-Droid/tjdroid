@@ -25,10 +25,11 @@ export const StyledDialogInput1 = styled(Dialog.Input).attrs(({ theme }) => ({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
-    paddingTop: 3,
+    paddingTop: 6,
     lineHeight: 30,
     borderColor: `${theme.color.text_secondary}40`,
   },
+  paddingTop: 6,
 }))`
   color: ${({ theme }) => theme.color.text_primary};
   font-size: 18px;
@@ -39,11 +40,12 @@ export const StyledDialogInput2 = styled(Dialog.Input).attrs(({ theme }) => ({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
-    paddingTop: 3,
+    paddingTop: 6,
     lineHeight: 30,
     borderColor: `${theme.color.text_secondary}40`,
     flex: 1,
   },
+  paddingTop: 6,
 }))`
   color: ${({ theme }) => theme.color.text_primary};
   font-size: 18px;
@@ -54,11 +56,12 @@ export const StyledDialogInput3 = styled(Dialog.Input).attrs(({ theme }) => ({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
-    paddingTop: 3,
+    paddingTop: 6,
     lineHeight: 30,
     borderColor: `${theme.color.text_secondary}40`,
     flex: 1,
   },
+  paddingTop: 6,
 }))`
   color: ${({ theme }) => theme.color.text_primary};
   font-size: 18px;

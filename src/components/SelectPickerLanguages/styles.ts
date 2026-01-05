@@ -1,5 +1,5 @@
-import styled from "styled-components/native";
 import { Picker } from "@react-native-picker/picker";
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   border-width: 1px;
@@ -13,7 +13,6 @@ export const StyledPicker = styled(Picker).attrs(({ theme }) => ({
   dropdownIconColor: `${theme.color.text_primary}`,
 }))`
   width: 100%;
-  height: 48px;
-  margin-top: -6px;
+  height: 56px;
   color: ${({ theme }) => theme.color.primary};
 `;
