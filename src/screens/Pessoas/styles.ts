@@ -15,7 +15,7 @@ export const ItemList = styled.View`
   padding: 10px 15px;
   width: 100%;
   height: auto;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   background: ${({ theme }) => theme.color.bg};
@@ -61,4 +61,22 @@ export const ItemListTextNoVisits = styled.Text`
   padding: 4px 14px;
   border-radius: 40px;
   font-weight: bold;
+`;
+
+export const ItemListTopContent = styled.View`
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+`;
+
+export const ItemListMidleContent = styled.View`
+  width: 100%;
+  margin-top: 6px;
+`;
+
+export const ItemListMidleContentText = styled.Text`
+  font-size: 16px;
+  font-style: italic;
+  color: ${({ theme }) => theme.color.text_secondary}90;
 `;

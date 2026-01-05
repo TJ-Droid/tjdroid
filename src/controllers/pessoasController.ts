@@ -20,6 +20,7 @@ export type BuscarPessoasType = {
   ultimaVisitaData: string;
   visitaBgColor: string;
   visitaFontColor: string;
+  ultimaAnotacao: string;
 };
 
 export type BuscarVisitasPessoaType = {
@@ -102,7 +103,7 @@ export default async function buscarPessoas() {
 
       const listaPessoas: BuscarPessoasType[] = [];
 
-      dados.map((pessoa) => {
+      dados.map((pessoa, index) => {
         let ultimaVisitaFeitaDescricao = "";
         let visitaBgColor = "";
         let visitaFontColor = "";
@@ -139,6 +140,7 @@ export default async function buscarPessoas() {
           qtdVisitas: pessoa.visitas.length,
           ultimaVisitaData: ultimaVisitaFeitaData,
           ultimaVisita: ultimaVisitaFeitaDescricao,
+          ultimaAnotacao: pessoa.visitas?.[0]?.anotacoes ?? "",
           visitaBgColor,
           visitaFontColor,
         });

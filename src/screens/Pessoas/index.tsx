@@ -24,11 +24,14 @@ import { RootStackParamListType } from "../../routes";
 import {
   Container,
   ItemList,
+  ItemListMidleContent,
+  ItemListMidleContentText,
   ItemListPerson,
   ItemListTextDateVisits,
   ItemListTextLastVisit,
   ItemListTextName,
   ItemListTextNoVisits,
+  ItemListTopContent,
 } from "./styles";
 
 type ProfileScreenRouteProp = StackScreenProps<
@@ -143,28 +146,38 @@ export default function Pessoas({ navigation }: Props) {
       onLongPress={() => alertaExclusaoPessoa(item.id)}
     >
       <ItemList>
-        <ItemListPerson>
-          <ItemListTextName ellipsizeMode="tail" numberOfLines={1}>
-            {item.nome}
-          </ItemListTextName>
+        <ItemListTopContent>
+          <ItemListPerson>
+            <ItemListTextName ellipsizeMode="tail" numberOfLines={1}>
+              {item.nome}
+            </ItemListTextName>
+            {item.qtdVisitas === 0 ? (
+              <View></View>
+            ) : (
+              <ItemListTextDateVisits>
+                {item.ultimaVisitaData} • {item.qtdVisitas}{" "}
+                {item.qtdVisitas >= 2 ? t("words.visits") : t("words.visit")}
+              </ItemListTextDateVisits>
+            )}
+          </ItemListPerson>
           {item.qtdVisitas === 0 ? (
-            <View></View>
+            <ItemListTextNoVisits>
+              {t("screens.pessoas.no_visits")}
+            </ItemListTextNoVisits>
           ) : (
-            <ItemListTextDateVisits>
-              {item.ultimaVisitaData} • {item.qtdVisitas}{" "}
-              {item.qtdVisitas >= 2 ? t("words.visits") : t("words.visit")}
-            </ItemListTextDateVisits>
+            <ItemListTextLastVisit fontColor={item.visitaFontColor}>
+              {item.ultimaVisita}
+            </ItemListTextLastVisit>
           )}
-        </ItemListPerson>
-        {item.qtdVisitas === 0 ? (
-          <ItemListTextNoVisits>
-            {t("screens.pessoas.no_visits")}
-          </ItemListTextNoVisits>
-        ) : (
-          <ItemListTextLastVisit fontColor={item.visitaFontColor}>
-            {item.ultimaVisita}
-          </ItemListTextLastVisit>
-        )}
+        </ItemListTopContent>
+
+        {item.ultimaAnotacao ? (
+          <ItemListMidleContent>
+            <ItemListMidleContentText>
+              {item.ultimaAnotacao}
+            </ItemListMidleContentText>
+          </ItemListMidleContent>
+        ) : null}
       </ItemList>
     </TouchableWithoutFeedback>
   );

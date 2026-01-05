@@ -13,10 +13,9 @@ export const Container = styled(SafeAreaView)`
 `;
 
 export const ItemList = styled.View`
-  padding: 0px 15px;
+  padding: 10px 15px;
   width: 100%;
-  height: 60px;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   background: ${({ theme }) => theme.color.bg};
@@ -77,4 +76,22 @@ export const HeaderPersonName = styled.Text`
 export const HeaderPersonNameIcon = styled(Feather)`
   color: ${({ theme }) => theme.color.primary}70;
   padding: 10px;
+`;
+
+export const ItemListTopContent = styled.View`
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+`;
+
+export const ItemListMidleContent = styled.View`
+  width: 100%;
+  margin-top: 6px;
+`;
+
+export const ItemListMidleContentText = styled.Text`
+  font-size: 16px;
+  font-style: italic;
+  color: ${({ theme }) => theme.color.text_secondary}90;
 `;

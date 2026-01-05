@@ -42,9 +42,12 @@ import {
   HeaderPersonNameIcon,
   ItemList,
   ItemListDay,
+  ItemListMidleContent,
+  ItemListMidleContentText,
   ItemListTextDay,
   ItemListTextDayInfo,
   ItemListTextLastVisit,
+  ItemListTopContent,
 } from "./styles";
 
 type ProfileScreenRouteProp = StackScreenProps<
@@ -246,22 +249,32 @@ export default function PessoaVisitas({ route, navigation }: Props) {
       }
     >
       <ItemList>
-        <ItemListDay>
-          <ItemListTextDay ellipsizeMode="tail" numberOfLines={1}>
-            {format(changeDateFormatToYearMonthDay(item.data), "dd/MM/yyyy")}
-          </ItemListTextDay>
-          <ItemListTextDayInfo ellipsizeMode="tail" numberOfLines={1}>
-            {moment(changeDateFormatToYearMonthDay(item.data))
-              .locale(formatarLocale(appLanguageLocal?.language))
-              .format("dddd, HH:mm")}
-          </ItemListTextDayInfo>
-        </ItemListDay>
-        <ItemListTextLastVisit
-          bgColor={item.visitaBgColor}
-          fontColor={item.visitaFontColor}
-        >
-          {item.visitaLabel}
-        </ItemListTextLastVisit>
+        <ItemListTopContent>
+          <ItemListDay>
+            <ItemListTextDay ellipsizeMode="tail" numberOfLines={1}>
+              {format(changeDateFormatToYearMonthDay(item.data), "dd/MM/yyyy")}
+            </ItemListTextDay>
+            <ItemListTextDayInfo ellipsizeMode="tail" numberOfLines={1}>
+              {moment(changeDateFormatToYearMonthDay(item.data))
+                .locale(formatarLocale(appLanguageLocal?.language))
+                .format("dddd, HH:mm")}
+            </ItemListTextDayInfo>
+          </ItemListDay>
+          <ItemListTextLastVisit
+            bgColor={item.visitaBgColor}
+            fontColor={item.visitaFontColor}
+          >
+            {item.visitaLabel}
+          </ItemListTextLastVisit>
+        </ItemListTopContent>
+
+        {item.anotacoes ? (
+          <ItemListMidleContent>
+            <ItemListMidleContentText>
+              {item.anotacoes}
+            </ItemListMidleContentText>
+          </ItemListMidleContent>
+        ) : null}
       </ItemList>
     </TouchableWithoutFeedback>
   );
