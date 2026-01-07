@@ -41,7 +41,9 @@ For example - "[FIX] Rendering territory list bug"
 
 ## :world_map: Contribution with Translations
 
-If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid), register a free translator account, and follow the instructions: https://crowdin.com/project/tjdroid
+If you want to help with translation to your language, please use the link below, register a free translator account, and follow the instructions: 
+- Invite: https://crwd.in/tjdroid/d71ea7f4f90a51a94663d703b1bbe99b2653194 `Invite expires January 7, 2027`
+- Project page: https://crowdin.com/project/tjdroid 
 
 ### ⭐ Acknowledgment for helping in translations:
 * #### Russian
