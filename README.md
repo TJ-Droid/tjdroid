@@ -45,6 +45,11 @@ If you want to help with translation to your language, please use the link below
 - Invite: https://crwd.in/tjdroid/d71ea7f4f90a51a94663d703b1bbe99b2653194 `Invite expires January 7, 2027`
 - Project page: https://crowdin.com/project/tjdroid 
 
+### ➡️ How to use Crowdin to translate to your language:
+<p align="center">
+  <img alt="Crowdin GIF Tutorial" src=".github/translate-tutorial.gif" width="100%">
+</p>
+
 ### ⭐ Acknowledgment for helping in translations:
 * #### Russian
   * Евгений Пудовкин
@@ -56,11 +61,6 @@ If you want to help with translation to your language, please use the link below
   * Robert Skorupa
 * #### Ukrainian
   * Alex Pawl
-
-### ➡️ How to use Crowdin to translate to your language:
-<p align="center">
-  <img alt="Crowdin GIF Tutorial" src=".github/translate-tutorial.gif" width="100%">
-</p>
 
 ## 🚀 Tecnologies
 -   [x] React Native with Expo Bare Workflow
