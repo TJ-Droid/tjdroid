@@ -16,7 +16,7 @@
 * 🏡 **Territories:** Organize your personal territory in a simple way.
 * 👥 **People:** Make notes about each visit made, mark the amount of posts left, videos shown and select the types of visits.
 * ⭐ **Modern and varied layout:** Get all the features of the application in an easy, intuitive and pleasant way to see.
-* 🗣️ **Supported languages:** English, Portuguese, Spanish, Russian (89%).
+* 🗣️ **Supported languages:** English, Portuguese, Spanish, Russian, Polish, Ukrainian.
 
 ## 📲 Get the app
 Only available on Android. 
@@ -41,7 +41,7 @@ For example - "[FIX] Rendering territory list bug"
 
 ## :world_map: Contribution with Translations
 
-If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid/invite), register a free translator account, and follow the instructions: https://crowdin.com/project/tjdroid/invite
+If you want to help with translation to your language, please use [the link below](https://crowdin.com/project/tjdroid), register a free translator account, and follow the instructions: https://crowdin.com/project/tjdroid
 
 ### ⭐ Acknowledgment for helping in translations:
 * #### Russian
