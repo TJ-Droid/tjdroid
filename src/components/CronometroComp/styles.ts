@@ -1,6 +1,6 @@
-import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { ScrollView } from "react-native";
+import styled from "styled-components/native";
 
 export const TopSectionContainer = styled.View`
   padding: 20px 15px;
@@ -35,7 +35,11 @@ export const ContadorButtonArea = styled.View`
 `;
 
 export const ContadorMinutesText = styled.Text`
-  font-size: 82px;
+  flex: 0.9;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 90px;
   color: ${({ theme }) => theme.color.primary};
   margin-top: -10px;
   padding: 0px 12px;
@@ -57,9 +61,11 @@ export const ContadorStartText = styled.Text`
 
 export const ActionsButtonsArea = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap;
+  gap: 12px;
 `;
 
 export const ActionsButtonsStyle = styled.View<{

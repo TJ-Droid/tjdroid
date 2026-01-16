@@ -1,65 +1,65 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  ToastAndroid,
-  AppState,
   Alert,
-  Linking,
-  View,
+  AppState,
   AppStateStatus,
+  Linking,
+  ToastAndroid,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
-import {
-  salvarAsyncStorage,
-  buscarAsyncStorage,
-} from "../../services/AsyncStorageMethods";
 import { differenceInMinutes, format, parseISO } from "date-fns";
+import {
+  buscarAsyncStorage,
+  salvarAsyncStorage,
+} from "../../services/AsyncStorageMethods";
 
-import Header from "../Header";
-import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { useInterval } from "../../hooks/useInterval";
 import { analyticsCustomEvent } from "../../services/AnalyticsCustomEvents";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
+import Header from "../Header";
 
 import {
   dismissAllNotifications,
-  schedulePushNotificationStart,
   schedulePushNotificationPaused,
+  schedulePushNotificationStart,
 } from "../../services/PushNotifications";
 
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 import {
-  StyledScrollView,
-  TopSectionContainer,
-  TopSectionContainerArea,
+  ActionsButtonsArea,
+  ActionsButtonsStyle,
+  ActionsButtonsText,
+  BottomSectionActionButtonsContainer,
+  BottomSectionButtonsArea,
+  BottomSectionButtonsWrapper,
+  BottomSectionButtonWrapper,
+  BottomSectionContainer,
+  BottomSectionLabelText,
+  BottomSectionMessageContainer,
+  BottomSectionMessageText,
+  BottomSectionQuantityText,
+  BottomSectionTextArea,
+  BottomSectionTextAreaVideoBulletButton,
+  BottomSectionTextAreaVideoBulletText,
   ContadorArea,
   ContadorButtonArea,
   ContadorMinutesText,
-  ContadorStartTextArea,
   ContadorStartText,
-  TopSectionContainerButtonsArea,
-  ActionsButtonsStyle,
-  ActionsButtonsArea,
-  ActionsButtonsText,
-  BottomSectionContainer,
-  BottomSectionActionButtonsContainer,
-  BottomSectionMessageContainer,
-  BottomSectionMessageText,
-  BottomSectionButtonsWrapper,
-  BottomSectionTextArea,
-  BottomSectionLabelText,
-  BottomSectionButtonsArea,
-  BottomSectionButtonWrapper,
-  BottomSectionQuantityText,
+  ContadorStartTextArea,
   StyledFeatherIconContadorButton,
   StyledFeatherIconContadorButtonAction,
   StyledFeatherIconSectionButton,
   StyledFeatherIconVideoPlay,
-  BottomSectionTextAreaVideoBulletButton,
-  BottomSectionTextAreaVideoBulletText,
+  StyledScrollView,
+  TopSectionContainer,
+  TopSectionContainerArea,
+  TopSectionContainerButtonsArea,
 } from "./styles";
-import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 type ReportParamType = {
   colocacoes: number;
@@ -882,7 +882,7 @@ export default function CronometroComp() {
                 </ContadorButtonArea>
               </TouchableOpacity>
 
-              <ContadorMinutesText>
+              <ContadorMinutesText adjustsFontSizeToFit numberOfLines={1}>
                 {minutes_to_hhmm(minutos, piscar)}
               </ContadorMinutesText>
 
@@ -915,7 +915,10 @@ export default function CronometroComp() {
                   }}
                 >
                   <ActionsButtonsStyle darkBlueColor>
-                    <ActionsButtonsText adjustsFontSizeToFit>
+                    <ActionsButtonsText
+                      adjustsFontSizeToFit
+                      allowFontScaling={false}
+                    >
                       {t("words.start")}
                     </ActionsButtonsText>
                     <StyledFeatherIconContadorButtonAction
@@ -936,7 +939,10 @@ export default function CronometroComp() {
                       }}
                     >
                       <ActionsButtonsStyle lightColor>
-                        <ActionsButtonsText adjustsFontSizeToFit>
+                        <ActionsButtonsText
+                          adjustsFontSizeToFit
+                          allowFontScaling={false}
+                        >
                           {t("words.continue")}
                         </ActionsButtonsText>
                         <StyledFeatherIconContadorButtonAction
@@ -953,7 +959,10 @@ export default function CronometroComp() {
                       }}
                     >
                       <ActionsButtonsStyle lightColor>
-                        <ActionsButtonsText adjustsFontSizeToFit>
+                        <ActionsButtonsText
+                          adjustsFontSizeToFit
+                          allowFontScaling={false}
+                        >
                           {t("words.pause")}
                         </ActionsButtonsText>
                         <StyledFeatherIconContadorButtonAction
@@ -970,7 +979,10 @@ export default function CronometroComp() {
                     }}
                   >
                     <ActionsButtonsStyle>
-                      <ActionsButtonsText adjustsFontSizeToFit>
+                      <ActionsButtonsText
+                        adjustsFontSizeToFit
+                        allowFontScaling={false}
+                      >
                         {t("words.stop")}
                       </ActionsButtonsText>
                       <StyledFeatherIconContadorButtonAction
