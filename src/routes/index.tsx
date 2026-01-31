@@ -1,45 +1,47 @@
-import React from "react";
+import { logEvent } from "@react-native-firebase/analytics";
 import {
   NavigationContainer,
   NavigationContainerRef,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import analytics from "@react-native-firebase/analytics";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 import Header from "../components/Header";
-import Home from "../screens/Home";
+import Ajuda from "../screens/Ajuda";
+import Backup from "../screens/Backup";
 import Configuracoes from "../screens/Configuracoes";
 import Cronometro from "../screens/Cronometro";
 import CronometroParado from "../screens/CronometroParado";
-import Pessoas from "../screens/Pessoas";
-import Relatorios from "../screens/Relatorios";
-import RelatorioMes from "../screens/RelatorioMes";
-import RelatorioDetalhes from "../screens/RelatorioDetalhes";
-import RelatorioAdicionar from "../screens/RelatorioAdicionar";
-import PessoaVisitas from "../screens/PessoaVisitas";
+import Home from "../screens/Home";
 import PessoaEditarVisita from "../screens/PessoaEditarVisita";
 import PessoaNovaVisita from "../screens/PessoaNovaVisita";
-import Territorios from "../screens/Territorios";
+import Pessoas from "../screens/Pessoas";
+import PessoaVisitas from "../screens/PessoaVisitas";
+import RelatorioAdicionar from "../screens/RelatorioAdicionar";
+import RelatorioDetalhes from "../screens/RelatorioDetalhes";
+import RelatorioMes from "../screens/RelatorioMes";
+import Relatorios from "../screens/Relatorios";
+import TerritorioInformacao from "../screens/TerritorioInformacao";
+import TerritorioResidenciaEditarVisita from "../screens/TerritorioResidenciaEditarVisita";
+import TerritorioResidenciaNovaVisita from "../screens/TerritorioResidenciaNovaVisita";
 import TerritorioResidencias from "../screens/TerritorioResidencias";
 import TerritorioResidenciasVisitas from "../screens/TerritorioResidenciasVisitas";
-import TerritorioResidenciaNovaVisita from "../screens/TerritorioResidenciaNovaVisita";
-import TerritorioResidenciaEditarVisita from "../screens/TerritorioResidenciaEditarVisita";
-import TerritorioInformacao from "../screens/TerritorioInformacao";
-import Ajuda from "../screens/Ajuda";
-import Backup from "../screens/Backup";
+import Territorios from "../screens/Territorios";
 
-import { ThemeColors } from "../types/Theme";
-import { ReportType } from "../types/Reports";
 import { CustomTerritoriesType } from "../controllers/territoriosController";
+import { ReportType } from "../types/Reports";
+import { ThemeColors } from "../types/Theme";
 
 type RoutesTypeProps = {
   // deepLinkingProp: any;
   actualTheme?: ThemeColors;
 };
 
-export interface RootStackParamListType
-  extends Record<string, object | undefined> {
+export interface RootStackParamListType extends Record<
+  string,
+  object | undefined
+> {
   Home: undefined;
   Cronometro: undefined;
   CronometroParado: {
@@ -84,7 +86,6 @@ export default function Routes({}: RoutesTypeProps) {
 
   return (
     <NavigationContainer
-      // linking={deepLinkingProp}
       ref={navigationRef}
       onReady={() => {
         routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name;
@@ -95,24 +96,13 @@ export default function Routes({}: RoutesTypeProps) {
           navigationRef?.current?.getCurrentRoute()?.name;
 
         if (previousRouteName !== currentRouteName) {
-          await analytics().logScreenView({
+          await logEvent("NavegacaoLogEvent", {
             screen_name: currentRouteName,
             screen_class: currentRouteName,
           });
         }
         routeNameRef.current = currentRouteName;
       }}
-      // theme={{
-      //   dark: true,
-      //   colors: {
-      //     background: "#000000",
-      //     border: "",
-      //     card: "",
-      //     notification: "",
-      //     primary: "",
-      //     text: "",
-      //   },
-      // }}
     >
       <Stack.Navigator
         screenOptions={{
