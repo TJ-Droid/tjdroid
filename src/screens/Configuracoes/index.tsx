@@ -89,7 +89,7 @@ export default function Configuracoes({ navigation }: Props) {
     if (obgEscondido >= 5) {
       ToastAndroid.show(
         `${t("screens.configuracoes.hide_message")} 😁`,
-        ToastAndroid.LONG
+        ToastAndroid.LONG,
       );
       setObgEscondido(0);
     }
@@ -113,7 +113,7 @@ export default function Configuracoes({ navigation }: Props) {
 
           // Salva o relatorio simplificado estado local
           setIsRelatorioSimplificadoAtivado(
-            configs?.isRelatorioSimplificado ?? true
+            configs?.isRelatorioSimplificado ?? true,
           );
 
           // Seta o carregando para false, tirando a mensagem de carregando
@@ -122,7 +122,7 @@ export default function Configuracoes({ navigation }: Props) {
           // Se erro, dispara o toast
           ToastAndroid.show(
             `${t("screens.configuracoes.error_load_configs")}`,
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       });
@@ -159,7 +159,7 @@ export default function Configuracoes({ navigation }: Props) {
           // Se erro, dispara o toast
           ToastAndroid.show(
             `${t("screens.configuracoes.error_save_theme")}`,
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       })
@@ -167,7 +167,7 @@ export default function Configuracoes({ navigation }: Props) {
         // Se erro, dispara o toast
         ToastAndroid.show(
           `${t("screens.configuracoes.error_save_theme")}`,
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
 
@@ -193,7 +193,7 @@ export default function Configuracoes({ navigation }: Props) {
           // Se erro, dispara o toast
           ToastAndroid.show(
             `${t("screens.configuracoes.error_save_simplified_report")}`,
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       })
@@ -201,7 +201,7 @@ export default function Configuracoes({ navigation }: Props) {
         // Se erro, dispara o toast
         ToastAndroid.show(
           `${t("screens.configuracoes.error_save_simplified_report")}`,
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   };
@@ -231,7 +231,7 @@ export default function Configuracoes({ navigation }: Props) {
           // Se erro, dispara o toast
           ToastAndroid.show(
             `${t("screens.configuracoes.error_save_theme")}`,
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       })
@@ -239,7 +239,7 @@ export default function Configuracoes({ navigation }: Props) {
         // Se erro, dispara o toast
         ToastAndroid.show(
           `${t("screens.configuracoes.error_save_theme")}`,
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
 
@@ -317,10 +317,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "azulEscuroDefault"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_blue"
+                      "screens.configuracoes.color_accessibility_label_blue",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_blue"
+                      "screens.configuracoes.color_accessibility_hint_blue",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -329,10 +329,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "azulClaro"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_lightblue"
+                      "screens.configuracoes.color_accessibility_label_lightblue",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_lightblue"
+                      "screens.configuracoes.color_accessibility_hint_lightblue",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -341,10 +341,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "verde"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_green"
+                      "screens.configuracoes.color_accessibility_label_green",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_green"
+                      "screens.configuracoes.color_accessibility_hint_green",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -353,10 +353,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "greenGlow"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_greenGlow"
+                      "screens.configuracoes.color_accessibility_label_greenGlow",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_greenGlow"
+                      "screens.configuracoes.color_accessibility_hint_greenGlow",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -365,10 +365,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "gold"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_gold"
+                      "screens.configuracoes.color_accessibility_label_gold",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_gold"
+                      "screens.configuracoes.color_accessibility_hint_gold",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -377,10 +377,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "laranja"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_orange"
+                      "screens.configuracoes.color_accessibility_label_orange",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_orange"
+                      "screens.configuracoes.color_accessibility_hint_orange",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -389,10 +389,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "rosa"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_pink"
+                      "screens.configuracoes.color_accessibility_label_pink",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_pink"
+                      "screens.configuracoes.color_accessibility_hint_pink",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -401,10 +401,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "vermelho"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_vermelho"
+                      "screens.configuracoes.color_accessibility_label_vermelho",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_vermelho"
+                      "screens.configuracoes.color_accessibility_hint_vermelho",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -413,10 +413,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "violeta"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_violeta"
+                      "screens.configuracoes.color_accessibility_label_violeta",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_violeta"
+                      "screens.configuracoes.color_accessibility_hint_violeta",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -425,10 +425,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "roxo"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_purple"
+                      "screens.configuracoes.color_accessibility_label_purple",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_purple"
+                      "screens.configuracoes.color_accessibility_hint_purple",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -437,10 +437,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "marsala"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_marsala"
+                      "screens.configuracoes.color_accessibility_label_marsala",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_marsala"
+                      "screens.configuracoes.color_accessibility_hint_marsala",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -449,10 +449,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "preto"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_black"
+                      "screens.configuracoes.color_accessibility_label_black",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_black"
+                      "screens.configuracoes.color_accessibility_hint_black",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -461,10 +461,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "teal"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_teal"
+                      "screens.configuracoes.color_accessibility_label_teal",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_teal"
+                      "screens.configuracoes.color_accessibility_hint_teal",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -473,10 +473,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "silhouette"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_silhouette"
+                      "screens.configuracoes.color_accessibility_label_silhouette",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_silhouette"
+                      "screens.configuracoes.color_accessibility_hint_silhouette",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -485,10 +485,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "cocoaPowder"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_cocoaPowder"
+                      "screens.configuracoes.color_accessibility_label_cocoaPowder",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_cocoaPowder"
+                      "screens.configuracoes.color_accessibility_hint_cocoaPowder",
                     )}
                   />
                   <ItemListBoxButtonCircleColor
@@ -497,10 +497,10 @@ export default function Configuracoes({ navigation }: Props) {
                     selected={temaLocal === "cloud"}
                     accessible={true}
                     accessibilityLabel={t(
-                      "screens.configuracoes.color_accessibility_label_cloud"
+                      "screens.configuracoes.color_accessibility_label_cloud",
                     )}
                     accessibilityHint={t(
-                      "screens.configuracoes.color_accessibility_hint_cloud"
+                      "screens.configuracoes.color_accessibility_hint_cloud",
                     )}
                   />
                 </ItemListBoxSpace>
@@ -526,7 +526,7 @@ export default function Configuracoes({ navigation }: Props) {
                 <ItemListTextDescriptionTranslation
                   onPress={() => {
                     Linking.openURL(
-                      "https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations"
+                      "https://github.com/TJ-Droid/tjdroid#world_map-contribution-with-translations",
                     );
                   }}
                 >
@@ -657,7 +657,7 @@ export default function Configuracoes({ navigation }: Props) {
                 <ItemListTextDescription
                   onPress={() => setObgEscondido((o) => o + 1)}
                 >
-                  {t("screens.configuracoes.version")} 1.2.7
+                  {t("screens.configuracoes.version")} 1.2.8
                 </ItemListTextDescription>
               </ItemListTitleSpace100>
             </ItemListSpaceBetween>
