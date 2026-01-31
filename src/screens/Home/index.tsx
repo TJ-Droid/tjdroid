@@ -24,34 +24,40 @@ type ProfileScreenRouteProp = StackScreenProps<RootStackParamListType, "Home">;
 
 interface Props extends ProfileScreenRouteProp {}
 
+let hasShownHomeToast = false;
+
 export default function Home({ navigation }: Props) {
   const { t } = useTranslation();
   const [isLandscape, setIsLandscape] = useState(false);
 
   // Um pequeno Toast com uma saudação dependendo do horário
   useEffect(() => {
-    const hora = parseInt(format(new Date(), "H"));
+    if (!hasShownHomeToast) {
+      const hora = parseInt(format(new Date(), "H"));
 
-    if (hora >= 18) {
-      ToastAndroid.show(
-        `${t("screens.home.good_night")} 🌑`,
-        ToastAndroid.SHORT
-      );
-    } else if (hora >= 12) {
-      ToastAndroid.show(
-        `${t("screens.home.good_afternoon")}`,
-        ToastAndroid.SHORT
-      );
-    } else if (hora >= 6) {
-      ToastAndroid.show(
-        `${t("screens.home.good_morning_day")} 🌞`,
-        ToastAndroid.SHORT
-      );
-    } else if (hora <= 5) {
-      ToastAndroid.show(
-        `${t("screens.home.good_morning_night")} 💤`,
-        ToastAndroid.SHORT
-      );
+      if (hora >= 18) {
+        ToastAndroid.show(
+          `${t("screens.home.good_night")} 🌑`,
+          ToastAndroid.SHORT
+        );
+      } else if (hora >= 12) {
+        ToastAndroid.show(
+          `${t("screens.home.good_afternoon")}`,
+          ToastAndroid.SHORT
+        );
+      } else if (hora >= 6) {
+        ToastAndroid.show(
+          `${t("screens.home.good_morning_day")} 🌞`,
+          ToastAndroid.SHORT
+        );
+      } else if (hora <= 5) {
+        ToastAndroid.show(
+          `${t("screens.home.good_morning_night")} 💤`,
+          ToastAndroid.SHORT
+        );
+      }
+
+      hasShownHomeToast = true;
     }
 
     // Função que calcula se a Home está numa tela landiscape ou não ao carregar a tela pela primeira vez
@@ -143,3 +149,4 @@ export default function Home({ navigation }: Props) {
     </View>
   );
 }
+

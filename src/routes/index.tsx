@@ -1,4 +1,4 @@
-import { logEvent } from "@react-native-firebase/analytics";
+import analytics from "@react-native-firebase/analytics";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -96,7 +96,7 @@ export default function Routes({}: RoutesTypeProps) {
           navigationRef?.current?.getCurrentRoute()?.name;
 
         if (previousRouteName !== currentRouteName) {
-          await logEvent("NavegacaoLogEvent", {
+          await analytics().logScreenView({
             screen_name: currentRouteName,
             screen_class: currentRouteName,
           });
