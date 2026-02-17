@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { format, parseISO, formatISO } from "date-fns";
-import { TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { format, formatISO, parseISO } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { TouchableOpacity } from "react-native";
 
 import Header from "../Header";
 
 import minutes_to_hhmm from "../../utils/minutes_to_hhmm";
 import { changeDateFormatToYearMonthDay } from "../../utils/utils";
 
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 import {
-  StyledScrollView,
-  TopSectionContainer,
-  TopSectionContainerArea,
+  BottomSectionActionButtonsContainer,
+  BottomSectionButtonsArea,
+  BottomSectionButtonsWrapper,
+  BottomSectionButtonWrapper,
+  BottomSectionContainer,
+  BottomSectionLabelDateTimeText,
+  BottomSectionLabelText,
+  BottomSectionQuantityText,
+  BottomSectionTextArea,
   ContadorArea,
   ContadorButtonArea,
   ContadorMinutesText,
-  TopSectionTextInput,
-  BottomSectionContainer,
-  BottomSectionActionButtonsContainer,
-  BottomSectionButtonsWrapper,
-  BottomSectionTextArea,
-  BottomSectionLabelText,
-  BottomSectionButtonsArea,
-  BottomSectionButtonWrapper,
-  BottomSectionQuantityText,
   StyledFeatherIconContadorButton,
   StyledFeatherIconSectionButton,
-  BottomSectionLabelDateTimeText,
+  StyledScrollView,
+  TopSectionContainer,
+  TopSectionContainerArea,
+  TopSectionTextInput,
 } from "./styles";
-import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 export type ContadorPropsType = {
   relatorioId?: string;
@@ -62,12 +62,12 @@ export default function Contador({
 
   // Date e time Picker
   const [time, setTime] = useState(
-    changeDateFormatToYearMonthDay(diaProp, horaProp) || new Date()
+    changeDateFormatToYearMonthDay(diaProp, horaProp) || new Date(),
   );
   const [date, setDate] = useState(
     diaProp === "00/00/0000"
       ? new Date()
-      : changeDateFormatToYearMonthDay(diaProp)
+      : changeDateFormatToYearMonthDay(diaProp),
   );
 
   // Estados gerais
@@ -153,7 +153,7 @@ export default function Contador({
     const currentTime = selectedTime || time; // 2021-09-22T21:58:00.000Z
     const currentTimeFormatted = format(
       parseISO(formatISO(currentTime)),
-      "HH:mm"
+      "HH:mm",
     );
     setShowTimePicker(false);
     setRelatorio({ ...relatorio, hora: currentTimeFormatted });
@@ -163,7 +163,7 @@ export default function Contador({
   // FUNCAO PARA OS BOTOES DO CONTADOR
   async function contar(
     local: "minutos" | "colocacoes" | "videosMostrados" | "revisitas",
-    tipo: "soma" | ""
+    tipo: "soma" | "",
   ) {
     if (local === "minutos") {
       if (tipo === "soma") {
@@ -233,7 +233,7 @@ export default function Contador({
   async function subtrairMinutosContinuamente() {
     setMinutos((m) => m - 10);
     setTimerBotaoPrecionado(
-      setTimeout(() => subtrairMinutosContinuamente(), 100)
+      setTimeout(() => subtrairMinutosContinuamente(), 100),
     );
     clearTimeout(timerBotaoPrecionado);
   }
@@ -250,7 +250,7 @@ export default function Contador({
         if (configs) {
           try {
             setIsRelatorioSimplificadoAtivado(
-              !!configs?.isRelatorioSimplificado
+              !!configs?.isRelatorioSimplificado,
             );
           } catch (e) {}
         }
@@ -319,7 +319,7 @@ export default function Contador({
                 </ContadorButtonArea>
               </TouchableOpacity>
 
-              <ContadorMinutesText>
+              <ContadorMinutesText adjustsFontSizeToFit numberOfLines={1}>
                 {minutes_to_hhmm(minutos)}
               </ContadorMinutesText>
 
@@ -338,9 +338,9 @@ export default function Contador({
               multiline
               autoCorrect
               placeholder={t(
-                "components.contador.input_description_placeholder"
+                "components.contador.input_description_placeholder",
               )}
-              onChangeText={(texto) =>
+              onChangeText={(texto: string) =>
                 setRelatorio({ ...relatorio, observacoes: texto })
               }
             >

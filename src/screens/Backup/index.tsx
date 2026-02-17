@@ -143,11 +143,13 @@ export default function Backup() {
       </ItemList> */}
 
       <SectionDivider>
-        <SectionDividerText>
+        <SectionDividerText adjustsFontSizeToFit numberOfLines={1}>
           {t("screens.backup.manual_backup")}
         </SectionDividerText>
-        <StyledZipIcon>.zip</StyledZipIcon>
-        <StyledStorageTypeIcon>{storageTypeLabel}</StyledStorageTypeIcon>
+        <StyledZipIcon allowFontScaling={false}>.zip</StyledZipIcon>
+        <StyledStorageTypeIcon allowFontScaling={false}>
+          {storageTypeLabel}
+        </StyledStorageTypeIcon>
       </SectionDivider>
 
       <ItemListColumn>

@@ -28,6 +28,7 @@ export const ItemListTerritory = styled.View`
   width: 65%;
   flex-direction: column;
   justify-content: space-between;
+  flex: 1;
 `;
 
 export const ItemListTerritoryTextName = styled.Text`
@@ -62,7 +63,7 @@ export const DateIconContainer = styled.View`
 `;
 
 export const StyledMaterialCommunityIconsDateIcon = styled(
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
 )`
   color: ${({ theme }) => theme.color.primary_dark};
 `;

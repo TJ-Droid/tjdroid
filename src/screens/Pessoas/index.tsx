@@ -3,6 +3,7 @@ import { FlashList } from "@shopify/flash-list";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
+  PixelRatio,
   ToastAndroid,
   TouchableWithoutFeedback,
   View,
@@ -69,7 +70,7 @@ export default function Pessoas({ navigation }: Props) {
               // Mensagem Toast
               ToastAndroid.show(
                 t("screens.pessoas.person_load_message_error"),
-                ToastAndroid.LONG
+                ToastAndroid.LONG,
               );
             }
 
@@ -80,7 +81,7 @@ export default function Pessoas({ navigation }: Props) {
             // Mensagem Toast
             ToastAndroid.show(
               t("screens.pessoas.person_load_message_error"),
-              ToastAndroid.LONG
+              ToastAndroid.LONG,
             );
           });
         // }
@@ -104,7 +105,7 @@ export default function Pessoas({ navigation }: Props) {
         },
         { text: t("words.yes"), onPress: () => handleDeletarPessoa(idPessoa) },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -117,7 +118,7 @@ export default function Pessoas({ navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.pessoas.person_deleted_message_success"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Atualiza a lista de pessoas
           setReload(!reload);
@@ -125,7 +126,7 @@ export default function Pessoas({ navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.pessoas.person_deleted_message_error"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
@@ -133,7 +134,7 @@ export default function Pessoas({ navigation }: Props) {
         // Mensagem Toast
         ToastAndroid.show(
           t("screens.pessoas.person_deleted_message_error"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -161,11 +162,20 @@ export default function Pessoas({ navigation }: Props) {
             )}
           </ItemListPerson>
           {item.qtdVisitas === 0 ? (
-            <ItemListTextNoVisits>
+            <ItemListTextNoVisits
+              adjustsFontSizeToFit
+              numberOfLines={PixelRatio?.getFontScale() >= 1.2 ? 2 : 1}
+              isLargeFont={PixelRatio?.getFontScale() >= 1.2}
+            >
               {t("screens.pessoas.no_visits")}
             </ItemListTextNoVisits>
           ) : (
-            <ItemListTextLastVisit fontColor={item.visitaFontColor}>
+            <ItemListTextLastVisit
+              adjustsFontSizeToFit
+              numberOfLines={PixelRatio?.getFontScale() >= 1.2 ? 2 : 1}
+              fontColor={item.visitaFontColor}
+              isLargeFont={PixelRatio?.getFontScale() >= 1.2}
+            >
               {item.ultimaVisita}
             </ItemListTextLastVisit>
           )}

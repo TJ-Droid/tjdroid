@@ -4,6 +4,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import {
   Alert,
+  PixelRatio,
   ToastAndroid,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -104,7 +105,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
                 // Se der errado, dispara o toast
                 ToastAndroid.show(
                   t("screens.pessoasvisitas.visits_load_error_message"),
-                  ToastAndroid.LONG
+                  ToastAndroid.LONG,
                 );
               }
             })
@@ -112,7 +113,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
               // Se der errado, dispara o toast
               ToastAndroid.show(
                 t("screens.pessoasvisitas.visits_load_error_message"),
-                ToastAndroid.LONG
+                ToastAndroid.LONG,
               );
             });
         }
@@ -167,7 +168,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           onPress: () => handleDeletarVisitaPessoa(idPessoa, idVisita),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   // DELETAR VISITA PESSOA
@@ -179,7 +180,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.pessoasvisitas.person_name_changed_success"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
 
           // Oculta o dialogModal
@@ -191,7 +192,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           // Se der errado, dispara o toast
           ToastAndroid.show(
             t("screens.pessoasvisitas.person_name_changed_error"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
@@ -199,7 +200,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
         // Se der errado, dispara o toast
         ToastAndroid.show(
           t("screens.pessoasvisitas.person_name_changed_error"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -213,7 +214,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.pessoasvisitas.visit_deleted_message_success"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Faz reaload da página
           setReload(!reload);
@@ -221,14 +222,14 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           // Se der errado, dispara o toast
           ToastAndroid.show(
             t("screens.pessoasvisitas.visit_deleted_message_error"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("screens.pessoasvisitas.visit_deleted_message_error"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -263,6 +264,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
           <ItemListTextLastVisit
             bgColor={item.visitaBgColor}
             fontColor={item.visitaFontColor}
+            isLargeFont={PixelRatio?.getFontScale() >= 1.2}
           >
             {item.visitaLabel}
           </ItemListTextLastVisit>
@@ -300,7 +302,7 @@ export default function PessoaVisitas({ route, navigation }: Props) {
         dialogValue={allVisitasPessoas.nome}
         dialogTitle={t("screens.pessoasvisitas.alert_change_person_name_title")}
         dialogMessage={t(
-          "screens.pessoasvisitas.alert_change_person_name_message"
+          "screens.pessoasvisitas.alert_change_person_name_message",
         )}
         dialogFunction={(personName) =>
           handleChangePersonName(personName, allVisitasPessoas.id)

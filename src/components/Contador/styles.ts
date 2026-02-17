@@ -1,6 +1,6 @@
-import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { ScrollView } from "react-native";
+import styled from "styled-components/native";
 
 export const TopSectionContainer = styled.View`
   padding: 20px 15px;
@@ -50,6 +50,8 @@ export const ContadorMinutesText = styled.Text`
   padding: 0px 12px;
   font-family: monospace;
   letter-spacing: -7px;
+  flex: 1;
+  text-align: center;
 `;
 
 export const BottomSectionContainer = styled.View`
@@ -63,7 +65,6 @@ export const BottomSectionActionButtonsContainer = styled.View<{
   width: 100%;
   height: auto;
   min-height: ${({ ocultarCampos }) => (ocultarCampos ? `80px` : "200px")};
-  max-height: 200px;
 `;
 
 export const BottomSectionMessageContainer = styled.View`
@@ -112,6 +113,8 @@ export const BottomSectionButtonsArea = styled.View`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
 `;
 
 export const BottomSectionButtonWrapper = styled.View<{

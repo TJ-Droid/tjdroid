@@ -70,6 +70,7 @@ export const SectionDivider = styled.View`
   align-items: center;
   flex-wrap: wrap;
   background: ${({ theme }) => theme.color.primary}28;
+  padding-right: 50px;
 `;
 
 export const SectionDividerText = styled.Text`
@@ -84,7 +85,7 @@ export const SectionDividerIconWrapper = styled.View`
 export const StyledIconGoogleDrive = styled(IconGoogleDrive).attrs(
   ({ theme }) => ({
     iconColor: theme.color.text_list_divider,
-  })
+  }),
 )``;
 
 export const StyledZipIcon = styled.Text`
@@ -114,7 +115,7 @@ export const StyledFeatherButtonWrapper = styled.View<{
   background-color: ${(props) => props.bgColor};
   flex-direction: row;
   align-items: center;
-  border-radius: 50px;
+  border-radius: 26px;
   margin-bottom: ${(props) => props.marginBottom};
   padding-right: 14px;
 `;
@@ -124,6 +125,8 @@ export const StyledFeatherButtonLeftOverlay = styled.View`
   background-color: #00000020;
   padding: 8px 0px 8px 14px;
   margin-right: 10px;
+  height: 100%;
+  justify-content: center;
 `;
 
 export const StyledFeatherButtonLeftIcon = styled(Feather)`

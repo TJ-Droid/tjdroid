@@ -24,7 +24,7 @@ export const ItemList = styled.View`
 `;
 
 export const ItemListPerson = styled.View`
-  width: 55%;
+  flex: 1;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -43,24 +43,37 @@ export const ItemListTextDateVisits = styled.Text`
 
 export const ItemListTextLastVisit = styled.Text<{
   fontColor: string;
+  isLargeFont: boolean;
 }>`
   font-size: 16px;
   color: ${(props) => props.fontColor};
   background: ${(props) => props.fontColor}20;
-  text-align: right;
+  text-align: center;
   padding: 4px 14px;
   border-radius: 40px;
   font-weight: bold;
+  flex: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-grow: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-shrink: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-basis: ${(props) => (props.isLargeFont ? "0%" : "auto")};
+  flex-wrap: ${(props) => (props.isLargeFont ? "wrap" : "nowrap")};
 `;
 
-export const ItemListTextNoVisits = styled.Text`
+export const ItemListTextNoVisits = styled.Text<{
+  isLargeFont: boolean;
+}>`
   font-size: 16px;
   color: #99999980;
   background: #99999910;
-  text-align: right;
+  text-align: center;
   padding: 4px 14px;
   border-radius: 40px;
   font-weight: bold;
+  flex: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-grow: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-shrink: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-basis: ${(props) => (props.isLargeFont ? "0%" : "auto")};
+  flex-wrap: ${(props) => (props.isLargeFont ? "wrap" : "nowrap")};
 `;
 
 export const ItemListTopContent = styled.View`

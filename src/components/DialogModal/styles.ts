@@ -11,7 +11,7 @@ export const StyledDialogContainer = styled(Dialog.Container).attrs(
       },
       contentStyle,
     ],
-  })
+  }),
 )``;
 
 export const StyledDialogTitle = styled(Dialog.Title)`
@@ -100,4 +100,6 @@ export const ButtonsContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
 `;

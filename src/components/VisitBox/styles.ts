@@ -1,6 +1,6 @@
-import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { ScrollView } from "react-native";
+import styled from "styled-components/native";
 
 export const TopSectionContainer = styled.View`
   padding: 10px 15px;
@@ -29,7 +29,6 @@ export const TopSectionTextInput = styled.TextInput.attrs(({ theme }) => ({
 export const BottomSectionContainer = styled.View`
   background: ${({ theme }) => theme.color.primary}08;
   width: 100%;
-  min-height: 100px;
   padding: 20px 15px;
 `;
 
@@ -38,8 +37,6 @@ export const BottomSectionActionButtonsContainer = styled.View<{
 }>`
   width: 100%;
   height: auto;
-  min-height: ${({ ocultarCampos }) => (ocultarCampos ? `110px` : "200px")};
-  max-height: 200px;
 `;
 
 export const BottomSectionButtonsWrapper = styled.View`
@@ -47,6 +44,7 @@ export const BottomSectionButtonsWrapper = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 export const BottomSectionTextArea = styled.View`
@@ -73,6 +71,8 @@ export const BottomSectionButtonsArea = styled.View`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 `;
 
 export const BottomSectionButtonWrapper = styled.View<{
@@ -86,7 +86,8 @@ export const BottomSectionButtonWrapper = styled.View<{
 `;
 
 export const BottomSectionQuantityText = styled.Text`
-  width: 60px;
+  width: 100%;
+  max-width: 70px;
   text-align: center;
   font-size: 24px;
   color: ${({ theme }) => theme.color.primary_dark};

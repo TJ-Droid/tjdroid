@@ -93,7 +93,7 @@ export default function DialogModal({
   // Handle Dialog Text Input Change
   function handleDialogTextInputChange(
     text: string,
-    inputNumber: "input1" | "input2"
+    inputNumber: "input1" | "input2",
   ) {
     switch (inputNumber) {
       case "input1":
@@ -135,7 +135,7 @@ export default function DialogModal({
             value: "",
             isError: true,
             isErrorMessage: t(
-              "components.dialogmodal.less_than_1_error_message"
+              "components.dialogmodal.less_than_1_error_message",
             ),
           },
         }));
@@ -152,7 +152,7 @@ export default function DialogModal({
             value: "",
             isError: true,
             isErrorMessage: t(
-              "components.dialogmodal.less_than_1_error_message"
+              "components.dialogmodal.less_than_1_error_message",
             ),
           },
         }));
@@ -170,7 +170,7 @@ export default function DialogModal({
             ...prev.input1,
             isError: true,
             isErrorMessage: t(
-              "components.dialogmodal.first_value_must_be_greater_than_second_message"
+              "components.dialogmodal.first_value_must_be_greater_than_second_message",
             ),
           },
         }));
@@ -197,7 +197,7 @@ export default function DialogModal({
             ...prev.input1,
             isError: true,
             isErrorMessage: t(
-              "components.dialogmodal.more_than_100_error_message"
+              "components.dialogmodal.more_than_100_error_message",
             ),
           },
         }));
@@ -214,7 +214,7 @@ export default function DialogModal({
             ...prev.input2,
             isError: true,
             isErrorMessage: t(
-              "components.dialogmodal.empty_error_message_fields"
+              "components.dialogmodal.empty_error_message_fields",
             ),
           },
         }));
@@ -224,7 +224,7 @@ export default function DialogModal({
       // RETORNO
       return dialogFunction(
         inputsValues.input1.value,
-        inputsValues.input2.value
+        inputsValues.input2.value,
       );
     } else {
       if (
@@ -237,7 +237,7 @@ export default function DialogModal({
             ...prev.input1,
             isError: true,
             isErrorMessage: t(
-              "components.dialogmodal.empty_error_message_fields"
+              "components.dialogmodal.empty_error_message_fields",
             ),
           },
         }));
@@ -261,68 +261,66 @@ export default function DialogModal({
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : undefined}
       contentStyle={dialogContentStyle}
     >
-        <TextsContainer>
-          <StyledDialogTitle>{dialogTitle}</StyledDialogTitle>
-          <StyledDialogDescription>{dialogMessage}</StyledDialogDescription>
+      <TextsContainer>
+        <StyledDialogTitle>{dialogTitle}</StyledDialogTitle>
+        <StyledDialogDescription>{dialogMessage}</StyledDialogDescription>
 
-          {inputsValues.input1.isError && (
-            <StyledDialogDescriptionErrorMessage>
-              {inputsValues.input1.isErrorMessage}
-            </StyledDialogDescriptionErrorMessage>
-          )}
+        {inputsValues.input1.isError && (
+          <StyledDialogDescriptionErrorMessage>
+            {inputsValues.input1.isErrorMessage}
+          </StyledDialogDescriptionErrorMessage>
+        )}
 
-          {inputsValues.input2.isError && (
-            <StyledDialogDescriptionErrorMessage>
-              {inputsValues.input2.isErrorMessage}
-            </StyledDialogDescriptionErrorMessage>
-          )}
-        </TextsContainer>
+        {inputsValues.input2.isError && (
+          <StyledDialogDescriptionErrorMessage>
+            {inputsValues.input2.isErrorMessage}
+          </StyledDialogDescriptionErrorMessage>
+        )}
+      </TextsContainer>
 
-        {keyboardTypeNumberAddManyHouses ? (
-          <View style={{ flexDirection: "row" }}>
-            <StyledDialogInput3
-              placeholder={t("components.dialogmodal.input_placeholder")}
-              // autoCapitalize="words"
-              // multiline
-              numberOfLines={1}
-              onChangeText={(e: string) =>
-                handleDialogTextInputChange(e, "input1")
-              }
-              value={inputsValues.input1.value}
-              keyboardType="numeric"
-              maxLength={10}
-              underlineColorAndroid="transparent"
-            />
-
-            <StyledDialogInput2
-              placeholder={t("components.dialogmodal.input_placeholder")}
-              // autoCapitalize="words"
-              // multiline
-              numberOfLines={1}
-              onChangeText={(e: string) =>
-                handleDialogTextInputChange(e, "input2")
-              }
-              value={inputsValues.input2.value}
-              keyboardType="numeric"
-              maxLength={10}
-              underlineColorAndroid="transparent"
-            />
-          </View>
-        ) : (
-          <StyledDialogInput1
+      {keyboardTypeNumberAddManyHouses ? (
+        <View style={{ flexDirection: "row" }}>
+          <StyledDialogInput3
             placeholder={t("components.dialogmodal.input_placeholder")}
             // autoCapitalize="words"
-            multiline
+            // multiline
             numberOfLines={1}
             onChangeText={(e: string) =>
               handleDialogTextInputChange(e, "input1")
             }
             value={inputsValues.input1.value}
-            keyboardType="default"
-            maxLength={200}
+            keyboardType="numeric"
+            maxLength={10}
             underlineColorAndroid="transparent"
           />
-        )}
+
+          <StyledDialogInput2
+            placeholder={t("components.dialogmodal.input_placeholder")}
+            // autoCapitalize="words"
+            // multiline
+            numberOfLines={1}
+            onChangeText={(e: string) =>
+              handleDialogTextInputChange(e, "input2")
+            }
+            value={inputsValues.input2.value}
+            keyboardType="numeric"
+            maxLength={10}
+            underlineColorAndroid="transparent"
+          />
+        </View>
+      ) : (
+        <StyledDialogInput1
+          placeholder={t("components.dialogmodal.input_placeholder")}
+          // autoCapitalize="words"
+          multiline
+          numberOfLines={1}
+          onChangeText={(e: string) => handleDialogTextInputChange(e, "input1")}
+          value={inputsValues.input1.value}
+          keyboardType="default"
+          maxLength={200}
+          underlineColorAndroid="transparent"
+        />
+      )}
 
       <ButtonsContainer>
         <StyledDialogButtonCancel

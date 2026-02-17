@@ -103,7 +103,6 @@ export const BottomSectionContainer = styled.View`
 export const BottomSectionActionButtonsContainer = styled.View`
   width: 100%;
   min-height: 200px;
-  max-height: 200px;
 `;
 
 export const BottomSectionMessageContainer = styled.View`

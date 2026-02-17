@@ -43,14 +43,20 @@ export const ItemListTextDayInfo = styled.Text`
 export const ItemListTextLastVisit = styled.Text<{
   fontColor: string;
   bgColor: string;
+  isLargeFont: boolean;
 }>`
   font-size: 14px;
   color: ${(props) => props.fontColor};
   background: ${(props) => props.bgColor};
-  text-align: right;
+  text-align: center;
   padding: 4px 14px;
   border-radius: 40px;
   font-weight: bold;
+  flex: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-grow: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-shrink: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-basis: ${(props) => (props.isLargeFont ? "0%" : "auto")};
+  flex-wrap: ${(props) => (props.isLargeFont ? "wrap" : "nowrap")};
 `;
 
 export const HeaderBoxPersonName = styled.View`

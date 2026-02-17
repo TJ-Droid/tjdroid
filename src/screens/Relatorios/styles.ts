@@ -26,12 +26,14 @@ export const ItemListMonthHour = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 `;
 
 export const ItemListTextMonth = styled.Text`
   font-size: 20px;
   color: ${({ theme }) => theme.color.text_secondary};
   text-transform: capitalize;
+  flex: 1;
 `;
 
 export const ItemListTextHour = styled.Text`

@@ -43,7 +43,7 @@ const ReportSectionHeader = React.memo(
       </HeaderItemListText>
     </HeaderItemList>
   ),
-  (prev, next) => prev.title === next.title
+  (prev, next) => prev.title === next.title,
 );
 
 ReportSectionHeader.displayName = "ReportSectionHeader";
@@ -63,7 +63,9 @@ const ReportListItem = React.memo(
     >
       <ItemList>
         <ItemListMonthHour>
-          <ItemListTextMonth>{item.mes_formatado}</ItemListTextMonth>
+          <ItemListTextMonth adjustsFontSizeToFit numberOfLines={1}>
+            {item.mes_formatado}
+          </ItemListTextMonth>
           <ItemListTextHour>{item.minutos_formatados}</ItemListTextHour>
         </ItemListMonthHour>
       </ItemList>
@@ -73,7 +75,7 @@ const ReportListItem = React.memo(
     prev.item.mes === next.item.mes &&
     prev.item.minutos_formatados === next.item.minutos_formatados &&
     prev.onPress === next.onPress &&
-    prev.onLongPress === next.onLongPress
+    prev.onLongPress === next.onLongPress,
 );
 
 ReportListItem.displayName = "ReportListItem";
@@ -111,7 +113,7 @@ export default function Relatorios({ navigation }: Props) {
           setAllAnosServicosOrdenados([]);
           ToastAndroid.show(
             t("screens.relatorios.reports_load_message_error"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       } catch (error) {
@@ -119,7 +121,7 @@ export default function Relatorios({ navigation }: Props) {
           setAllAnosServicosOrdenados([]);
           ToastAndroid.show(
             t("screens.relatorios.reports_load_message_error"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       } finally {
@@ -151,31 +153,31 @@ export default function Relatorios({ navigation }: Props) {
           if (dados === 1) {
             ToastAndroid.show(
               t("screens.relatoriomes.month_report_deleted_message_success"),
-              ToastAndroid.LONG
+              ToastAndroid.LONG,
             );
             setReload((prev) => !prev);
           } else if (dados === 2) {
             ToastAndroid.show(
               t(
-                "screens.relatoriomes.actual_month_report_delete_message_error"
+                "screens.relatoriomes.actual_month_report_delete_message_error",
               ),
-              ToastAndroid.LONG
+              ToastAndroid.LONG,
             );
           } else {
             ToastAndroid.show(
               t("screens.relatoriomes.month_report_deleted_message_error"),
-              ToastAndroid.LONG
+              ToastAndroid.LONG,
             );
           }
         })
         .catch(() => {
           ToastAndroid.show(
             t("screens.relatoriomes.month_report_deleted_message_error"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         });
     },
-    [t]
+    [t],
   );
 
   // Mostra alerta para excluir relatorio do mes
@@ -199,9 +201,9 @@ export default function Relatorios({ navigation }: Props) {
             onPress: () => handleDeletarRelatorioMes(mes),
           },
         ],
-        { cancelable: true }
+        { cancelable: true },
       ),
-    [handleDeletarRelatorioMes, t]
+    [handleDeletarRelatorioMes, t],
   );
 
   const handleNavigateToReport = useCallback(
@@ -211,20 +213,20 @@ export default function Relatorios({ navigation }: Props) {
         mesAnoFormatado: item.mes_formatado,
       });
     },
-    [navigation]
+    [navigation],
   );
 
   const handleLongPressReport = useCallback(
     (item: MonthTotalsType) =>
       alertaExclusaoRelatorioMes(item.mes, item.mes_formatado.toUpperCase()),
-    [alertaExclusaoRelatorioMes]
+    [alertaExclusaoRelatorioMes],
   );
 
   const renderSectionHeader = useCallback(
     ({ section }: { section: SectionHeadersType }) => (
       <ReportSectionHeader title={section.title} />
     ),
-    []
+    [],
   );
 
   const renderItem = useCallback(
@@ -237,7 +239,7 @@ export default function Relatorios({ navigation }: Props) {
         onLongPress={handleLongPressReport}
       />
     ),
-    [handleLongPressReport, handleNavigateToReport]
+    [handleLongPressReport, handleNavigateToReport],
   );
 
   const keyExtractor = useCallback((item: MonthTotalsType) => item.mes, []);
@@ -249,7 +251,7 @@ export default function Relatorios({ navigation }: Props) {
         message={t("screens.relatorios.screen_empty_message")}
       />
     ),
-    [t]
+    [t],
   );
 
   return (

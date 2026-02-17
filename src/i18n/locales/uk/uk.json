@@ -226,7 +226,7 @@
         "first_value_must_be_greater_than_second_message": "Друге значення має бути більшим за перше."
       },
       "visitbox": {
-        "input_placeholder": "Уведіть вашу\nнотатку:"
+        "input_placeholder": "Уведіть вашу нотатку:"
       },
       "header": {
         "share_report_title": "Звіт за місяць",
@@ -335,7 +335,7 @@
       "revisit": "Повторне відвідування",
       "second_visit": "Друге відвідування",
       "first_visit": "Перше відвідування",
-      "refused": "Refused/Denied",
+      "refused": "Відмовлено/Заперечено",
       "absentee": "відсутній"
     },
     "words": {

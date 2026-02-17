@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
+import React, { useEffect, useState } from "react";
 
 import {
   buscarAsyncStorage,
@@ -7,8 +7,8 @@ import {
 } from "../../services/AsyncStorageMethods";
 
 import { AppLanguages } from "../../types/Languages";
-import { Container, StyledPicker } from "./styles";
 import LoadingSpinner from "../LoadingSpinner";
+import { Container, StyledPicker } from "./styles";
 
 const LANGUAGES_OPTIONS = [
   { language: "en", label: "English (100%)" },
@@ -39,7 +39,7 @@ export default function SelectPickerLanguages({
     // Salva o idioma escolhido no asyncStorage
     await salvarAsyncStorage(
       { language: languageSelected, choosed: true },
-      "@tjdroid:idioma"
+      "@tjdroid:idioma",
     );
   }
 

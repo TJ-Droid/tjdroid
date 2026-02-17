@@ -128,7 +128,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
               // Mensagem Toast
               ToastAndroid.show(
                 t("screens.relatoriomes.month_report_load_error_message"),
-                ToastAndroid.SHORT
+                ToastAndroid.SHORT,
               );
             }
           })
@@ -136,7 +136,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
             // Mensagem Toast
             ToastAndroid.show(
               t("screens.relatoriomes.month_report_load_error_message"),
-              ToastAndroid.SHORT
+              ToastAndroid.SHORT,
             );
           })
           .finally(async () => {
@@ -166,7 +166,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
   // ALERTA de DELETAR RELATÓRIO
   const alertaExclusaoRelatorioAtual = (
     idRelatorio: string,
-    dataRelatorio: string
+    dataRelatorio: string,
   ) =>
     Alert.alert(
       t("screens.relatoriomes.alert_report_deleted_title"),
@@ -182,7 +182,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
           onPress: () => handleDeletarRelatorio(idRelatorio, dataRelatorio),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   // DELETAR RELATÓRIO
@@ -194,7 +194,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.relatoriomes.report_deleted_message_success"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Faz reaload da página
           setReload(!reload);
@@ -202,7 +202,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.relatoriomes.report_deleted_message_error"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       })
@@ -210,7 +210,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
         // Mensagem Toast
         ToastAndroid.show(
           t("screens.relatoriomes.report_deleted_message_error"),
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   }
@@ -218,7 +218,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
   // Verifica se o mes foi trabalhado
   const carregarSeMesFoiTrabalhado = async () => {
     const mesAnoDessaTela = moment(`${mesAno}`, "MMMM yy", true).format(
-      "MM/YYYY"
+      "MM/YYYY",
     );
     await verificarSeMesTrabalhado(mesAnoDessaTela)
       .then((dados) => {
@@ -228,7 +228,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.errors.error_message_1"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       })
@@ -236,7 +236,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
         // Mensagem Toast
         ToastAndroid.show(
           t("screens.errors.error_message_1"),
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   };
@@ -248,7 +248,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
 
     // Pega o anoMes formatado
     const mesAnoDessaTela = moment(`${mesAno}`, "MMMM yy", true).format(
-      "MM/YYYY"
+      "MM/YYYY",
     );
 
     // Toggle do Mes Trabalhado
@@ -260,7 +260,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
           // Mensagem Toast
           ToastAndroid.show(
             t("screens.errors.error_message_1"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
         // Remove Loading
@@ -272,7 +272,7 @@ export default function RelatorioMes({ route, navigation }: Props) {
         // Mensagem Toast
         ToastAndroid.show(
           t("screens.errors.error_message_1"),
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   };
@@ -373,16 +373,19 @@ export default function RelatorioMes({ route, navigation }: Props) {
               </HeaderTotalsTopSectionHours>
             </HeaderTotalsTopSection>
             <HeaderTotalsBottomSection>
-              <HeaderTotalsBottomSectionText>
+              <HeaderTotalsBottomSectionText
+                adjustsFontSizeToFit
+                numberOfLines={4}
+              >
                 {`${
                   totaisDoMes.totalEstudosBiblicos
                     ? `${
                         totaisDoMes.totalEstudosBiblicos === 1
                           ? `${totaisDoMes.totalEstudosBiblicos} ${t(
-                              "words.bible_study"
+                              "words.bible_study",
                             )},`
                           : `${totaisDoMes.totalEstudosBiblicos} ${t(
-                              "words.bible_studies"
+                              "words.bible_studies",
                             )},`
                       }`
                     : `0 ${t("words.bible_studies")},`
@@ -391,10 +394,10 @@ export default function RelatorioMes({ route, navigation }: Props) {
                     ? `${
                         totaisDoMes.totalRevisitas === 1
                           ? `${totaisDoMes.totalRevisitas} ${t(
-                              "words.revisit"
+                              "words.revisit",
                             )},`
                           : `${totaisDoMes.totalRevisitas} ${t(
-                              "words.revisits"
+                              "words.revisits",
                             )},`
                       }`
                     : `0 ${t("words.revisits")},`
@@ -403,10 +406,10 @@ export default function RelatorioMes({ route, navigation }: Props) {
                     ? `${
                         totaisDoMes.totalColocacoes === 1
                           ? `${totaisDoMes.totalColocacoes} ${t(
-                              "words.placement"
+                              "words.placement",
                             )},`
                           : `${totaisDoMes.totalColocacoes} ${t(
-                              "words.placements"
+                              "words.placements",
                             )},`
                       }`
                     : `0 ${t("words.placements")},`
@@ -415,10 +418,10 @@ export default function RelatorioMes({ route, navigation }: Props) {
                     ? `${
                         totaisDoMes.totalVideosMostrados === 1
                           ? `${totaisDoMes.totalVideosMostrados} ${t(
-                              "words.video"
+                              "words.video",
                             )}`
                           : `${totaisDoMes.totalVideosMostrados} ${t(
-                              "words.videos"
+                              "words.videos",
                             )}`
                       }`
                     : `0 ${t("words.videos")}`
@@ -427,7 +430,10 @@ export default function RelatorioMes({ route, navigation }: Props) {
             </HeaderTotalsBottomSection>
             <StyledContainerWorkedMonth>
               <View style={{ flex: 1 }}>
-                <StyledContainerWorkedMonthText>
+                <StyledContainerWorkedMonthText
+                  adjustsFontSizeToFit
+                  numberOfLines={4}
+                >
                   {t("screens.relatoriomes.worked_month_description")}
                 </StyledContainerWorkedMonthText>
               </View>

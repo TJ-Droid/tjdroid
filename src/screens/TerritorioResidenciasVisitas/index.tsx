@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
+  PixelRatio,
   ToastAndroid,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -67,7 +68,7 @@ export default function TerritorioResidenciasVisitas({
   const [dialogVisible, setDialogVisible] = useState(false);
   const [allVisitasResidencia, setAllVisitasResidencia] =
     useState<CustomSearchHomeVisitsIterface>(
-      {} as CustomSearchHomeVisitsIterface
+      {} as CustomSearchHomeVisitsIterface,
     );
   const [carregando, setCarregando] = useState(true);
 
@@ -102,9 +103,9 @@ export default function TerritorioResidenciasVisitas({
                 // Se der errado, dispara o toast
                 ToastAndroid.show(
                   t(
-                    "screens.territorioresidenciasvisitas.visits_load_message_error"
+                    "screens.territorioresidenciasvisitas.visits_load_message_error",
                   ),
-                  ToastAndroid.LONG
+                  ToastAndroid.LONG,
                 );
               }
             })
@@ -112,9 +113,9 @@ export default function TerritorioResidenciasVisitas({
               // Se der errado, dispara o toast
               ToastAndroid.show(
                 t(
-                  "screens.territorioresidenciasvisitas.visits_load_message_error"
+                  "screens.territorioresidenciasvisitas.visits_load_message_error",
                 ),
-                ToastAndroid.LONG
+                ToastAndroid.LONG,
               );
             });
         }
@@ -177,14 +178,14 @@ export default function TerritorioResidenciasVisitas({
             handleDeletarVisita(idVisita, residenciaId, territorioId),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   // EDITAR NOME CASA
   function handleChangeHomeName(
     casaNome: string,
     residenciaId: string,
-    territorioId: string
+    territorioId: string,
   ) {
     editarNomeCasa(casaNome, residenciaId, territorioId)
       .then((dados) => {
@@ -193,9 +194,9 @@ export default function TerritorioResidenciasVisitas({
           // Mensagem Toast
           ToastAndroid.show(
             t(
-              "screens.territorioresidenciasvisitas.house_change_name_message_success"
+              "screens.territorioresidenciasvisitas.house_change_name_message_success",
             ),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
 
           // Oculta o dialogModal
@@ -210,9 +211,9 @@ export default function TerritorioResidenciasVisitas({
           // Se der errado, dispara o toast
           ToastAndroid.show(
             t(
-              "screens.territorioresidenciasvisitas.house_change_name_message_error"
+              "screens.territorioresidenciasvisitas.house_change_name_message_error",
             ),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
@@ -220,9 +221,9 @@ export default function TerritorioResidenciasVisitas({
         // Se der errado, dispara o toast
         ToastAndroid.show(
           t(
-            "screens.territorioresidenciasvisitas.house_change_name_message_error"
+            "screens.territorioresidenciasvisitas.house_change_name_message_error",
           ),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -231,7 +232,7 @@ export default function TerritorioResidenciasVisitas({
   function handleDeletarVisita(
     idVisita: string,
     residenciaId: string,
-    territorioId: string
+    territorioId: string,
   ) {
     excluirVisitaCasa(idVisita, residenciaId, territorioId)
       .then((dados) => {
@@ -240,9 +241,9 @@ export default function TerritorioResidenciasVisitas({
           // Mensagem Toast
           ToastAndroid.show(
             t(
-              "screens.territorioresidenciasvisitas.visit_deleted_message_success"
+              "screens.territorioresidenciasvisitas.visit_deleted_message_success",
             ),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Faz reaload da página
           setReload(!reload);
@@ -250,16 +251,16 @@ export default function TerritorioResidenciasVisitas({
           // Se der errado, dispara o toast
           ToastAndroid.show(
             t(
-              "screens.territorioresidenciasvisitas.visit_deleted_message_error"
+              "screens.territorioresidenciasvisitas.visit_deleted_message_error",
             ),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("screens.territorioresidenciasvisitas.visit_deleted_message_error"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -297,6 +298,7 @@ export default function TerritorioResidenciasVisitas({
         <ItemListTextLastVisit
           bgColor={item.visitaBgColor}
           fontColor={item.visitaFontColor}
+          isLargeFont={PixelRatio?.getFontScale() >= 1.2}
         >
           {item.visita}
         </ItemListTextLastVisit>
@@ -340,16 +342,16 @@ export default function TerritorioResidenciasVisitas({
         dialogVisibleProp={dialogVisible}
         dialogValue={`${allVisitasResidencia.nomeMorador}`}
         dialogTitle={t(
-          "screens.territorioresidenciasvisitas.dialog_change_name_household_title"
+          "screens.territorioresidenciasvisitas.dialog_change_name_household_title",
         )}
         dialogMessage={t(
-          "screens.territorioresidenciasvisitas.dialog_change_name_household_message"
+          "screens.territorioresidenciasvisitas.dialog_change_name_household_message",
         )}
         dialogFunction={(residenciaNome) =>
           handleChangeHomeName(
             residenciaNome,
             allVisitasResidencia.id,
-            allVisitasResidencia.territorioId
+            allVisitasResidencia.territorioId,
           )
         }
         dialogCloseFunction={() => handleCancelDialog()}

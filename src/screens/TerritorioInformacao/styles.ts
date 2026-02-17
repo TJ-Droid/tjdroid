@@ -1,5 +1,5 @@
-import styled from "styled-components/native";
 import { ScrollView } from "react-native";
+import styled from "styled-components/native";
 
 export const TopSectionContainer = styled.View`
   padding: 10px 15px;
@@ -34,8 +34,6 @@ export const BottomSectionContainer = styled.View`
 
 export const BottomSectionActionButtonsContainer = styled.View`
   width: 100%;
-  min-height: 200px;
-  max-height: 200px;
 `;
 
 export const BottomSectionButtonsWrapper = styled.View`
@@ -43,6 +41,7 @@ export const BottomSectionButtonsWrapper = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 6px;
 `;
 
 export const BottomSectionTextArea = styled.View`

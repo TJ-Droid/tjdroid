@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, formatISO, parseISO } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { TouchableOpacity } from "react-native";
 
+import { carregarConfiguracoes } from "../../controllers/configuracoesController";
+import { VisitDataType } from "../../types/Visits";
 import { changeDateFormatToYearMonthDay } from "../../utils/utils";
 import SelectPicker from "../SelectPicker";
-import { VisitDataType } from "../../types/Visits";
 import {
+  BottomSectionActionButtonsContainer,
+  BottomSectionButtonsArea,
+  BottomSectionButtonsWrapper,
+  BottomSectionButtonWrapper,
+  BottomSectionContainer,
+  BottomSectionLabelDateTimeText,
+  BottomSectionLabelText,
+  BottomSectionQuantityText,
+  BottomSectionTextArea,
+  StyledFeatherIconSectionButton,
   StyledScrollView,
   TopSectionContainer,
   TopSectionContainerArea,
   TopSectionTextInput,
-  BottomSectionContainer,
-  BottomSectionActionButtonsContainer,
-  BottomSectionButtonsWrapper,
-  BottomSectionTextArea,
-  BottomSectionLabelText,
-  BottomSectionButtonsArea,
-  BottomSectionButtonWrapper,
-  BottomSectionQuantityText,
-  StyledFeatherIconSectionButton,
-  BottomSectionLabelDateTimeText,
 } from "./styles";
-import { carregarConfiguracoes } from "../../controllers/configuracoesController";
 
 type VisitBoxPropsType = {
   visitData: VisitDataType;
@@ -37,10 +37,10 @@ export function VisitBox({
   const { t } = useTranslation();
 
   const [date, setDate] = useState(
-    changeDateFormatToYearMonthDay(visitData.dia)
+    changeDateFormatToYearMonthDay(visitData.dia),
   );
   const [time, setTime] = useState(
-    changeDateFormatToYearMonthDay(visitData.dia, visitData.hora)
+    changeDateFormatToYearMonthDay(visitData.dia, visitData.hora),
   );
 
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -67,8 +67,8 @@ export function VisitBox({
       data: formatISO(
         changeDateFormatToYearMonthDay(
           currentDateFormatted,
-          visitDataState.hora
-        )
+          visitDataState.hora,
+        ),
       ),
     });
   };
@@ -81,7 +81,7 @@ export function VisitBox({
     const currentTime = selectedTime || time;
     const currentTimeFormatted = format(
       parseISO(formatISO(currentTime)),
-      "HH:mm"
+      "HH:mm",
     );
     setShowTimePicker(false);
     setTime(currentTime);
@@ -89,7 +89,10 @@ export function VisitBox({
       ...visitDataState,
       hora: currentTimeFormatted,
       data: formatISO(
-        changeDateFormatToYearMonthDay(visitDataState.dia, currentTimeFormatted)
+        changeDateFormatToYearMonthDay(
+          visitDataState.dia,
+          currentTimeFormatted,
+        ),
       ),
     });
   };
@@ -151,7 +154,7 @@ export function VisitBox({
         if (configs) {
           try {
             setIsRelatorioSimplificadoAtivado(
-              !!configs?.isRelatorioSimplificado
+              !!configs?.isRelatorioSimplificado,
             );
           } catch (e) {}
         }
@@ -189,7 +192,7 @@ export function VisitBox({
               multiline
               autoCorrect
               placeholder={t("components.visitbox.input_placeholder")}
-              onChangeText={(texto) =>
+              onChangeText={(texto: string) =>
                 setVisitDataState({ ...visitDataState, anotacoes: texto })
               }
             >
@@ -247,7 +250,10 @@ export function VisitBox({
                       </BottomSectionButtonWrapper>
                     </TouchableOpacity>
 
-                    <BottomSectionQuantityText>
+                    <BottomSectionQuantityText
+                      adjustFontSizeToFit
+                      numberOfLines={1}
+                    >
                       {visitDataState.colocacoes}
                     </BottomSectionQuantityText>
 

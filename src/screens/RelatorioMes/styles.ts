@@ -27,12 +27,14 @@ export const HeaderTotalsTopSection = styled.View`
   width: 100%;
   height: auto;
   margin-bottom: 10px;
+  gap: 10px;
 `;
 
 export const HeaderTotalsTopSectionText = styled.Text`
   color: ${({ theme }) => theme.color.primary_dark};
   font-size: 20px;
   font-weight: bold;
+  flex: 1;
 `;
 
 export const HeaderTotalsTopSectionHours = styled.Text`

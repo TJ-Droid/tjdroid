@@ -13,9 +13,8 @@ export const Container = styled(SafeAreaView)`
 `;
 
 export const ItemList = styled.View`
-  padding: 0px 15px;
+  padding: 10px 15px;
   width: 100%;
-  height: 60px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -48,10 +47,15 @@ export const ItemListTextLastVisit = styled.Text<{
   font-size: 14px;
   color: ${(props) => props.fontColor};
   background: ${(props) => props.bgColor};
-  text-align: right;
+  text-align: center;
   padding: 4px 14px;
   border-radius: 40px;
   font-weight: bold;
+  flex: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-grow: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-shrink: ${(props) => (props.isLargeFont ? "1" : "0")};
+  flex-basis: ${(props) => (props.isLargeFont ? "0%" : "auto")};
+  flex-wrap: ${(props) => (props.isLargeFont ? "wrap" : "nowrap")};
 `;
 
 export const HeaderBoxPersonName = styled.View`

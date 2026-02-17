@@ -202,28 +202,28 @@ function Header({
 
   const voltarHome = useCallback(
     () => navigation.navigate("Home"),
-    [navigation]
+    [navigation],
   );
   const voltarPessoas = useCallback(
     () => navigation.navigate("Pessoas"),
-    [navigation]
+    [navigation],
   );
   const voltarAtras = useCallback(() => navigation.goBack(), [navigation]);
   const navigateToRelatorios = useCallback(
     () => navigation.navigate("Relatorios"),
-    [navigation]
+    [navigation],
   );
   const navigateToBackup = useCallback(
     () => navigation.navigate("Backup"),
-    [navigation]
+    [navigation],
   );
   const navigateToAjuda = useCallback(
     () => navigation.navigate("Ajuda"),
-    [navigation]
+    [navigation],
   );
   const navigateToConfiguracoes = useCallback(
     () => navigation.navigate("Configuracoes"),
-    [navigation]
+    [navigation],
   );
 
   // Dialog Open Function
@@ -272,7 +272,7 @@ function Header({
   // COMPARTILHAR RELATÓRIO
   function compartilharRelatorio(
     relatorio: ShowReportSendType,
-    comHoras?: boolean
+    comHoras?: boolean,
   ) {
     const compartilhar = async () => {
       // Chama o controller para carregar as configurações
@@ -293,41 +293,41 @@ function Header({
               ? `${t("components.header.share_report_title")} ${(
                   relatorio.mesAnoFormatado ?? ""
                 ).replace(/^\w/, (c) => c.toUpperCase())}\n\n${t(
-                  "screens.relatoriomes.worked_month_description"
+                  "screens.relatoriomes.worked_month_description",
                 )} ${
                   relatorio.isMesTrabalhado ? t("words.yes") : t("words.no")
                 }. \n${t(
-                  "components.header.share_report_hours"
+                  "components.header.share_report_hours",
                 )}: ${minutes_to_hhmm(totalMinutos ?? 0)}\n${t(
-                  "components.header.share_report_bible_studies"
+                  "components.header.share_report_bible_studies",
                 )}: ${totalEstudosBiblicos}${
                   !!configs?.isRelatorioSimplificado
                     ? ``
                     : `\n${t(
-                        "components.header.share_report_revisits"
+                        "components.header.share_report_revisits",
                       )}: ${totalRevisitas}\n${t(
-                        "components.header.share_report_placements"
+                        "components.header.share_report_placements",
                       )}: ${totalColocacoes}\n${t(
-                        "components.header.share_report_videos_showed"
+                        "components.header.share_report_videos_showed",
                       )}: ${totalVideosMostrados}`
                 }`
               : `${t("components.header.share_report_title")} ${(
                   relatorio.mesAnoFormatado ?? ""
                 ).replace(/^\w/, (c) => c.toUpperCase())}\n\n${t(
-                  "screens.relatoriomes.worked_month_description"
+                  "screens.relatoriomes.worked_month_description",
                 )} ${
                   relatorio.isMesTrabalhado ? t("words.yes") : t("words.no")
                 }. \n${t(
-                  "components.header.share_report_bible_studies"
+                  "components.header.share_report_bible_studies",
                 )}: ${totalEstudosBiblicos}${
                   !!configs?.isRelatorioSimplificado
                     ? ``
                     : `\n${t(
-                        "components.header.share_report_revisits"
+                        "components.header.share_report_revisits",
                       )}: ${totalRevisitas}\n${t(
-                        "components.header.share_report_placements"
+                        "components.header.share_report_placements",
                       )}: ${totalColocacoes}\n${t(
-                        "components.header.share_report_videos_showed"
+                        "components.header.share_report_videos_showed",
                       )}: ${totalVideosMostrados}`
                 }`;
 
@@ -337,14 +337,14 @@ function Header({
           } catch (e) {
             ToastAndroid.show(
               t("components.header.share_report_error_message"),
-              ToastAndroid.LONG
+              ToastAndroid.LONG,
             );
           }
         } else {
           // Se erro, dispara o toast
           ToastAndroid.show(
             `${t("screens.configuracoes.error_load_configs")}`,
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       });
@@ -364,7 +364,7 @@ function Header({
         },
         { text: t("words.yes"), onPress: () => handleDeletarPessoa(idPessoa) },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaExclusaoCasa = (residenciaId: string, territoryId: string) =>
@@ -382,12 +382,12 @@ function Header({
           onPress: () => handleDeletarCasa(residenciaId, territoryId),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaExclusaoRelatorioAtual = (
     idRelatorio: string,
-    dataRelatorio: string
+    dataRelatorio: string,
   ) =>
     Alert.alert(
       t("components.header.alert_delete_report_title"),
@@ -403,7 +403,7 @@ function Header({
           onPress: () => handleDeletarRelatorio(idRelatorio, dataRelatorio),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaCancelarNovoRelatorio = (caminhoParaVoltar: "Home" | "voltar") =>
@@ -424,7 +424,7 @@ function Header({
               : navigation.navigate(caminhoParaVoltar),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaDeletarVisitaPessoa = (idPessoa: string, idVisita: string) =>
@@ -442,13 +442,13 @@ function Header({
           onPress: () => handleDeletarVisitaPessoa(idPessoa, idVisita),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaDeletarVisitaCasa = (
     idVisita: string,
     residenciaId: string,
-    territorioId: string
+    territorioId: string,
   ) =>
     Alert.alert(
       t("components.header.alert_delete_visit_house_title"),
@@ -465,7 +465,7 @@ function Header({
             handleDeletarVisitaCasa(idVisita, residenciaId, territorioId),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaCancelarAdicaoVisitaPessoa = (caminhoParaVoltar: "voltar") =>
@@ -486,7 +486,7 @@ function Header({
               : navigation.navigate(caminhoParaVoltar),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaCancelarAdicaoVisitaCasa = (caminhoParaVoltar: "voltar") =>
@@ -507,12 +507,12 @@ function Header({
               : navigation.navigate(caminhoParaVoltar),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   const alertaExclusaoTerritorio = (
     idTerritorio: string,
-    nomeTerritorio: string
+    nomeTerritorio: string,
   ) =>
     Alert.alert(
       t("components.header.alert_delete_territory_title"),
@@ -533,7 +533,7 @@ function Header({
             }),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
 
   // Editar Relatório
@@ -547,7 +547,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.report_edit_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
@@ -555,7 +555,7 @@ function Header({
         // Mensagem Toast
         ToastAndroid.show(
           t("components.header.report_edit_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -563,7 +563,7 @@ function Header({
   // Salvar Relatorio
   function handleSalvarNovoRelatorio(
     relatorio: ReportCounterType,
-    origem: "contador" | "relatorio"
+    origem: "contador" | "relatorio",
   ) {
     salvarNovoRelatorio(relatorio)
       .then((dados) => {
@@ -572,7 +572,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.new_report_add_success_message"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
 
           // Se vier do contador, usa o REPLACE, se nao, usa o NAVIGATE
@@ -584,7 +584,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.new_report_add_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
@@ -592,7 +592,7 @@ function Header({
         // Mensagem Toast
         ToastAndroid.show(
           t("components.header.new_report_add_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -606,7 +606,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.report_delete_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
 
           // Navega até a página abaixo
@@ -615,7 +615,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.report_delete_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
@@ -623,7 +623,7 @@ function Header({
         // Mensagem Toast
         ToastAndroid.show(
           t("components.header.report_delete_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -637,7 +637,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.person_add_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
           // Navega até a página abaixo
           navigation.replace("Pessoas");
@@ -646,14 +646,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.person_add_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.person_add_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -667,21 +667,21 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.person_delete_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
           // Navega até a página abaixo
           navigation.replace("Pessoas");
         } else {
           ToastAndroid.show(
             t("components.header.person_delete_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.person_delete_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -695,7 +695,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.house_delete_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
           // Navega até a página abaixo
           // navigation.goBack("TerritorioResidencias", dados);
@@ -703,14 +703,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.house_delete_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.house_delete_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -719,7 +719,7 @@ function Header({
   function handleDeletarVisitaCasa(
     idVisita: string,
     residenciaId: string,
-    territorioId: string
+    territorioId: string,
   ) {
     excluirVisitaCasa(idVisita, residenciaId, territorioId)
       .then((dados) => {
@@ -728,21 +728,21 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.house_visit_delete_success_message"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Navega até a página abaixo
           navigation.goBack();
         } else {
           ToastAndroid.show(
             t("components.header.house_visit_delete_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.house_visit_delete_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -756,21 +756,21 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.person_visit_success_message"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Navega até a página abaixo
           navigation.navigate("PessoaVisitas", { idPessoa: dados?.idPessoa });
         } else {
           ToastAndroid.show(
             t("components.header.person_visit_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.person_visit_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -785,21 +785,21 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.person_edit_visit_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.person_edit_visit_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
 
   // EDITAR UMA VISITA FEITA CASA
   function handleEditarVisitaCasa(
-    dadosVisita: VisitCustomSearchHomeVisitIterface
+    dadosVisita: VisitCustomSearchHomeVisitIterface,
   ) {
     editarVisitaCasa(dadosVisita)
       .then((dados) => {
@@ -809,21 +809,21 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.house_edit_visit_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.house_edit_visit_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
 
   // EDITAR INFORMAÇÕES DO TERRITORIO
   function handleEditarInformacoesTerritorio(
-    dadosTerritorio: SearchTerritoryInfoType
+    dadosTerritorio: SearchTerritoryInfoType,
   ) {
     salvarInformacoesTerritorio(dadosTerritorio)
       .then((dados) => {
@@ -833,14 +833,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.territory_edit_infos_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.territory_edit_infos_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -854,21 +854,21 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.person_add_visit_success_message"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Navega até a página abaixo
           navigation.navigate("PessoaVisitas", { idPessoa: dados?.idPessoa });
         } else {
           ToastAndroid.show(
             t("components.header.person_add_visit_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.person_add_visit_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -882,21 +882,21 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.house_add_visit_success_message"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
           // Navega até a página TerritorioResidenciasVisitas
           navigation.goBack();
         } else {
           ToastAndroid.show(
             t("components.header.house_add_visit_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.house_add_visit_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -910,7 +910,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.add_territory_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
           // Navega até a página abaixo
           navigation.replace("Territorios");
@@ -919,14 +919,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.add_territory_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.add_territory_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -953,14 +953,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.change_territories_disposition_error_message"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.change_territories_disposition_error_message"),
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   }
@@ -968,7 +968,7 @@ function Header({
   // ADICIONAR NOVO TERRITÓRIO
   function handleEditarNomeTerritorio(
     territorioNome: string,
-    territorioId: string
+    territorioId: string,
   ) {
     editarNomeTerritorio(territorioNome, territorioId)
       .then((dados) => {
@@ -977,7 +977,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.territory_edit_name_succes_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
 
           // Altera o nome da tela também
@@ -988,14 +988,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.territory_edit_name_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.territory_edit_name_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -1004,7 +1004,7 @@ function Header({
   function handleEditarIdentificadorResidencia(
     newIdentifier: string,
     residenciaId = "",
-    territoryId: string
+    territoryId: string,
   ) {
     editarNomeIdentificadorResidencia(newIdentifier, residenciaId, territoryId)
       .then((dados) => {
@@ -1013,7 +1013,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.territory_edit_identificator_succes_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
 
           // Altera o nome da tela também
@@ -1024,14 +1024,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.territory_edit_identificator_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.territory_edit_identificator_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -1045,7 +1045,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.add_house_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
           // Navega até a página abaixo
           navigation.replace("TerritorioResidencias", dados);
@@ -1054,14 +1054,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.add_house_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.add_house_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -1070,7 +1070,7 @@ function Header({
   function handleAdicionarVariasResidencias(
     territorioId: string,
     qtdInicial: number,
-    qtdFinal: number
+    qtdFinal: number,
   ) {
     adicionarVariasResidencias(territorioId, qtdInicial, qtdFinal)
       .then((dados) => {
@@ -1079,7 +1079,7 @@ function Header({
           // Mensagem Toast
           ToastAndroid.show(
             t("components.header.add_many_houses_success_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
           // Navega até a página abaixo
           navigation.replace("TerritorioResidencias", dados);
@@ -1088,14 +1088,14 @@ function Header({
         } else {
           ToastAndroid.show(
             t("components.header.add_many_houses_error_message"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
       .catch((e) => {
         ToastAndroid.show(
           t("components.header.add_many_houses_error_message"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
@@ -1106,7 +1106,7 @@ function Header({
         dialogVisibleProp={dialogNewPersonVisible}
         dialogTitle={t("components.header.dialogmodal_add_person_title")}
         dialogMessage={t(
-          "components.header.dialogmodal_add_person_description"
+          "components.header.dialogmodal_add_person_description",
         )}
         dialogFunction={(personName) => handleAdicionarPessoa(personName)}
         dialogCloseFunction={() => handleCancelDialogNewPerson()}
@@ -1116,7 +1116,7 @@ function Header({
         dialogVisibleProp={dialogNewTerritoryVisible}
         dialogTitle={t("components.header.dialogmodal_add_territory_title")}
         dialogMessage={t(
-          "components.header.dialogmodal_add_territory_description"
+          "components.header.dialogmodal_add_territory_description",
         )}
         dialogFunction={(territorioNome) =>
           handleAdicionarTerritorio(territorioNome)
@@ -1128,10 +1128,10 @@ function Header({
         dialogVisibleProp={dialogChangeNameTerritoryVisible}
         dialogValue={territoryData.nome}
         dialogTitle={t(
-          "components.header.dialogmodal_edit_territory_name_title"
+          "components.header.dialogmodal_edit_territory_name_title",
         )}
         dialogMessage={t(
-          "components.header.dialogmodal_edit_territory_name_description"
+          "components.header.dialogmodal_edit_territory_name_description",
         )}
         dialogFunction={(newName) =>
           handleEditarNomeTerritorio(newName, territoryData.territoryId)
@@ -1144,13 +1144,13 @@ function Header({
         keyboardTypeNumberAddManyHouses
         dialogTitle={t("components.header.dialogmodal_add_many_houses_title")}
         dialogMessage={t(
-          "components.header.dialogmodal_add_many_houses_description"
+          "components.header.dialogmodal_add_many_houses_description",
         )}
         dialogFunction={(qttInicial, qttFinal) =>
           handleAdicionarVariasResidencias(
             territoryData.territoryId,
             parseInt(qttInicial.replace(/[^0-9]/g, "")),
-            parseInt((qttFinal ?? "0").replace(/[^0-9]/g, ""))
+            parseInt((qttFinal ?? "0").replace(/[^0-9]/g, "")),
           )
         }
         dialogCloseFunction={() => handleCancelDialogTerritoryHome()}
@@ -1160,16 +1160,16 @@ function Header({
         dialogVisibleProp={dialogChangeHomeIdentifierVisible}
         dialogValue={territoryData.nome}
         dialogTitle={t(
-          "components.header.dialogmodal_edit_territory_identificador_title"
+          "components.header.dialogmodal_edit_territory_identificador_title",
         )}
         dialogMessage={t(
-          "components.header.dialogmodal_edit_territory_identificador_description"
+          "components.header.dialogmodal_edit_territory_identificador_description",
         )}
         dialogFunction={(newName) =>
           handleEditarIdentificadorResidencia(
             newName,
             territoryData.residenciaId,
-            territoryData.territoryId
+            territoryData.territoryId,
           )
         }
         dialogCloseFunction={() => handleCancelDialogChangeHomeIdentifier()}
@@ -1203,9 +1203,10 @@ function Header({
 
       <ContainerTitleButtons>
         <Title
-          ellipsizeMode="tail"
+          adjustsFontSizeToFit
           numberOfLines={2}
           style={capitalize ? styles.titleCapitalize : styles.titleNone}
+          allowFontScaling={false}
         >
           {title}
         </Title>
@@ -1284,7 +1285,7 @@ function Header({
                   onPress={() =>
                     alertaExclusaoRelatorioAtual(
                       showReportSave.id,
-                      showReportSave.dia
+                      showReportSave.dia,
                     )
                   }
                 >
@@ -1437,7 +1438,7 @@ function Header({
                 onPress={() =>
                   alertaExclusaoCasa(
                     showDeleteTerritoryHome.residenciaId,
-                    showDeleteTerritoryHome.territoryId
+                    showDeleteTerritoryHome.territoryId,
                   )
                 }
               >
@@ -1467,7 +1468,7 @@ function Header({
                   onPress={() =>
                     alertaDeletarVisitaPessoa(
                       showEditPersonVisit?.idPessoa as any,
-                      showEditPersonVisit?.idVisita as any
+                      showEditPersonVisit?.idVisita as any,
                     )
                   }
                 >
@@ -1499,7 +1500,7 @@ function Header({
                     alertaDeletarVisitaCasa(
                       showEditHomeVisit.idVisita,
                       showEditHomeVisit.residenciaId,
-                      showEditHomeVisit.territorioId
+                      showEditHomeVisit.territorioId,
                     )
                   }
                 >
@@ -1677,7 +1678,7 @@ function Header({
                     onPress={() =>
                       alertaExclusaoTerritorio(
                         territoryData.territoryId,
-                        territoryData.nome
+                        territoryData.nome,
                       )
                     }
                     title={t("components.header.menu_item_remove")}
