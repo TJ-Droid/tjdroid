@@ -1,9 +1,67 @@
+import { Feather } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 export const Container = styled(SafeAreaView)`
   background: ${({ theme }) => theme.color.bg};
   flex: 1;
+`;
+
+export const FloorInfoRow = styled.View`
+  align-items: center;
+  background: ${({ theme }) => theme.color.bg};
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 14px 10px;
+`;
+
+export const FloorNavigationButton = styled(TouchableOpacity)<{
+  disabled?: boolean;
+}>`
+  align-items: center;
+  background: ${({ theme }) => theme.color.primary}14;
+  border-radius: 999px;
+  height: 36px;
+  justify-content: center;
+  opacity: ${({ disabled }) => (disabled ? 0.35 : 1)};
+  width: 36px;
+`;
+
+export const FloorNavigationIcon = styled(Feather)<{
+  disabled?: boolean;
+}>`
+  color: ${({ theme }) => theme.color.primary};
+  font-size: 18px;
+`;
+
+export const FloorTitleBadge = styled.View`
+  background: ${({ theme }) => theme.color.primary}18;
+  border-radius: 999px;
+  flex: 1;
+  margin: 0 12px;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const FloorTitleText = styled.Text`
+  color: ${({ theme }) => theme.color.primary};
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+export const FloorCounter = styled.View`
+  background: ${({ theme }) => theme.color.header_bg}40;
+  border-radius: 999px;
+  padding: 8px 12px;
+`;
+
+export const FloorCounterText = styled.Text`
+  color: ${({ theme }) => theme.color.text_secondary};
+  font-size: 13px;
+  font-weight: bold;
 `;
 
 export const ItemList = styled.View`

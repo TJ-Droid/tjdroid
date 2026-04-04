@@ -57,7 +57,11 @@ export interface RootStackParamListType extends Record<
   PessoaEditarVisita: { idVisita: string; idPessoa: string };
   PessoaNovaVisita: { personId: string };
   Territorios: undefined;
-  TerritorioResidencias: CustomTerritoriesType;
+  TerritorioResidencias: CustomTerritoriesType & {
+    andarIdSelecionado?: string;
+    andarPosicaoSelecionada?: number;
+    totalAndares?: number;
+  };
   TerritorioResidenciasVisitas: { residenciaId: string; territoryId: string };
   TerritorioResidenciaNovaVisita: { residenciaId: string; territoryId: string };
   TerritorioResidenciaEditarVisita: {

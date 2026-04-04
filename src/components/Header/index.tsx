@@ -32,9 +32,11 @@ import {
   SelectedMonthServiceDataType,
 } from "../../controllers/relatoriosController";
 import {
+  adicionarUmAndar,
   adicionarUmaResidencia,
   adicionarVariasResidencias,
   alterarDisposicaoVisualTerritorio,
+  deletarUmAndar,
   deletarResidenciaTerritorio,
   deletarTerritorio,
   editarNomeIdentificadorResidencia,
@@ -90,6 +92,9 @@ type TerritoryType = {
   nome: string;
   territoryId: string;
   residenciaId?: string;
+  andarId?: string;
+  andarPosicao?: number;
+  totalAndares?: number;
 };
 
 type HeaderPropsType = {
@@ -184,6 +189,8 @@ function Header({
   const [dotsMenu, setDotsMenu] = useState(false);
   const openDotsMenu = useCallback(() => setDotsMenu(true), []);
   const closeDotsMenu = useCallback(() => setDotsMenu(false), []);
+  const canDeleteCurrentFloor =
+    (territoryData.totalAndares ?? 0) > 1 && !!territoryData.andarId;
 
   // Dialog states
   const [dialogNewPersonVisible, setDialogNewPersonVisible] = useState(false);
@@ -535,6 +542,35 @@ function Header({
       ],
       { cancelable: true },
     );
+
+  const alertaExclusaoAndar = (
+    territorioId: string,
+    andarId?: string,
+    andarPosicao?: number,
+  ) => {
+    if (!andarId) {
+      return;
+    }
+
+    Alert.alert(
+      t("components.header.alert_delete_floor_title"),
+      t("components.header.alert_delete_floor_description", {
+        floor: andarPosicao ?? 1,
+      }),
+      [
+        {
+          text: t("words.no"),
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: t("words.yes"),
+          onPress: () => handleDeletarUmAndar(territorioId, andarId),
+        },
+      ],
+      { cancelable: true },
+    );
+  };
 
   // Editar Relatório
   function handleEditarRelatorio(relatorio: ReportCounterType) {
@@ -1036,9 +1072,60 @@ function Header({
       });
   }
 
-  // ADICIONAR NOVA RESIDÊNCIA
-  function handleAdicionarUmaResidencia(territorioId: string) {
-    adicionarUmaResidencia(territorioId)
+  function handleAdicionarUmAndar(territorioId: string) {
+    adicionarUmAndar(territorioId)
+      .then((dados) => {
+        if (dados) {
+          ToastAndroid.show(
+            t("components.header.add_floor_success_message"),
+            ToastAndroid.LONG,
+          );
+          navigation.replace("TerritorioResidencias", dados);
+        } else {
+          ToastAndroid.show(
+            t("components.header.add_floor_error_message"),
+            ToastAndroid.LONG,
+          );
+        }
+      })
+      .catch(() => {
+        ToastAndroid.show(
+          t("components.header.add_floor_error_message"),
+          ToastAndroid.LONG,
+        );
+      });
+  }
+
+  function handleDeletarUmAndar(territorioId: string, andarId?: string) {
+    deletarUmAndar(territorioId, andarId)
+      .then((dados) => {
+        if (dados) {
+          ToastAndroid.show(
+            t("components.header.delete_floor_success_message"),
+            ToastAndroid.LONG,
+          );
+          navigation.replace("TerritorioResidencias", dados);
+        } else {
+          ToastAndroid.show(
+            t("components.header.delete_floor_error_message"),
+            ToastAndroid.LONG,
+          );
+        }
+      })
+      .catch(() => {
+        ToastAndroid.show(
+          t("components.header.delete_floor_error_message"),
+          ToastAndroid.LONG,
+        );
+      });
+  }
+
+  // ADICIONAR NOVA RESIDENCIA
+  function handleAdicionarUmaResidencia(
+    territorioId: string,
+    andarId?: string,
+  ) {
+    adicionarUmaResidencia(territorioId, andarId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -1071,8 +1158,9 @@ function Header({
     territorioId: string,
     qtdInicial: number,
     qtdFinal: number,
+    andarId?: string,
   ) {
-    adicionarVariasResidencias(territorioId, qtdInicial, qtdFinal)
+    adicionarVariasResidencias(territorioId, qtdInicial, qtdFinal, andarId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -1151,6 +1239,7 @@ function Header({
             territoryData.territoryId,
             parseInt(qttInicial.replace(/[^0-9]/g, "")),
             parseInt((qttFinal ?? "0").replace(/[^0-9]/g, "")),
+            territoryData.andarId,
           )
         }
         dialogCloseFunction={() => handleCancelDialogTerritoryHome()}
@@ -1612,8 +1701,30 @@ function Header({
                   }
                 >
                   <Menu.Item
+                    onPress={() => handleAdicionarUmAndar(territoryData.territoryId)}
+                    title={t("components.header.menu_item_add_floor")}
+                    leadingIcon="layers-plus"
+                  />
+                  <Menu.Item
+                    onPress={() => {
+                      closeAddMenu();
+                      alertaExclusaoAndar(
+                        territoryData.territoryId,
+                        territoryData.andarId,
+                        territoryData.andarPosicao,
+                      );
+                    }}
+                    title={t("components.header.menu_item_remove_floor")}
+                    leadingIcon="layers-minus"
+                    disabled={!canDeleteCurrentFloor}
+                    style={canDeleteCurrentFloor ? styles.menuDeleteItem : undefined}
+                  />
+                  <Menu.Item
                     onPress={() =>
-                      handleAdicionarUmaResidencia(territoryData.territoryId)
+                      handleAdicionarUmaResidencia(
+                        territoryData.territoryId,
+                        territoryData.andarId,
+                      )
                     }
                     title={t("components.header.menu_item_add_one_house")}
                     leadingIcon="home"

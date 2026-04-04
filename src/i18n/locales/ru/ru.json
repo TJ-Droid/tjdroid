@@ -142,6 +142,8 @@
         "screen_name": "Новое посещение"
       },
       "territorioresidencias": {
+        "floor_title": "Этаж {{floor}}",
+        "floor_counter": "Этаж {{current}} из {{total}}",
         "screen_empty_title": "Дома ещё не добавлены!",
         "screen_empty_message": "Нажмите на значок + выше, чтобы добавить новое посещение",
         "alert_home_deleted_title": "Удалить дом",
@@ -229,6 +231,12 @@
         "input_placeholder": "Введите вашу заметку:"
       },
       "header": {
+        "add_floor_success_message": "Этаж успешно добавлен!",
+        "add_floor_error_message": "Не удалось добавить этаж. Повторите попытку!",
+        "menu_item_add_floor": "Добавить этаж",
+        "delete_floor_success_message": "Этаж успешно удален!",
+        "delete_floor_error_message": "Ошибка при удалении этажа, попробуйте еще раз!",
+        "menu_item_remove_floor": "Удалить этаж",
         "share_report_title": "Отчет за месяц",
         "share_report_hours": "Часы",
         "share_report_bible_studies": "Изучения Библии",
@@ -287,6 +295,8 @@
         "add_house_error_message": "Не удалось добавить дом. Повторите попытку!",
         "add_many_houses_success_message": "Дома успешно добавлены!",
         "add_many_houses_error_message": "Не удалось добавить дома. Повторите попытку!",
+        "alert_delete_floor_title": "УДАЛИТЬ ЭТАЖ",
+        "alert_delete_floor_description": "Вы действительно хотите удалить этаж {{floor}} со всеми квартирами и посещениями?",
         "dialogmodal_add_person_title": "ДОБАВИТЬ ЧЕЛОВЕКА",
         "dialogmodal_add_person_description": "Введите имя человека в поле ниже:",
         "dialogmodal_add_territory_title": "ДОБАВИТЬ ТЕРРИТОРИЮ",

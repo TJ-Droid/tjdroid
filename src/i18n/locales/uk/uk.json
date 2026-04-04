@@ -142,6 +142,8 @@
         "screen_name": "Нове відвідування"
       },
       "territorioresidencias": {
+        "floor_title": "Поверх {{floor}}",
+        "floor_counter": "Поверх {{current}} з {{total}}",
         "screen_empty_title": "Жодних домівок ще не додано!",
         "screen_empty_message": "Натисніть на значок + вище, щоб додати",
         "alert_home_deleted_title": "ВИДАЛИТИ БУДИНОК",
@@ -229,6 +231,12 @@
         "input_placeholder": "Уведіть вашу нотатку:"
       },
       "header": {
+        "add_floor_success_message": "Поверх успішно додано!",
+        "add_floor_error_message": "Помилка додавання поверху, спробуйте ще раз!",
+        "menu_item_add_floor": "Додати поверх",
+        "delete_floor_success_message": "Поверх успішно видалено!",
+        "delete_floor_error_message": "Помилка видалення поверху, спробуйте ще раз!",
+        "menu_item_remove_floor": "Видалити поверх",
         "share_report_title": "Звіт за місяць",
         "share_report_hours": "Години",
         "share_report_bible_studies": "Біблійні вивчення",
@@ -287,6 +295,8 @@
         "add_house_error_message": "Помилка додавання будинку, спробуйте ще раз!",
         "add_many_houses_success_message": "Будинок успішно додано!",
         "add_many_houses_error_message": "Помилка додавання будинку, спробуйте ще раз!",
+        "alert_delete_floor_title": "ВИДАЛИТИ ПОВЕРХ",
+        "alert_delete_floor_description": "Ви дійсно хочете видалити поверх {{floor}} з усіма оселями та відвідинами?",
         "dialogmodal_add_person_title": "ДОДАТИ ОСОБУ",
         "dialogmodal_add_person_description": "Введіть нове ім'я в поле нижче:",
         "dialogmodal_add_territory_title": "ДОДАТИ ТЕРИТОРІЮ",

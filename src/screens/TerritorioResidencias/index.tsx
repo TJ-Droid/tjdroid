@@ -1,10 +1,12 @@
 import { useIsFocused } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
   Dimensions,
+  FlatList,
+  ListRenderItem,
   Pressable,
   Text,
   ToastAndroid,
@@ -19,6 +21,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import {
   buscarTerritoriosResidencias,
   deletarResidenciaTerritorio,
+  TerritoryFloorResidencesInterface,
   TerritoryHomesInterface,
 } from "../../controllers/territoriosController";
 
@@ -27,6 +30,11 @@ import { RootStackParamListType } from "../../routes";
 import { TerritoryDispositionType } from "../../types/Territories";
 import {
   Container,
+  FloorInfoRow,
+  FloorNavigationButton,
+  FloorNavigationIcon,
+  FloorTitleBadge,
+  FloorTitleText,
   ItemList,
   ItemListTerritory,
   ItemListTerritoryColor,
@@ -35,10 +43,9 @@ import {
   ItemListTerritoryQuantityZeroVisits,
   ItemListTerritoryTextBold,
   ItemListTerritoryTitle,
-  TerritoryBoxText,
+  TerritoryBoxText
 } from "./styles";
 
-// Número de linhas
 const NUM_COLUMNS = 6;
 
 type ProfileScreenRouteProp = StackScreenProps<
@@ -46,74 +53,85 @@ type ProfileScreenRouteProp = StackScreenProps<
   "TerritorioResidencias"
 >;
 
-interface Props extends ProfileScreenRouteProp {}
+type Props = ProfileScreenRouteProp;
 
 export default function TerritorioResidencias({ route, navigation }: Props) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
+  const floorPagerRef = useRef<FlatList<TerritoryFloorResidencesInterface>>(null);
 
-  // Pega os dados do territorio
-  const { id, nome, ordenacao, disposicao } = route.params;
+  const { id, nome, ordenacao, disposicao, andarIdSelecionado } = route.params;
 
   const [territoryName, setTerritoryName] = useState("");
   const [territoryId, setTerritoryId] = useState("");
-
   const [visualDisposition, setVisualDisposition] = useState(disposicao);
   const [reload, setReload] = useState(false);
-  const [allTerritoriosResidencias, setAllTerritoriosResidencias] = useState<
-    TerritoryHomesInterface[]
-  >([]);
+  const [allFloors, setAllFloors] = useState<TerritoryFloorResidencesInterface[]>(
+    [],
+  );
+  const [currentFloorIndex, setCurrentFloorIndex] = useState(0);
   const [carregando, setCarregando] = useState(true);
+  const selectedFloorIdRef = useRef(andarIdSelecionado ?? "");
 
-  async function buscarDados() {
-    // Busca os anos de Servico para setar no SectionList
+  const screenWidth = Dimensions.get("window").width;
+
+  const buscarDados = useCallback(async () => {
     await buscarTerritoriosResidencias(id, ordenacao)
       .then((dados) => {
-        // Trata o retorno
         if (dados) {
-          // Seta o estado com todos as casas do território para o SectionList
-          setAllTerritoriosResidencias(dados);
+          setAllFloors(dados.andares);
 
-          // Retira a mensagem de carregando
+          const preferredFloorId =
+            andarIdSelecionado ?? selectedFloorIdRef.current;
+          const floorIndex = dados.andares.findIndex(
+            (andar) => andar.id === preferredFloorId,
+          );
+          const nextIndex = floorIndex >= 0 ? floorIndex : 0;
+          const nextFloorId = dados.andares[nextIndex]?.id ?? "";
+
+          selectedFloorIdRef.current = nextFloorId;
+          setCurrentFloorIndex(nextIndex);
+
+          requestAnimationFrame(() => {
+            floorPagerRef.current?.scrollToIndex({
+              index: nextIndex,
+              animated: false,
+            });
+          });
+
           setCarregando(false);
         } else {
-          // Retira a mensagem de carregando
           setCarregando(false);
-
-          // Mensagem Toast
           ToastAndroid.show(
             t("screens.territorioresidencias.homes_load_message_error"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
-      .catch((error) => {
-        // Mensagem Toast
+      .catch(() => {
+        setCarregando(false);
         ToastAndroid.show(
           t("screens.territorioresidencias.homes_load_message_error"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
-  }
+  }, [andarIdSelecionado, id, ordenacao, t]);
 
-  // On component mount
   useEffect(() => {
     if (isFocused) {
       setCarregando(true);
-
-      // Seta a disposicao dos itens
-      setVisualDisposition(visualDisposition);
-
-      // Seta o nome do territorio
+      setVisualDisposition(disposicao);
       setTerritoryName(nome);
       setTerritoryId(id);
-
-      // Busca os territórios
       buscarDados();
     }
-  }, [isFocused, reload]);
+  }, [buscarDados, disposicao, id, isFocused, nome, reload]);
 
-  // ALERTA de DELETAR TERRITÓRIO
+  const currentFloor = useMemo(
+    () => allFloors[currentFloorIndex] ?? allFloors[0],
+    [allFloors, currentFloorIndex],
+  );
+
   const alertaExclusaoResidencia = ({
     residenciaId,
     residenciaNome,
@@ -137,52 +155,72 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
           onPress: () => handleDeletarResidencia(residenciaId),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
-  // DELETAR TERRITÓRIO
   function handleDeletarResidencia(residenciaId: string) {
     deletarResidenciaTerritorio(residenciaId, territoryId)
       .then((dados) => {
-        //Trata o retorno
         if (dados) {
-          // Mensagem Toast
           ToastAndroid.show(
             t("screens.territorioresidencias.home_deleted_message_success"),
-            ToastAndroid.SHORT
+            ToastAndroid.SHORT,
           );
-          // Atualiza a lista
+          selectedFloorIdRef.current =
+            dados.andarIdSelecionado ?? selectedFloorIdRef.current;
           setReload(!reload);
         } else {
-          // Mensagem Toast
           ToastAndroid.show(
             t("screens.territorioresidencias.home_deleted_message_error"),
-            ToastAndroid.LONG
+            ToastAndroid.LONG,
           );
         }
       })
-      .catch((e) => {
-        // Mensagem Toast
+      .catch(() => {
         ToastAndroid.show(
           t("screens.territorioresidencias.home_deleted_message_error"),
-          ToastAndroid.LONG
+          ToastAndroid.LONG,
         );
       });
   }
 
-  // Função que altera a disposição dos itens na tela
   function handleChangeVisualDisposition(
-    newDisposition: TerritoryDispositionType
+    newDisposition: TerritoryDispositionType,
   ) {
     setVisualDisposition(newDisposition);
   }
-  // Função que altera o nome do territorio na tela
+
   function handleChangeTerritoryName(newTerritoryName: string) {
     setTerritoryName(newTerritoryName);
   }
 
-  // ITEM PARA A DISPOSIÇÃO VISUAL DE LINHAS
+  function handleFloorChange(nextIndex: number) {
+    const floor = allFloors[nextIndex];
+
+    if (!floor) {
+      return;
+    }
+
+    setCurrentFloorIndex(nextIndex);
+    selectedFloorIdRef.current = floor.id;
+  }
+
+  function scrollToFloor(nextIndex: number) {
+    if (nextIndex < 0 || nextIndex >= allFloors.length) {
+      return;
+    }
+
+    handleFloorChange(nextIndex);
+    floorPagerRef.current?.scrollToOffset({
+      offset: nextIndex * screenWidth,
+      animated: true,
+    });
+  }
+
+  const hasPreviousFloor = currentFloorIndex > 0;
+  const hasNextFloor = currentFloorIndex < allFloors.length - 1;
+
   const Item = ({ item }: { item: TerritoryHomesInterface }) => (
     <TouchableWithoutFeedback
       onPress={() =>
@@ -243,69 +281,91 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
               <Text>{`${item.descAnotacoes}`}</Text>
             </ItemListTerritoryDescription>
           ) : item.descNome !== "" ? (
-            <>
-              <ItemListTerritoryDescription
-                ellipsizeMode="tail"
-                numberOfLines={2}
-              >
-                <ItemListTerritoryTextBold>
-                  {item.descNome}
-                </ItemListTerritoryTextBold>
-              </ItemListTerritoryDescription>
-            </>
-          ) : (
-            <></>
-          )}
+            <ItemListTerritoryDescription
+              ellipsizeMode="tail"
+              numberOfLines={2}
+            >
+              <ItemListTerritoryTextBold>{item.descNome}</ItemListTerritoryTextBold>
+            </ItemListTerritoryDescription>
+          ) : null}
         </ItemList>
       </View>
     </TouchableWithoutFeedback>
   );
 
-  // ITEM PARA A DISPOSIÇÃO VISUAL DE CAIXAS
-  const ItemBox = ({ item }: { item: TerritoryHomesInterface }) => {
-    return (
-      <View
+  const ItemBox = ({ item }: { item: TerritoryHomesInterface }) => (
+    <View
+      style={{
+        backgroundColor: item.corVisita,
+        flex: 1,
+        margin: 3,
+        height: Dimensions.get("window").width / NUM_COLUMNS - 8,
+        borderRadius: 7,
+      }}
+    >
+      <Pressable
+        onPress={() =>
+          navigation.navigate("TerritorioResidenciasVisitas", {
+            residenciaId: item.id,
+            territoryId: territoryId,
+          })
+        }
+        onLongPress={() =>
+          alertaExclusaoResidencia({
+            residenciaId: item.id,
+            residenciaNome: item.titulo.toString().substring(0, 3),
+          })
+        }
         style={{
-          backgroundColor: item.corVisita,
+          alignItems: "center",
+          justifyContent: "center",
           flex: 1,
-          margin: 3,
-          height: Dimensions.get("window").width / NUM_COLUMNS - 8,
-          borderRadius: 7,
+          width: "100%",
         }}
       >
-        <Pressable
-          onPress={() =>
-            navigation.navigate("TerritorioResidenciasVisitas", {
-              residenciaId: item.id,
-              territoryId: territoryId,
-            })
-          }
-          onLongPress={() =>
-            alertaExclusaoResidencia({
-              residenciaId: item.id,
-              residenciaNome: item.titulo.toString().substring(0, 3),
-            })
-          }
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            width: "100%",
-          }}
-        >
-          <TerritoryBoxText adjustsFontSizeToFit numberOfLines={1}>
-            {item.titulo.toString()}
-          </TerritoryBoxText>
-        </Pressable>
-      </View>
-    );
-  };
+        <TerritoryBoxText adjustsFontSizeToFit numberOfLines={1}>
+          {item.titulo.toString()}
+        </TerritoryBoxText>
+      </Pressable>
+    </View>
+  );
 
   const EmptyListMessage = () => (
     <EmptyMessage
       title={t("screens.territorioresidencias.screen_empty_title")}
       message={t("screens.territorioresidencias.screen_empty_message")}
     />
+  );
+
+  const renderFloorPage: ListRenderItem<TerritoryFloorResidencesInterface> = ({
+    item,
+  }) => (
+    <View style={{ width: screenWidth, flex: 1 }}>
+      {visualDisposition !== "caixas" ? (
+        <FlashList
+          style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: 50 }}
+          data={item.residencias}
+          renderItem={Item}
+          ListEmptyComponent={EmptyListMessage}
+          key={`list-${item.id}`}
+          keyExtractor={(residencia) => residencia.id}
+          fadingEdgeLength={12}
+        />
+      ) : (
+        <FlashList
+          style={{ flex: 1, paddingHorizontal: 12 }}
+          contentContainerStyle={{ paddingTop: 10, paddingBottom: 30 }}
+          data={item.residencias}
+          renderItem={ItemBox}
+          ListEmptyComponent={EmptyListMessage}
+          key={`grid-${item.id}`}
+          keyExtractor={(residencia) => residencia.id}
+          numColumns={NUM_COLUMNS}
+          fadingEdgeLength={12}
+        />
+      )}
+    </View>
   );
 
   return (
@@ -315,34 +375,82 @@ export default function TerritorioResidencias({ route, navigation }: Props) {
         showGoBack
         showOptionAddNewResidences
         showTerritoryMenu
-        territoryData={{ nome: territoryName, territoryId: id }}
+        territoryData={{
+          nome: territoryName,
+          territoryId: id,
+          andarId: currentFloor?.id,
+          andarPosicao: currentFloor?.posicao,
+          totalAndares: allFloors.length,
+        }}
         showChangeDisposition={{ visualDisposition, id }}
         showChangeDispositionFunc={(r) => handleChangeVisualDisposition(r)}
         handleChangeTerritoryNameFunc={(r) => handleChangeTerritoryName(r)}
       />
+
       {carregando ? (
         <LoadingSpinner />
-      ) : visualDisposition !== "caixas" ? (
-        <FlashList
-          style={{ width: "100%" }}
-          contentContainerStyle={{ paddingBottom: 50 }}
-          data={allTerritoriosResidencias}
-          renderItem={Item}
-          ListEmptyComponent={EmptyListMessage}
-          key={"_"}
-          keyExtractor={(_, index) => "_" + index}
-        />
       ) : (
-        <FlashList
-          style={{ flex: 1, paddingHorizontal: 12 }}
-          contentContainerStyle={{ paddingTop: 10, paddingBottom: 30 }}
-          data={allTerritoriosResidencias}
-          renderItem={ItemBox}
-          ListEmptyComponent={EmptyListMessage}
-          key={"#"}
-          keyExtractor={(_, index) => "#" + index}
-          numColumns={NUM_COLUMNS}
-        />
+        <>
+          <FloorInfoRow>
+            <FloorNavigationButton
+              disabled={!hasPreviousFloor}
+              onPress={() => scrollToFloor(currentFloorIndex - 1)}
+            >
+              <FloorNavigationIcon
+                name="chevron-left"
+                disabled={!hasPreviousFloor}
+              />
+            </FloorNavigationButton>
+
+            <FloorTitleBadge>
+              <FloorTitleText>
+                {t("screens.territorioresidencias.floor_counter", {
+                  current: currentFloorIndex + 1,
+                  total: allFloors.length,
+                })}
+              </FloorTitleText>
+            </FloorTitleBadge>
+
+            <FloorNavigationButton
+              disabled={!hasNextFloor}
+              onPress={() => scrollToFloor(currentFloorIndex + 1)}
+            >
+              <FloorNavigationIcon
+                name="chevron-right"
+                disabled={!hasNextFloor}
+              />
+            </FloorNavigationButton>
+          </FloorInfoRow>
+
+          <FlatList
+            ref={floorPagerRef}
+            style={{ flex: 1 }}
+            data={allFloors}
+            renderItem={renderFloorPage}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id}
+            onMomentumScrollEnd={(event) => {
+              const nextIndex = Math.round(
+                event.nativeEvent.contentOffset.x / screenWidth,
+              );
+              handleFloorChange(nextIndex);
+            }}
+            onScrollToIndexFailed={() => {
+              floorPagerRef.current?.scrollToOffset({
+                offset: currentFloorIndex * screenWidth,
+                animated: false,
+              });
+            }}
+            getItemLayout={(_, index) => ({
+              length: screenWidth,
+              offset: screenWidth * index,
+              index,
+            })}
+            extraData={visualDisposition}
+          />
+        </>
       )}
     </Container>
   );

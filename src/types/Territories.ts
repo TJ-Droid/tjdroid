@@ -7,7 +7,7 @@ export type TerritoriesType = {
   disposicao?: TerritoryDispositionType;
   informacoes: TerritoryInfoType;
   casas: TerritoryHomeType[];
-  // predio: TerritoryPredioType[];
+  andares?: TerritoryFloorType[];
 };
 
 export type TerritoryInfoType = {
@@ -17,11 +17,11 @@ export type TerritoryInfoType = {
   ultimaVisita: string;
 };
 
-// export type TerritoryPredioType = {
-//   idPredio: string;
-//   posicao: number;
-//   casas: TerritoryHomeType[];
-// };
+export type TerritoryFloorType = {
+  id: string;
+  posicao: number;
+  casas: TerritoryHomeType[];
+};
 
 export type TerritoryHomeType = {
   id: string;

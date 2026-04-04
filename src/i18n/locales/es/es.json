@@ -142,6 +142,8 @@
         "screen_name": "Nueva Visita"
       },
       "territorioresidencias": {
+        "floor_title": "Piso {{floor}}",
+        "floor_counter": "Piso {{current}} de {{total}}",
         "screen_empty_title": "¡No se agregaron casas!",
         "screen_empty_message": "Haga clic en el ícono + arriba para agregar",
         "alert_home_deleted_title": "ELIMINAR RESIDENCIA",
@@ -229,6 +231,12 @@
         "input_placeholder": "Ingrese su comentario:"
       },
       "header": {
+        "add_floor_success_message": "¡Piso agregado con éxito!",
+        "add_floor_error_message": "¡Error al agregar el piso, inténtalo de nuevo!",
+        "delete_floor_success_message": "¡Piso eliminado con éxito!",
+        "delete_floor_error_message": "¡Error al eliminar el piso, inténtalo de nuevo!",
+        "menu_item_add_floor": "Añadir piso",
+        "menu_item_remove_floor": "Eliminar piso",
         "share_report_title": "Informe de",
         "share_report_hours": "Horas",
         "share_report_bible_studies": "Estudios bíblicos",
@@ -287,6 +295,8 @@
         "add_house_error_message": "¡Error al agregar la casa, inténtalo de nuevo!",
         "add_many_houses_success_message": "¡Casas añadidas con éxito!",
         "add_many_houses_error_message": "¡Error al agregar casas, inténtalo de nuevo!",
+        "alert_delete_floor_title": "ELIMINAR PISO",
+        "alert_delete_floor_description": "¿Realmente desea eliminar el piso {{floor}} con todas sus residencias y visitas?",
         "dialogmodal_add_person_title": "AÑADIR PERSONA",
         "dialogmodal_add_person_description": "Ingrese el nombre de la persona en el campo a continuación:",
         "dialogmodal_add_territory_title": "AÑADIR TERRITORIO",

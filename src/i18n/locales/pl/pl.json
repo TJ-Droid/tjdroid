@@ -142,6 +142,8 @@
         "screen_name": "Nowe odwiedziny"
       },
       "territorioresidencias": {
+        "floor_title": "Piętro {{floor}}",
+        "floor_counter": "Piętro {{current}} z {{total}}",
         "screen_empty_title": "Nie dodano jeszcze żadnych mieszkań!",
         "screen_empty_message": "Dotknij ikonę + powyżej, aby dodać",
         "alert_home_deleted_title": "Usuń mieszkanie",
@@ -229,6 +231,12 @@
         "input_placeholder": "Wprowadź swoje notatki:"
       },
       "header": {
+        "add_floor_success_message": "Piętro zostało dodane pomyślnie!",
+        "add_floor_error_message": "Wystąpił błąd podczas dodawania piętra. Spróbuj ponownie!",
+        "menu_item_add_floor": "Dodaj piętro",
+        "delete_floor_success_message": "Piętro zostało usunięte pomyślnie!",
+        "delete_floor_error_message": "Wystąpił błąd podczas usuwania piętra. Spróbuj ponownie!",
+        "menu_item_remove_floor": "Usuń piętro",
         "share_report_title": "Sprawozdanie za miesiąc",
         "share_report_hours": "Godziny",
         "share_report_bible_studies": "Studia biblijne",
@@ -287,6 +295,8 @@
         "add_house_error_message": "Wystąpił błąd podczas dodawania mieszkania. Spróbuj ponownie!",
         "add_many_houses_success_message": "Mieszkania dodane pomyślenie!",
         "add_many_houses_error_message": "Wystąpił błąd podczas dodawania mieszkań. Spróbuj ponownie!",
+        "alert_delete_floor_title": "USUŃ PIĘTRO",
+        "alert_delete_floor_description": "Czy na pewno chcesz usunąć piętro {{floor}} wraz ze wszystkimi mieszkaniami i odwiedzinami?",
         "dialogmodal_add_person_title": "DODAJ OSOBĘ",
         "dialogmodal_add_person_description": "Wpisz imię i nazwisko osoby w polu poniżej:",
         "dialogmodal_add_territory_title": "DODAJ TEREN",
