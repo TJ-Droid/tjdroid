@@ -225,7 +225,10 @@
         "empty_error_message_fields": "¡Los campos no pueden quedar vacíos!",
         "less_than_1_error_message": "El campo no puede ser menor que 1",
         "more_than_100_error_message": "El campo/intervalo no puede ser mayor que 100",
-        "first_value_must_be_greater_than_second_message": "El segundo valor debe ser mayor que el primero."
+        "first_value_must_be_greater_than_second_message": "El segundo valor debe ser mayor que el primero.",
+        "add_many_houses_mode_all": "Todos",
+        "add_many_houses_mode_odd": "Impares",
+        "add_many_houses_mode_even": "Pares"
       },
       "visitbox": {
         "input_placeholder": "Ingrese su comentario:"

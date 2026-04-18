@@ -225,7 +225,10 @@
         "empty_error_message_fields": "Поля не можуть залишатися порожніми!",
         "less_than_1_error_message": "Поле не може бути меншим за 1",
         "more_than_100_error_message": "Поле/діапазон не може бути більшим за 100",
-        "first_value_must_be_greater_than_second_message": "Друге значення має бути більшим за перше."
+        "first_value_must_be_greater_than_second_message": "Друге значення має бути більшим за перше.",
+        "add_many_houses_mode_all": "Усі",
+        "add_many_houses_mode_odd": "Непарні",
+        "add_many_houses_mode_even": "Парні"
       },
       "visitbox": {
         "input_placeholder": "Уведіть вашу нотатку:"

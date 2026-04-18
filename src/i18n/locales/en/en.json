@@ -225,7 +225,10 @@
         "empty_error_message_fields": "The fields cannot be left empty!",
         "less_than_1_error_message": "The field cannot be less than 1",
         "more_than_100_error_message": "The field/range cannot be greater than 100",
-        "first_value_must_be_greater_than_second_message": "The second value must be greater than the first."
+        "first_value_must_be_greater_than_second_message": "The second value must be greater than the first.",
+        "add_many_houses_mode_all": "All",
+        "add_many_houses_mode_odd": "Odd",
+        "add_many_houses_mode_even": "Even"
       },
       "visitbox": {
         "input_placeholder": "Enter your note:"

@@ -225,7 +225,10 @@
         "empty_error_message_fields": "Поля не могут оставаться пустыми!",
         "less_than_1_error_message": "Значение не может быть меньше 1",
         "more_than_100_error_message": "Поле/диапазон не может быть больше 100",
-        "first_value_must_be_greater_than_second_message": "Второе значение должно быть больше первого."
+        "first_value_must_be_greater_than_second_message": "Второе значение должно быть больше первого.",
+        "add_many_houses_mode_all": "Все",
+        "add_many_houses_mode_odd": "Нечетные",
+        "add_many_houses_mode_even": "Четные"
       },
       "visitbox": {
         "input_placeholder": "Введите вашу заметку:"

@@ -102,6 +102,8 @@ export interface CustomSearchHomeVisitsIterface {
   visitas?: CustomSearchVisitType[];
 }
 
+export type AddManyResidencesMode = "all" | "odd" | "even";
+
 type ResidenceLocationType = {
   floorIndex: number;
   residenceIndex: number;
@@ -253,6 +255,28 @@ const getFloorIndex = (territorio: TerritoriesType, andarId?: string) => {
   const floorIndex =
     territorio.andares?.findIndex((andar) => andar.id === andarId) ?? -1;
   return floorIndex >= 0 ? floorIndex : 0;
+};
+
+const buildResidenceNumbers = (
+  numeroInicial: number,
+  numeroFinal: number,
+  mode: AddManyResidencesMode,
+) => {
+  const residenceNumbers: number[] = [];
+
+  for (let i = numeroInicial; i <= numeroFinal; i++) {
+    if (mode === "odd" && i % 2 === 0) {
+      continue;
+    }
+
+    if (mode === "even" && i % 2 !== 0) {
+      continue;
+    }
+
+    residenceNumbers.push(i);
+  }
+
+  return residenceNumbers;
 };
 
 const buildResidenceSummary = (
@@ -697,13 +721,16 @@ export async function adicionarVariasResidencias(
   territorioId: string,
   numeroInicial: number,
   numeroFinal: number,
+  mode: AddManyResidencesMode = "all",
   andarId?: string,
 ) {
-  if (numeroFinal - numeroInicial < 0) {
+  if (numeroInicial < 1 || numeroFinal < 1 || numeroFinal - numeroInicial < 0) {
     return undefined;
   }
 
-  if (numeroFinal - numeroInicial > 100) {
+  const residenceNumbers = buildResidenceNumbers(numeroInicial, numeroFinal, mode);
+
+  if (residenceNumbers.length === 0 || residenceNumbers.length > 100) {
     return undefined;
   }
 
@@ -724,30 +751,23 @@ export async function adicionarVariasResidencias(
       const casas =
         todosTerritorios[indexTerritorio].andares?.[floorIndex].casas ?? [];
 
-      for (let i = numeroInicial; i <= numeroFinal; i++) {
-        if (casas.length === 0) {
-          casas.push({
-            id: uuidv4(),
-            nome: `${i}`,
-            nomeMorador: "",
-            posicao: 1,
-            interessado: 0,
-            visitas: [],
-          });
-        } else {
-          const ultimaResidencia = [...casas]
-            .sort((a, b) => a.posicao - b.posicao)
-            .slice(-1)[0];
+      let nextPosicao =
+        casas.length === 0
+          ? 1
+          : [...casas].sort((a, b) => a.posicao - b.posicao).slice(-1)[0]
+              .posicao + 1;
 
-          casas.push({
-            id: uuidv4(),
-            nome: `${i}`,
-            nomeMorador: "",
-            posicao: ultimaResidencia.posicao + 1,
-            interessado: 0,
-            visitas: [],
-          });
-        }
+      for (const residenceNumber of residenceNumbers) {
+        casas.push({
+          id: uuidv4(),
+          nome: `${residenceNumber}`,
+          nomeMorador: "",
+          posicao: nextPosicao,
+          interessado: 0,
+          visitas: [],
+        });
+
+        nextPosicao += 1;
       }
 
       return await saveNormalizedTerritories(todosTerritorios)

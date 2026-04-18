@@ -225,7 +225,10 @@
         "empty_error_message_fields": "Pola nie mogą pozostać puste!",
         "less_than_1_error_message": "Wartość nie może być mniejsza niż 1",
         "more_than_100_error_message": "Pole/zakres nie może być większe niż 100",
-        "first_value_must_be_greater_than_second_message": "Druga wartość musi być większa od pierwszej."
+        "first_value_must_be_greater_than_second_message": "Druga wartość musi być większa od pierwszej.",
+        "add_many_houses_mode_all": "Wszystkie",
+        "add_many_houses_mode_odd": "Nieparzyste",
+        "add_many_houses_mode_even": "Parzyste"
       },
       "visitbox": {
         "input_placeholder": "Wprowadź swoje notatki:"

@@ -32,6 +32,7 @@ import {
   SelectedMonthServiceDataType,
 } from "../../controllers/relatoriosController";
 import {
+  AddManyResidencesMode,
   adicionarUmAndar,
   adicionarUmaResidencia,
   adicionarVariasResidencias,
@@ -1158,9 +1159,10 @@ function Header({
     territorioId: string,
     qtdInicial: number,
     qtdFinal: number,
+    mode: AddManyResidencesMode,
     andarId?: string,
   ) {
-    adicionarVariasResidencias(territorioId, qtdInicial, qtdFinal, andarId)
+    adicionarVariasResidencias(territorioId, qtdInicial, qtdFinal, mode, andarId)
       .then((dados) => {
         // Trata o retorno
         if (dados) {
@@ -1234,11 +1236,12 @@ function Header({
         dialogMessage={t(
           "components.header.dialogmodal_add_many_houses_description",
         )}
-        dialogFunction={(qttInicial, qttFinal) =>
+        dialogFunction={(qttInicial, qttFinal, mode) =>
           handleAdicionarVariasResidencias(
             territoryData.territoryId,
             parseInt(qttInicial.replace(/[^0-9]/g, "")),
             parseInt((qttFinal ?? "0").replace(/[^0-9]/g, "")),
+            mode ?? "all",
             territoryData.andarId,
           )
         }

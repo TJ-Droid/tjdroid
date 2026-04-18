@@ -76,6 +76,38 @@ export const StyledDialogDescriptionErrorMessage = styled(Dialog.Description)`
   color: ${({ theme }) => theme.color.red}90;
 `;
 
+export const SegmentedControlContainer = styled.View`
+  flex-direction: row;
+  border-width: 1px;
+  border-color: ${({ theme }) => theme.color.primary_dark}30;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+`;
+
+export const SegmentedControlButton = styled.TouchableOpacity<{
+  isActive: boolean;
+  isLast?: boolean;
+}>`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.color.primary_dark : `${theme.color.primary_dark}12`};
+  border-right-width: ${({ isLast }) => (isLast ? 0 : 1)}px;
+  border-right-color: ${({ theme }) => theme.color.primary_dark}20;
+`;
+
+export const SegmentedControlButtonText = styled.Text<{ isActive: boolean }>`
+  color: ${({ theme, isActive }) =>
+    isActive ? theme.color.white : theme.color.primary_dark};
+  font-size: 15px;
+  font-weight: 700;
+`;
+
 export const StyledDialogButtonCancel = styled(Dialog.Button)`
   font-size: 15px;
   border-radius: 4px;
