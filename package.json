@@ -79,7 +79,7 @@
     "react-native-zip-archive": "^6.0.9",
     "react-xml-parser": "^1.1.8",
     "styled-components": "^6.1.19",
-    "uuid": "^8.3.2"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
