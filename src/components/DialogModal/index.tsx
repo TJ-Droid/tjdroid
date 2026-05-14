@@ -127,13 +127,15 @@ export default function DialogModal({
     text: string,
     inputNumber: "input1" | "input2",
   ) {
+    const isEmpty = text.trim() === "";
+
     switch (inputNumber) {
       case "input1":
         setInputsValue((prev) => ({
           ...prev,
           input1: {
-            value: text.trim(),
-            isError: text === "",
+            value: text,
+            isError: isEmpty,
             isErrorMessage: t("components.dialogmodal.empty_error_message"),
           },
         }));
@@ -142,8 +144,8 @@ export default function DialogModal({
         setInputsValue((prev) => ({
           ...prev,
           input2: {
-            value: text.trim(),
-            isError: text === "",
+            value: text,
+            isError: isEmpty,
             isErrorMessage: t("components.dialogmodal.empty_error_message"),
           },
         }));
@@ -155,10 +157,13 @@ export default function DialogModal({
   }
 
   function handleSubmitButton() {
+    const input1ValueTrimmed = inputsValues.input1.value.trim();
+    const input2ValueTrimmed = inputsValues.input2.value.trim();
+
     if (keyboardTypeNumberAddManyHouses === true) {
       if (
-        inputsValues.input1.value === "" ||
-        inputsValues.input1.value === undefined
+        input1ValueTrimmed === "" ||
+        input1ValueTrimmed === undefined
       ) {
         setInputsValue((prev) => ({
           ...prev,
@@ -174,8 +179,8 @@ export default function DialogModal({
       }
 
       if (
-        inputsValues.input2.value === "" ||
-        inputsValues.input2.value === undefined
+        input2ValueTrimmed === "" ||
+        input2ValueTrimmed === undefined
       ) {
         setInputsValue((prev) => ({
           ...prev,
@@ -190,7 +195,7 @@ export default function DialogModal({
         return;
       }
 
-      if (parseInt(inputsValues.input1.value) < 1) {
+      if (parseInt(input1ValueTrimmed) < 1) {
         setInputsValue((prev) => ({
           ...prev,
           input1: {
@@ -204,7 +209,7 @@ export default function DialogModal({
         return;
       }
 
-      if (parseInt(inputsValues.input2.value) < 1) {
+      if (parseInt(input2ValueTrimmed) < 1) {
         setInputsValue((prev) => ({
           ...prev,
           input2: {
@@ -218,8 +223,8 @@ export default function DialogModal({
         return;
       }
 
-      const initialValue = parseInt(inputsValues.input1.value);
-      const finalValue = parseInt(inputsValues.input2.value);
+      const initialValue = parseInt(input1ValueTrimmed);
+      const finalValue = parseInt(input2ValueTrimmed);
 
       if (finalValue - initialValue < 0) {
         setInputsValue((prev) => ({
@@ -265,15 +270,15 @@ export default function DialogModal({
       }
 
       return dialogFunction(
-        inputsValues.input1.value,
-        inputsValues.input2.value,
+        input1ValueTrimmed,
+        input2ValueTrimmed,
         addManyHousesMode,
       );
     }
 
     if (
-      inputsValues.input1.value === "" ||
-      inputsValues.input1.value === undefined
+      input1ValueTrimmed === "" ||
+      input1ValueTrimmed === undefined
     ) {
       setInputsValue((prev) => ({
         ...prev,
@@ -288,7 +293,7 @@ export default function DialogModal({
       return;
     }
 
-    return dialogFunction(inputsValues.input1.value);
+    return dialogFunction(input1ValueTrimmed);
   }
 
   const dialogContentStyle =
