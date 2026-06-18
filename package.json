@@ -82,7 +82,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.29.6",
     "@types/expo": "^33.0.1",
     "@types/i18n-js": "^3.8.2",
     "@types/react": "~19.1.0",
