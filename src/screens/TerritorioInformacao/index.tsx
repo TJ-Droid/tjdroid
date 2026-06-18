@@ -183,9 +183,8 @@ export default function TerritorioInformacao({ route }: Props) {
                 onChangeText={(texto) =>
                   setTerritorioInfos({ ...territorioInfos, observacoes: texto })
                 }
-              >
-                {territorioInfos?.observacoes}
-              </TopSectionTextInput>
+                value={territorioInfos?.observacoes}
+              />
             </TopSectionContainerArea>
           </TopSectionContainer>
 

@@ -343,9 +343,8 @@ export default function Contador({
               onChangeText={(texto: string) =>
                 setRelatorio({ ...relatorio, observacoes: texto })
               }
-            >
-              {observacoesProp}
-            </TopSectionTextInput>
+              value={relatorio.observacoes}
+            />
           </TopSectionContainerArea>
         </TopSectionContainer>
 

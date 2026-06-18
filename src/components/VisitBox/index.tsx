@@ -195,9 +195,8 @@ export function VisitBox({
               onChangeText={(texto: string) =>
                 setVisitDataState({ ...visitDataState, anotacoes: texto })
               }
-            >
-              {visitDataState.anotacoes}
-            </TopSectionTextInput>
+              value={visitDataState.anotacoes}
+            />
           </TopSectionContainerArea>
         </TopSectionContainer>
 
