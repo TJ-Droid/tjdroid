@@ -97,4 +97,4 @@ If you want to help with translation to your language, please use the link below
 -   [x] fast-xml-parser
 -   [x] react-native-mmkv
 
-*TJ Droid app its based on the old JW Droid app, developed by Artem Chivchalov.*
+*TJ Droid app its based on the old [JW Droid](https://github.com/jwdroid/jwdroid) app, developed by Artem Chivchalov.*
