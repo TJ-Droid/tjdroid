@@ -50,7 +50,7 @@
     "expo-symbols": "~1.0.8",
     "expo-system-ui": "~6.0.9",
     "expo-web-browser": "~15.0.10",
-    "i18next": "^21.6.0",
+    "i18next": "^26.3.4",
     "jotai": "^2.3.1",
     "moment": "^2.31.0",
     "patch-package": "^8.0.1",
